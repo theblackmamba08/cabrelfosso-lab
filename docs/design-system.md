@@ -15,14 +15,17 @@
 | `Reveal` | `ui/reveal.tsx` | Apparition douce au défilement |
 | `PageHero` | `ui/page-hero.tsx` | En-tête de page ; `size="display"` pour l'accueil |
 | `PageSection` | `page-section.tsx` | Section d'une page : titre, contenu, `Reveal` |
-| `SiteHeader` | `site-header.tsx` | Barre flottante : nom, FR/EN, thème, « Portfolio » |
+| `SiteHeader` | `site-header.tsx` | Barre flottante : nom, menu, FR/EN, thème, « Portfolio » |
+| `MainNav` | `main-nav.tsx` | Menu : une entrée par catégorie publiée ; `aria-current` sur la page de catégorie seulement |
+| `Breadcrumb`, `PageTrail` | `breadcrumb.tsx`, `page-trail.tsx` | Fil d'Ariane, et ses données structurées à partir des mêmes étapes |
+| `ExperimentCards`, `DemoFigure` | `experiment-cards.tsx`, `demos/demo-figure.tsx` | Cartes d'expériences, avec leur petite figure décorative (`aria-hidden`) |
+| Bouton Pause / Reprendre du pendule | `demos/newtons-cradle/newtons-cradle-demo.tsx` | Arrête l'animation (WCAG 2.2.2) ; ralenti coché par défaut avec `prefers-reduced-motion` |
 | `SiteFooter` | `site-footer.tsx` | Liens, licences, droits |
 | `LanguageSwitcher` | `language-switcher.tsx` | Même page dans l'autre langue, par un lien ordinaire |
 | `ThemeToggle` | `theme-toggle.tsx` | Thème clair ou sombre, clé `theme` du navigateur |
 | `WebAnalytics` | `web-analytics.tsx` | Extrait Cloudflare Web Analytics, s'il y a un jeton |
-| `TemporaryDemos` | `temporary-demos.tsx` | Bloc provisoire de l'accueil, retiré à l'étape L2 |
 
-Absents du Labo : menu et menu mobile, `Timeline`, `TeachingNav`, `Breadcrumb`, `FloatingActions`
+Absents du Labo : menu mobile, `Timeline`, `TeachingNav`, `FloatingActions`
 (WhatsApp, retour en haut), `NewsBanner`, `CopyButton`, `MotionToggle`, accueil animé (`Hero`,
 `HeroVisual`, `RoleTypewriter`, `TechMarquee`), formulaires.
 
@@ -119,8 +122,10 @@ Contrastes vérifiés par `src/design/contrast.test.ts`, dans les deux thèmes :
 ## Barre flottante
 
 ```
-≥ 480 px   ( Le Labo Cabrel FOSSO                 FR EN ◐  (Portfolio) )
-< 480 px   ( Le Labo                              FR EN ◐  (Portfolio) )   « Cabrel FOSSO » reste dans le nom accessible
+≥ 640 px   ( Le Labo Cabrel FOSSO   Physique      FR EN ◐  (Portfolio) )
+480–639    ( Le Labo   Physique                   FR EN ◐  (Portfolio) )   « Cabrel FOSSO » reste dans le nom accessible
+< 480 px   ( Le Labo                              FR EN ◐  (Portfolio) )
+           ( Physique                                                  )
 ```
 
 ## Mouvement
@@ -129,7 +134,8 @@ Contrastes vérifiés par `src/design/contrast.test.ts`, dans les deux thèmes :
   (`data-reveal-item`, rang `--i`) apparaissent avec 70 ms de décalage.
 - Seules `transform` et `opacity` sont animées par les `@keyframes` (`src/design/motion-css.test.ts`).
 - Arrivée de l'en-tête : fondu et glissement de 12 px, élément après élément (80 ms), une fois.
-- Aucune animation en boucle à l'étape L1, donc pas de bouton Pause (absent du Labo).
+- Aucune animation CSS en boucle, donc pas de `MotionToggle`. Le pendule de Newton a son propre
+  bouton Pause ; le tir du projectile dure 3 s au plus et ne boucle pas.
 - `Reveal` : l'état masqué n'existe qu'avec la classe `js` sur `<html>` (posée par le script de thème
   dans `<head>`) **et** `prefers-reduced-motion: no-preference`. Sans JavaScript, ou pour qui refuse
   le mouvement, tout est visible d'emblée.

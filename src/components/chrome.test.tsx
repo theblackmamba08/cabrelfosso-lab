@@ -3,7 +3,8 @@ import { describe, expect, it, vi } from "vitest";
 import en from "@/i18n/messages/en";
 import fr from "@/i18n/messages/fr";
 
-vi.mock("next/navigation", () => ({ usePathname: () => "/fr" }));
+const pathname = vi.hoisted(() => ({ current: "/fr" }));
+vi.mock("next/navigation", () => ({ usePathname: () => pathname.current }));
 
 const { SiteHeader } = await import("./site-header");
 const { SiteFooter } = await import("./site-footer");
@@ -28,9 +29,9 @@ describe.each(["fr", "en"] as const)("en-tête (%s)", (locale) => {
     expect(home?.[0]).not.toContain("aria-label");
   });
 
-  it("masque « Cabrel FOSSO » sous 480 px à la vue seulement", () => {
+  it("masque « Cabrel FOSSO » à la vue seulement sur les petits écrans", () => {
     const author = html.match(/<span class="([^"]*)">Cabrel FOSSO<\/span>/)?.[1].split(" ");
-    expect(author).toEqual(expect.arrayContaining(["text-ink-muted", "sr-only", "min-[480px]:not-sr-only"]));
+    expect(author).toEqual(expect.arrayContaining(["text-ink-muted", "sr-only", "sm:not-sr-only"]));
   });
 
   it("a le sélecteur de langue, le bouton de thème et le lien vers le portfolio de la langue", () => {
@@ -41,9 +42,38 @@ describe.each(["fr", "en"] as const)("en-tête (%s)", (locale) => {
     expect(link?.[2]).toBe("Portfolio");
   });
 
-  it("n’a ni menu, ni boutons flottants, ni bandeau", () => {
-    expect(html.match(/<nav/g)).toHaveLength(1);
+  it("n’a que deux zones de navigation (menu, langue), sans bouton flottant ni bandeau", () => {
+    expect(html.match(/<nav/g)).toHaveLength(2);
     expect(html).not.toMatch(/<dialog|whatsapp|data-news|data-motion-toggle/i);
+  });
+});
+
+describe.each([
+  ["fr", "/fr/physique", "/fr/physique/pendule-de-newton"],
+  ["en", "/en/physics", "/en/physics/newtons-cradle"],
+] as const)("menu (%s)", (locale, category, experiment) => {
+  const t = messages[locale];
+  const entry = (path: string) => {
+    pathname.current = path;
+    const html = renderToStaticMarkup(<SiteHeader locale={locale} t={t} />);
+    pathname.current = "/fr";
+    const nav = html.match(new RegExp(`<nav aria-label="${t.nav.label}"[^>]*>(.*?)</nav>`))?.[1] ?? "";
+    expect(text(nav)).toBe(t.nav.physics);
+    const link = nav.match(/<a [^>]*>/)?.[0] ?? "";
+    expect(link).toContain(`href="${category}"`);
+    return { current: link.includes('aria-current="page"'), active: link.includes("bg-accent-soft text-ink") };
+  };
+
+  it("a une entrée, la Physique, sans style de page courante sur l’accueil", () => {
+    expect(entry(`/${locale}`)).toEqual({ current: false, active: false });
+  });
+
+  it("est la page courante sur la page Physique", () => {
+    expect(entry(category)).toEqual({ current: true, active: true });
+  });
+
+  it("garde le style, sans aria-current, sur une expérience", () => {
+    expect(entry(experiment)).toEqual({ current: false, active: true });
   });
 });
 

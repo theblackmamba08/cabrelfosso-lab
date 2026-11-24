@@ -8,6 +8,13 @@ export const PRODUCTION_HOST = "lab.cabrelfosso.com";
 
 const UNKNOWN_PATH = "/adresse-inconnue";
 
+// L'injection automatique de Cloudflare n'a lieu que sur les requêtes de ce genre (cahier, section 6).
+const BROWSER_HEADERS = {
+  "user-agent":
+    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36",
+  accept: "text/html",
+};
+
 export function normalizeBase(value) {
   let url;
   try {
@@ -34,7 +41,33 @@ function expectedHeaders() {
     });
 }
 
-export async function runSmoke({ baseUrl, fetchFn = fetch, log = () => {} }) {
+/** Jeton Web Analytics du code (src/lib/analytics.ts), ou null. */
+export function readAnalyticsToken(
+  source = readFileSync(new URL("../../src/lib/analytics.ts", import.meta.url), "utf8"),
+) {
+  const value = source.match(/export const webAnalyticsToken: string \| null = (null|"[^"]+");/)?.[1];
+  if (!value) throw new Error("webAnalyticsToken introuvable dans src/lib/analytics.ts");
+  return JSON.parse(value);
+}
+
+/** Mesure d'audience d'une page : aucune trace sans jeton, exactement un extrait (le nôtre) avec. */
+function analyticsProblems(html, token) {
+  if (token === null) {
+    return html.includes("cloudflareinsights") ? ["script cloudflareinsights présent alors qu'il n'y a pas de jeton"] : [];
+  }
+  const snippets = [...html.matchAll(/<script\b[^>]*static\.cloudflareinsights\.com[^>]*>/g)].map((m) => m[0]);
+  if (snippets.length !== 1) {
+    return [`${snippets.length} extrait${snippets.length > 1 ? "s" : ""} de mesure (1 attendu)`];
+  }
+  return snippets[0].includes(token) ? [] : ["extrait de mesure avec un autre jeton"];
+}
+
+export async function runSmoke({
+  baseUrl,
+  fetchFn = fetch,
+  log = () => {},
+  analyticsToken = readAnalyticsToken(),
+}) {
   const base = normalizeBase(baseUrl);
   const security = expectedHeaders();
   const failures = [];
@@ -61,7 +94,7 @@ export async function runSmoke({ baseUrl, fetchFn = fetch, log = () => {} }) {
   const hasSitemap = /Sitemap: https:\/\/\S+\/sitemap\.xml/.test(await robots.text());
   report("robots.txt", [...expectStatus(robots, 200), ...(hasSitemap ? [] : ["ligne Sitemap absente"])]);
 
-  // 2. Toutes les adresses du sitemap : HTTPS, 200, en-têtes ; image de partage de chacune.
+  // 2. Toutes les adresses du sitemap : HTTPS, 200, en-têtes, mesure d'audience ; image de partage de chacune.
   const sitemap = await request("/sitemap.xml");
   const locs = [...(await sitemap.text()).matchAll(/<loc>([^<]+)<\/loc>/g)].map((m) => m[1]);
   report("sitemap.xml", [...expectStatus(sitemap, 200), ...(locs.length > 0 ? [] : ["aucune adresse"])]);
@@ -71,8 +104,12 @@ export async function runSmoke({ baseUrl, fetchFn = fetch, log = () => {} }) {
       continue;
     }
     const { pathname } = new URL(loc);
-    const page = await request(pathname);
-    report(pathname, [...expectStatus(page, 200), ...expectHeaders(page, security)]);
+    const page = await request(pathname, { headers: BROWSER_HEADERS });
+    report(pathname, [
+      ...expectStatus(page, 200),
+      ...expectHeaders(page, security),
+      ...analyticsProblems(await page.text(), analyticsToken),
+    ]);
 
     const image = await request(`/og${pathname}.png`);
     report(`/og${pathname}.png`, [...expectStatus(image, 200), ...expectHeaders(image, [["content-type", "image/png"]])]);

@@ -20,6 +20,19 @@ export function websiteLd(locale: Locale) {
   } satisfies Thing;
 }
 
+/** Fil d'Ariane : mêmes étapes que celui de la page, URL absolues. */
+export function breadcrumbLd(steps: ReadonlyArray<{ label: string; href: string }>) {
+  return {
+    "@type": "BreadcrumbList",
+    itemListElement: steps.map((step, index) => ({
+      "@type": "ListItem",
+      position: index + 1,
+      name: step.label,
+      item: absolute(step.href),
+    })),
+  } satisfies Thing;
+}
+
 /**
  * Contenu de la balise <script type="application/ld+json"> : un graphe schema.org.
  * « < » est échappé (guide JSON-LD de Next.js) : aucun texte ne peut fermer le script.

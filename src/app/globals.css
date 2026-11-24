@@ -103,8 +103,14 @@
     color: var(--ink);
     font-family: var(--font-sans);
     -webkit-text-size-adjust: 100%;
-    /* Une ancre ne finit pas sous la barre flottante (4,75 rem sur une ligne, plus une marge). */
-    scroll-padding-top: 6.25rem;
+    /* Une ancre ne finit pas sous la barre flottante : deux lignes sous 480 px, une ensuite. */
+    scroll-padding-top: 9rem;
+  }
+
+  @media (min-width: 30rem) {
+    html {
+      scroll-padding-top: 6.25rem;
+    }
   }
 
   body {
@@ -226,7 +232,7 @@ body::after {
 
 /*
  * Mouvement : une seule arrivée des en-têtes de page, et l'apparition décalée des cartes. Aucune
- * animation en boucle à l'étape L1. Seules transform et opacity sont animées.
+ * animation en boucle. Seules transform et opacity sont animées.
  */
 @media (prefers-reduced-motion: no-preference) {
   /* Arrivée de l'en-tête : une seule fois, élément après élément (--i). */

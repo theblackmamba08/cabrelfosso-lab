@@ -2,18 +2,18 @@ import type { Metadata } from "next";
 import { absolute } from "../lib/site";
 import { defaultLocale, ogLocale, type Locale } from "./config";
 import type { Messages } from "./messages/fr";
-import type { PublishedPage } from "./published";
-import { alternatePaths, localizedPath } from "./routes";
+import { pagePath, type PublishedPage } from "./published";
+import { alternatePaths } from "./routes";
 
 /** Dimensions des images de partage (format recommandé par Open Graph). */
 export const shareImageSize = { width: 1200, height: 630 } as const;
 
-/** Titre de l'onglet, description et grand titre d'une page publiée (annexe B). */
+/** Titre de l'onglet, description et grand titre d'une page publiée (annexes B et C). */
 export function pageTexts(
   page: PublishedPage,
   t: Messages,
 ): { title: string; description: string; heading: string } {
-  const { title, metaTitle, metaDescription } = t[page];
+  const { title, metaTitle, metaDescription } = page.demo ? t.demos[page.demo.id] : t[page.key];
   return {
     title: metaTitle,
     description: metaDescription,
@@ -23,7 +23,7 @@ export function pageTexts(
 
 /** Adresse de l'image de partage d'une page : son adresse publique, sous /og, en PNG. */
 export function shareImagePath(page: PublishedPage, locale: Locale): string {
-  return `/og${localizedPath(page, locale)}.png`;
+  return `/og${pagePath(page, locale)}.png`;
 }
 
 /**
@@ -33,8 +33,8 @@ export function shareImagePath(page: PublishedPage, locale: Locale): string {
  */
 export function pageMetadata(page: PublishedPage, locale: Locale, t: Messages): Metadata {
   const { title, description } = pageTexts(page, t);
-  const alternates = alternatePaths(page);
-  const url = absolute(localizedPath(page, locale));
+  const alternates = alternatePaths(page.key, page.demo?.slugs);
+  const url = absolute(pagePath(page, locale));
   const image = {
     url: absolute(shareImagePath(page, locale)),
     ...shareImageSize,

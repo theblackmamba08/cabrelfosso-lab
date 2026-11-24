@@ -3,6 +3,7 @@ import { locales } from "./config";
 import en from "./messages/en";
 import fr from "./messages/fr";
 import { pageMetadata, pageTexts, shareImagePath } from "./metadata";
+import { demos } from "../demos/registry";
 import { publishedPages } from "./published";
 import { localizedPath } from "./routes";
 
@@ -21,29 +22,39 @@ describe("titres et descriptions des pages publiées", () => {
     expect(new Set(texts.map((t) => t.description)).size).toBe(texts.length);
   });
 
+  it("reprennent ceux de l’annexe C", () => {
+    expect(pageTexts({ key: "physics" }, fr).title).toBe("Physique — Le Labo");
+    expect(pageTexts({ key: "physics", demo: demos[0] }, fr)).toEqual({
+      title: "Le mouvement d’un projectile — Le Labo",
+      description: fr.demos.projectile.metaDescription,
+      heading: "Le mouvement d’un projectile",
+    });
+    expect(pageTexts({ key: "physics", demo: demos[1] }, en).title).toBe("Newton’s cradle — The Lab");
+  });
+
   it("reprennent ceux de l’annexe B", () => {
-    expect(pageTexts("privacy", fr).title).toBe("Confidentialité — Le Labo");
-    expect(pageTexts("home", en).title).toBe("The Lab — Cabrel FOSSO");
+    expect(pageTexts({ key: "privacy" }, fr).title).toBe("Confidentialité — Le Labo");
+    expect(pageTexts({ key: "home" }, en).title).toBe("The Lab — Cabrel FOSSO");
   });
 
   it("donnent à l’image de partage le grand titre de la page", () => {
-    expect(pageTexts("home", fr).heading).toBe("Comprendre la physique et l’informatique en manipulant");
-    expect(pageTexts("privacy", en).heading).toBe("Privacy");
+    expect(pageTexts({ key: "home" }, fr).heading).toBe("Comprendre la physique et l’informatique en manipulant");
+    expect(pageTexts({ key: "privacy" }, en).heading).toBe("Privacy");
   });
 });
 
 describe("pageMetadata", () => {
-  it.each(cases)("$locale $page : URL canonique et hreflang absolues", ({ locale, page }) => {
+  it.each(cases)("$locale $page.key $page.demo.id : URL canonique et hreflang absolues", ({ locale, page }) => {
     const meta = pageMetadata(page, locale, messages[locale]);
-    expect(meta.alternates?.canonical).toBe(site + localizedPath(page, locale));
+    expect(meta.alternates?.canonical).toBe(site + localizedPath(page.key, locale, page.demo?.slugs));
     expect(meta.alternates?.languages).toEqual({
-      fr: site + localizedPath(page, "fr"),
-      en: site + localizedPath(page, "en"),
-      "x-default": site + localizedPath(page, "fr"),
+      fr: site + localizedPath(page.key, "fr", page.demo?.slugs),
+      en: site + localizedPath(page.key, "en", page.demo?.slugs),
+      "x-default": site + localizedPath(page.key, "fr", page.demo?.slugs),
     });
   });
 
-  it.each(cases)("$locale $page : Open Graph et Twitter complets", ({ locale, page }) => {
+  it.each(cases)("$locale $page.key $page.demo.id : Open Graph et Twitter complets", ({ locale, page }) => {
     const t = messages[locale];
     const meta = pageMetadata(page, locale, t);
     const { title, description } = pageTexts(page, t);
@@ -60,7 +71,7 @@ describe("pageMetadata", () => {
       type: "website",
       title,
       description,
-      url: site + localizedPath(page, locale),
+      url: site + localizedPath(page.key, locale, page.demo?.slugs),
       locale: locale === "fr" ? "fr_FR" : "en_US",
       siteName: locale === "fr" ? "Le Labo — Cabrel FOSSO" : "The Lab — Cabrel FOSSO",
       images: [image],
@@ -71,8 +82,9 @@ describe("pageMetadata", () => {
 
 describe("chemin de l’image de partage", () => {
   it("suit l’adresse publique de la page, sous /og, en PNG", () => {
-    expect(shareImagePath("home", "fr")).toBe("/og/fr.png");
-    expect(shareImagePath("privacy", "fr")).toBe("/og/fr/confidentialite.png");
-    expect(shareImagePath("privacy", "en")).toBe("/og/en/privacy.png");
+    expect(shareImagePath({ key: "home" }, "fr")).toBe("/og/fr.png");
+    expect(shareImagePath({ key: "privacy" }, "fr")).toBe("/og/fr/confidentialite.png");
+    expect(shareImagePath({ key: "physics", demo: demos[1] }, "en")).toBe("/og/en/physics/newtons-cradle.png");
+    expect(shareImagePath({ key: "privacy" }, "en")).toBe("/og/en/privacy.png");
   });
 });

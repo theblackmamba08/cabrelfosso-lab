@@ -19,7 +19,8 @@ const common = readable(between("### B.1 Éléments communs", "### B.2 Accueil")
 const homeFr = readable(between("### B.2 Accueil", "Tab title: The Lab"));
 const homeEn = readable(between("Tab title: The Lab", "### B.3 Confidentialité"));
 const privacyFr = readable(between("### B.3 Confidentialité", "Tab title: Privacy"));
-const privacyEn = readable(between("Tab title: Privacy", "## Historique"));
+const privacyEn = readable(between("Tab title: Privacy", "## Annexe C"));
+const menu = readable(between("### C.1 Menu", "### C.2"));
 
 describe.each([
   ["fr", fr, homeFr, privacyFr],
@@ -28,6 +29,15 @@ describe.each([
   const { site, header, footer, notFound } = messages;
   it.each(strings({ site, header, footer, notFound }))("commun : %s", (_path, value) => {
     expect(common).toContain(plain(value).trim());
+  });
+
+  const { nav, physics, experiment } = messages;
+  it.each(strings({ nav, physics, experiment }))("menu et page Physique : %s", (_path, value) => {
+    expect(menu).toContain(plain(value).trim());
+  });
+
+  it.each(strings(Object.values(messages.demos).map((demo) => demo.card)))("carte : %s", (_path, value) => {
+    expect(home).toContain(plain(value).trim());
   });
 
   it.each(strings(messages.home))("accueil : %s", (_path, value) => {

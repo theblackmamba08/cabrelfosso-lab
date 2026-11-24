@@ -10,7 +10,7 @@ import { absolute } from "../site";
  */
 export function sitemapEntries(): MetadataRoute.Sitemap {
   return publishedPages.flatMap((page) => {
-    const paths = alternatePaths(page);
+    const paths = alternatePaths(page.key, page.demo?.slugs);
     const languages = {
       fr: absolute(paths.fr),
       en: absolute(paths.en),

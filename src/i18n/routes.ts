@@ -1,3 +1,4 @@
+import { publishedDemos } from "../demos/registry";
 import { locales, type Locale } from "./config";
 
 /**
@@ -15,25 +16,43 @@ export const routes = {
 
 export type RouteKey = keyof typeof routes;
 
+/** Nom d'une expérience dans chaque langue. */
+export type SubPage = Record<Locale, string>;
+
 const routeKeys = Object.keys(routes) as RouteKey[];
 
-/** Adresse d'une page dans une langue, par exemple `/fr/confidentialite`. */
-export function localizedPath(key: RouteKey, locale: Locale): string {
+/** Toutes les adresses connues : les pages, puis les expériences publiées. */
+const places: ReadonlyArray<{ key: RouteKey; subPage?: SubPage }> = [
+  ...routeKeys.map((key) => ({ key })),
+  ...publishedDemos.map((demo) => ({ key: demo.category, subPage: demo.slugs })),
+];
+
+/** Adresse d'une page dans une langue, par exemple `/fr/physique/projectile`. */
+export function localizedPath(key: RouteKey, locale: Locale, subPage?: SubPage): string {
   const segment = routes[key][locale];
-  return segment ? `/${locale}/${segment}` : `/${locale}`;
+  const path = segment ? `/${locale}/${segment}` : `/${locale}`;
+  return subPage ? `${path}/${subPage[locale]}` : path;
 }
 
 /** Adresse d'une page dans chaque langue (pour hreflang et le sitemap). */
-export function alternatePaths(key: RouteKey): Record<Locale, string> {
-  return Object.fromEntries(locales.map((locale) => [locale, localizedPath(key, locale)])) as Record<Locale, string>;
+export function alternatePaths(key: RouteKey, subPage?: SubPage): Record<Locale, string> {
+  return Object.fromEntries(
+    locales.map((locale) => [locale, localizedPath(key, locale, subPage)]),
+  ) as Record<Locale, string>;
 }
 
-/** Page correspondant à une adresse ; l'accueil si l'adresse est inconnue dans cette langue. */
+/** Page ou expérience d'une adresse ; l'accueil si l'adresse est inconnue dans cette langue. */
+function placeOf(pathname: string, locale: Locale) {
+  return places.find(({ key, subPage }) => localizedPath(key, locale, subPage) === pathname) ?? places[0];
+}
+
+/** Page d'une adresse, ou catégorie d'une expérience (menu). */
 export function routeKeyFromPath(pathname: string, locale: Locale): RouteKey {
-  return routeKeys.find((key) => localizedPath(key, locale) === pathname) ?? "home";
+  return placeOf(pathname, locale).key;
 }
 
 /** La même page dans une autre langue, pour le sélecteur. */
 export function pathInLocale(pathname: string, locale: Locale, target: Locale): string {
-  return localizedPath(routeKeyFromPath(pathname, locale), target);
+  const { key, subPage } = placeOf(pathname, locale);
+  return localizedPath(key, target, subPage);
 }

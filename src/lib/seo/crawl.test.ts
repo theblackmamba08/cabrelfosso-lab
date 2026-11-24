@@ -6,12 +6,18 @@ const site = "https://lab.cabrelfosso.com";
 describe("sitemap", () => {
   const entries = sitemapEntries();
 
-  it("liste les quatre adresses publiées, en URL absolues, et rien d’autre", () => {
+  it("liste les dix adresses publiées, en URL absolues, et rien d’autre", () => {
     expect(entries.map((entry) => entry.url)).toEqual([
       `${site}/fr`,
       `${site}/en`,
       `${site}/fr/confidentialite`,
       `${site}/en/privacy`,
+      `${site}/fr/physique`,
+      `${site}/en/physics`,
+      `${site}/fr/physique/projectile`,
+      `${site}/en/physics/projectile`,
+      `${site}/fr/physique/pendule-de-newton`,
+      `${site}/en/physics/newtons-cradle`,
     ]);
   });
 

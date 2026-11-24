@@ -1,17 +1,19 @@
+import { demosOf } from "@/demos/registry";
 import type { Locale } from "@/i18n/config";
 import type { Messages } from "@/i18n/messages";
+import { localizedPath } from "@/i18n/routes";
 import { portfolioPage } from "@/lib/site";
 import { websiteLd } from "@/lib/seo/structured-data";
+import { ExperimentCards } from "./experiment-cards";
 import { JsonLd } from "./json-ld";
 import { PageSection } from "./page-section";
-import { TemporaryDemos } from "./temporary-demos";
 import { ButtonLink } from "./ui/button";
 import { Card } from "./ui/card";
 import { PageHero } from "./ui/page-hero";
 import { Reveal } from "./ui/reveal";
 import { stagger } from "./ui/stagger";
 
-/** Accueil du Labo à l'étape L1 (cahier, annexe B.2). */
+/** Accueil du Labo (cahier, annexe B.2). */
 export function HomePage({ locale, t }: { locale: Locale; t: Messages }) {
   const { home } = t;
   const colon = locale === "fr" ? " : " : ": ";
@@ -32,6 +34,13 @@ export function HomePage({ locale, t }: { locale: Locale; t: Messages }) {
       />
 
       <div className="mt-20 grid gap-20 md:mt-28 md:gap-28">
+        <PageSection id="titre-physique" title={home.physics.title}>
+          <ExperimentCards locale={locale} t={t} demos={demosOf("physics")} headingLevel={3} />
+          <p className="mt-8">
+            <ButtonLink href={localizedPath("physics", locale)}>{home.physics.all}</ButtonLink>
+          </p>
+        </PageSection>
+
         <PageSection id="titre-comment" title={home.how.title}>
           <ul className="grid gap-4 md:grid-cols-3 md:gap-6">
             {Object.values(home.how.steps).map((step, i) => (
@@ -54,8 +63,6 @@ export function HomePage({ locale, t }: { locale: Locale; t: Messages }) {
             ))}
           </ul>
         </PageSection>
-
-        <TemporaryDemos locale={locale} t={t} />
 
         <Reveal>
           <div className="max-w-prose">

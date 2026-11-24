@@ -4,12 +4,13 @@ import type { Messages } from "@/i18n/messages";
 import { localizedPath } from "@/i18n/routes";
 import { portfolioPage } from "@/lib/site";
 import { LanguageSwitcher } from "./language-switcher";
+import { MainNav } from "./main-nav";
 import { ThemeToggle } from "./theme-toggle";
 import { ButtonLink } from "./ui/button";
 
 /**
  * Barre flottante (cahier, section 5) : collante, détachée des bords, en verre dépoli, sur une
- * ligne de 360 à 1920 px. Pas de menu tant qu'aucune catégorie n'est publiée.
+ * ligne à partir de 480 px ; en dessous, le menu passe sur une seconde ligne.
  */
 export function SiteHeader({ locale, t }: { locale: Locale; t: Messages }) {
   // Fondu du fond de page au-dessus de la barre : le texte qui défile ne dépasse pas en haut.
@@ -22,12 +23,15 @@ export function SiteHeader({ locale, t }: { locale: Locale; t: Messages }) {
           className="flex items-baseline gap-x-1.5 font-heading text-lg font-semibold tracking-tight whitespace-nowrap text-ink no-underline"
         >
           <span>{t.site.name}</span>{" "}
-          <span className="text-base font-medium text-ink-muted sr-only min-[480px]:not-sr-only">{t.site.author}</span>
+          <span className="text-base font-medium text-ink-muted sr-only sm:not-sr-only">{t.site.author}</span>
         </Link>
+        <div className="order-last w-full min-[480px]:order-none min-[480px]:w-auto">
+          <MainNav locale={locale} labels={t.nav} />
+        </div>
         <div className="ml-auto flex items-center gap-1">
           <LanguageSwitcher locale={locale} label={t.site.languageSwitcher} />
           <ThemeToggle label={t.site.themeToggle} />
-          {/* Pilule plus étroite sur les petits écrans : la barre tient sur une ligne à 360 px. */}
+          {/* Pilule plus étroite sur les petits écrans : la barre garde une ligne dès 480 px. */}
           <span className="max-[559px]:[&>a]:px-3 max-[559px]:[&>a]:text-sm min-[560px]:ml-2">
             <ButtonLink href={portfolioPage(locale)}>{t.header.portfolio}</ButtonLink>
           </span>
