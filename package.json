@@ -1,0 +1,43 @@
+{
+  "name": "cabrelfosso-lab",
+  "version": "0.1.0",
+  "private": true,
+  "license": "MIT",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build && node scripts/flatten-segments.mjs",
+    "typecheck": "next typegen && tsc --noEmit && tsc --noEmit -p worker",
+    "lint": "eslint",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "check": "npm run typecheck && npm run lint && npm test && npm run build",
+    "test:integration": "node scripts/integration.mjs",
+    "smoke": "node scripts/smoke.mjs",
+    "linkcheck": "node scripts/linkcheck.mjs",
+    "preview": "npm run build && wrangler dev",
+    "deploy": "npm run build && wrangler deploy",
+    "cf-typegen": "wrangler types worker/worker-configuration.d.ts",
+    "prepare": "node scripts/install-hooks.mjs"
+  },
+  "dependencies": {
+    "next": "16.4.6",
+    "react": "19.3.1",
+    "react-dom": "19.3.1",
+    "server-only": "^0.0.1"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4.3.5",
+    "@types/node": "^22.20.5",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "eslint": "^9.39.5",
+    "eslint-config-next": "16.4.6",
+    "tailwindcss": "^4.3.5",
+    "typescript": "~5.9.3",
+    "vitest": "^5.1.1",
+    "wrangler": "^4.167.0"
+  },
+  "engines": {
+    "node": ">=22.12.0"
+  }
+}

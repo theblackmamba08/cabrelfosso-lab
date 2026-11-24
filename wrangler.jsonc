@@ -1,0 +1,26 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "cabrelfosso-lab",
+  // Worker de la racine : redirige / selon la langue du navigateur (cahier, section 2).
+  "main": "worker/index.ts",
+  "compatibility_date": "2026-11-24",
+  // Site exporté par Next.js, servi comme fichiers statiques, sans adaptateur (cahier, section 4).
+  // https://developers.cloudflare.com/workers/static-assets/binding/
+  // https://developers.cloudflare.com/workers/static-assets/routing/worker-script/
+  // https://developers.cloudflare.com/workers/static-assets/routing/advanced/html-handling/
+  // https://developers.cloudflare.com/workers/static-assets/routing/static-site-generation/
+  "assets": {
+    "directory": "./out",
+    "binding": "ASSETS",
+    "not_found_handling": "404-page",
+    "html_handling": "auto-trailing-slash",
+    "run_worker_first": ["/"]
+  },
+  // Le site n'est servi que sur son domaine : aucune copie sur workers.dev ni en aperçu.
+  // https://developers.cloudflare.com/workers/configuration/routing/custom-domains/
+  "routes": [{ "pattern": "lab.cabrelfosso.com", "custom_domain": true }],
+  "workers_dev": false,
+  "preview_urls": false,
+  // Aucun journal : la page Confidentialité le promet.
+  "observability": { "enabled": false }
+}

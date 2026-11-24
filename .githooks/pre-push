@@ -1,0 +1,4 @@
+#!/bin/sh
+# Refuse tout envoi vers main : la décision est dans scripts/pre-push.mjs.
+# Si Node.js manque, `exec` échoue et l'envoi est refusé.
+exec node "$(dirname "$0")/../scripts/pre-push.mjs" "$@"

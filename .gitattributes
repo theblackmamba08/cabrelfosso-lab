@@ -1,0 +1,13 @@
+# Fins de ligne LF dans tout le dépôt, quel que soit le système.
+* text=auto eol=lf
+
+# Fichiers binaires : aucune conversion.
+*.pdf binary
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.webp binary
+*.ico binary
+*.woff binary
+*.woff2 binary
+*.ttf binary
