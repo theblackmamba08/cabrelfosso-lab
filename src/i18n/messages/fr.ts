@@ -78,8 +78,7 @@ const fr = {
   },
   privacy: {
     metaTitle: "Confidentialité — Le Labo",
-    metaDescription:
-      "Ce que le Labo enregistre, et ce qu’il n’enregistre pas : mesure d’audience, préférences, hébergement.",
+    metaDescription: "Ce que le Labo enregistre, et ce qu’il n’enregistre pas.",
     title: "Confidentialité",
     intro: "Ce que le Labo enregistre, et ce qu’il n’enregistre pas.",
     controller: {

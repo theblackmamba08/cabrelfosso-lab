@@ -1,6 +1,7 @@
 import { lastUpdated, privacyLastUpdated } from "@/content/privacy";
 import type { Locale } from "@/i18n/config";
 import type { Messages } from "@/i18n/messages";
+import { isAnalyticsActive, webAnalyticsToken } from "@/lib/analytics";
 import { portfolioPage } from "@/lib/site";
 import { Card } from "./ui/card";
 import { PageHero } from "./ui/page-hero";
@@ -17,9 +18,23 @@ function Entry({ term, children }: { term: string; children: React.ReactNode }) 
   );
 }
 
-/** Page Confidentialité (cahier, annexe B.3). */
-export function PrivacyPage({ locale, t }: { locale: Locale; t: Messages }) {
+/**
+ * Page Confidentialité (cahier, annexe B.3). Le paragraphe « Mesure d'audience » n'existe que si la
+ * mesure est active (section 6) : la page ne décrit jamais une mesure qui n'existe pas.
+ */
+export function PrivacyPage({
+  locale,
+  t,
+  analyticsToken = webAnalyticsToken,
+}: {
+  locale: Locale;
+  t: Messages;
+  analyticsToken?: string | null;
+}) {
   const { controller, entries, updated, title, intro } = t.privacy;
+
+  const { analytics, ...others } = entries;
+  const shown = [...(isAnalyticsActive(analyticsToken) ? [analytics] : []), ...Object.values(others)];
 
   return (
     <article>
@@ -36,7 +51,7 @@ export function PrivacyPage({ locale, t }: { locale: Locale; t: Messages }) {
               </a>
               {controller.text.after}
             </Entry>
-            {Object.values(entries).map((entry) => (
+            {shown.map((entry) => (
               <Entry key={entry.term} term={entry.term}>
                 {entry.text}
               </Entry>

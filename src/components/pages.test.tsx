@@ -57,7 +57,7 @@ describe.each(["fr", "en"] as const)("accueil (%s)", (locale) => {
 
 describe.each(["fr", "en"] as const)("confidentialité (%s)", (locale) => {
   const t = messages[locale].privacy;
-  const html = renderToStaticMarkup(<PrivacyPage locale={locale} t={messages[locale]} />);
+  const html = renderToStaticMarkup(<PrivacyPage locale={locale} t={messages[locale]} analyticsToken="jeton-de-test" />);
 
   it("est une liste de définitions, dans l’ordre du cahier", () => {
     const terms = [...html.matchAll(/<dt[^>]*>(.*?)<\/dt>/g)].map((m) => m[1]);
@@ -67,6 +67,22 @@ describe.each(["fr", "en"] as const)("confidentialité (%s)", (locale) => {
       t.updated.term,
     ]);
     expect(html.match(/<dd/g)).toHaveLength(terms.length);
+  });
+
+  it("avec un jeton, présente la mesure d’audience juste après le responsable, mot pour mot", () => {
+    const entries = [...html.matchAll(/<dt[^>]*>(.*?)<\/dt><dd[^>]*>(.*?)<\/dd>/g)].map((m) => [m[1], text(m[2])]);
+    expect(entries[0][0]).toBe(t.controller.term);
+    expect(entries[1]).toEqual([t.entries.analytics.term, t.entries.analytics.text]);
+  });
+
+  it("sans jeton, ne dit rien de la mesure d’audience, et garde tout le reste", () => {
+    const without = renderToStaticMarkup(<PrivacyPage locale={locale} t={messages[locale]} analyticsToken={null} />);
+    expect(text(without)).not.toContain(t.entries.analytics.term);
+    expect(text(without)).not.toContain(t.entries.analytics.text);
+    const terms = [...without.matchAll(/<dt[^>]*>(.*?)<\/dt>/g)].map((m) => m[1]);
+    const { analytics, ...others } = t.entries;
+    expect(terms).toEqual([t.controller.term, ...Object.values(others).map((e) => e.term), t.updated.term]);
+    expect(analytics.term).not.toBe("");
   });
 
   it("a un titre, son introduction et tous ses textes", () => {

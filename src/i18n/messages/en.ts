@@ -75,7 +75,7 @@ const en: Messages = {
   },
   privacy: {
     metaTitle: "Privacy — The Lab",
-    metaDescription: "What the Lab records, and what it doesn’t: analytics, preferences, hosting.",
+    metaDescription: "What the Lab records, and what it doesn’t.",
     title: "Privacy",
     intro: "What the Lab records, and what it doesn’t.",
     controller: {

@@ -15,7 +15,7 @@ Le cahier d’abord, puis le code, puis les tests. Un texte changé seulement da
 | Changer l’adresse d’une page | Interdit : les adresses publiées ne changent plus (cahier, section 2) | |
 | Retirer le bloc provisoire de l’accueil (étape L2) | `src/components/temporary-demos.tsx`, son appel dans `home-page.tsx`, la clé `home.temporary` des messages | |
 | Modifier les couleurs, les polices, le motif | `src/app/globals.css`, `src/design/fonts.ts`. Référence : `docs/design-system.md` | Contrastes vérifiés par `src/design/contrast.test.ts` et `motif.test.ts` |
-| Mettre le jeton Cloudflare Web Analytics | `src/lib/analytics.ts` : `webAnalyticsToken` (valeur publique ; `null` : aucun extrait) | Redéployer. Les tests vérifient que chaque page porte l’extrait dès qu’il y a un jeton |
+| Mettre le jeton Cloudflare Web Analytics | `src/lib/analytics.ts` : `webAnalyticsToken` (valeur publique ; `null` : aucun extrait) | Le paragraphe « Mesure d’audience » de la page Confidentialité apparaît avec l’extrait, par la même condition (`isAnalyticsActive`). **Le jour où le jeton est ajouté ou retiré, changer aussi la date de la page** : `privacyLastUpdated` (`src/content/privacy.ts`) et ses tests. Puis redéployer. Les tests vérifient que chaque page porte l’extrait dès qu’il y a un jeton |
 | Changer un en-tête de sécurité | `src/lib/security-headers.ts` et `public/_headers` (et la section 4 du cahier) | `security-headers.test.ts` compare les trois |
 | Changer la configuration Cloudflare | `wrangler.jsonc`, puis `npm run cf-typegen` | `scripts/wrangler-config.test.ts` vérifie les valeurs |
 
@@ -27,7 +27,11 @@ Retour arrière : `npx wrangler rollback <identifiant de la version précédente
 
 Le sitemap n’est pas envoyé à la Search Console avant l’étape L2 (cahier, section 8).
 
-## 4. Inventaire
+## 4. Fichier technique `/_not-found`
+
+Next.js exporte `out/_not-found*`, une copie de la page 404 qui répond 200. On le garde : `out/404.html` se déclare lui-même comme la route `/_not-found` dans ses données internes, et le supprimer risquerait des erreurs dans le navigateur. Il porte `noindex`, aucun lien n’y mène et il n’est pas dans le sitemap (tests dans `tests/integration/`).
+
+## 5. Inventaire
 
 | Élément | Où | Rôle |
 | --- | --- | --- |
