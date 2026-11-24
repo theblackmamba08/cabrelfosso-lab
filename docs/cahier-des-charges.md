@@ -1,6 +1,6 @@
 # Cahier des charges — le Labo de Cabrel FOSSO
 
-Version 0.2, du 24 novembre 2026 : décisions de l’étape L1 (racine `/`, stack vérifiée, licences, mesure d’audience, textes de l’accueil, de la page Confidentialité et de la page 404).
+Version 0.3, du 24 novembre 2026 : étape L1.1, paragraphe « Mesure d’audience » affiché seulement quand la mesure est active ; fichier technique `/_not-found` de Next.js (section 4).
 
 Rédigée par Claude dans le projet claude.ai « Labo », à partir de la version 0.1 (projet « Portfolio », 23 novembre 2026) et des réponses de Jospin du 24 novembre 2026. Les marqueurs TODO(Jospin) signalent une information encore manquante. Ce fichier est copié dans le dépôt `cabrelfosso-lab` sous `docs/cahier-des-charges.md` ; c’est cette copie qui fait foi.
 
@@ -103,6 +103,7 @@ Options écartées : page racine bilingue (un clic de plus, page pauvre indexée
 - **En-têtes de sécurité** (fichiers statiques et réponses du Worker, une seule source) : `X-Content-Type-Options: nosniff`, `Referrer-Policy: strict-origin-when-cross-origin`, `Permissions-Policy: camera=(), microphone=(), geolocation=()`, `X-Frame-Options: DENY`, et une politique de sécurité du contenu :
   `default-src 'self'; script-src 'self' 'unsafe-inline' https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self' https://cloudflareinsights.com; worker-src 'self'; manifest-src 'self'; object-src 'none'; base-uri 'self'; form-action 'none'; frame-ancestors 'none'`.
   `'unsafe-inline'` dans `script-src` : les pages exportées contiennent des scripts en ligne de Next.js et le script de thème ; un nonce exigerait un rendu à chaque requête. Fichiers de `/_next/static/` : `Cache-Control: public, max-age=31536000, immutable`.
+- **Fichier technique `/_not-found`** : Next.js exporte aussi `/_not-found` (copie de la page 404, avec `noindex`), qui répond 200. Il est gardé : la page 404 se déclare elle-même comme cette route dans ses données, et le supprimer risquerait des erreurs dans le navigateur. Aucun lien n’y mène, il n’est pas dans le sitemap ; un test vérifie son `noindex`.
 - **Calculs** : dans le navigateur. Les calculs longs tournent dans un Web Worker (une tâche de fond séparée de l’affichage), pour que la page reste fluide.
 - **Hasard reproductible** : générateur pseudo-aléatoire à graine fixe ; même graine, même résultat, dans les tests comme à l’écran.
 - **Graphiques et figures** : SVG dessiné par les composants, aux couleurs du design system ; aucune bibliothèque de graphique ni de physique.
@@ -131,7 +132,7 @@ Les mêmes que pour le portfolio :
 
 ### Mesure d’audience et confidentialité (décidé le 24 novembre 2026)
 
-- Cloudflare Web Analytics, installé par l’extrait JavaScript officiel (« manual JS snippet ») placé avant la fin de `<body>` sur chaque page, avec le jeton du site (public). L’installation automatique n’est pas documentée pour un Worker : l’extrait rend le comportement vérifiable par un test. TODO(Jospin): jeton du site Web Analytics `lab.cabrelfosso.com`. Sans jeton, aucun extrait n’est ajouté.
+- Cloudflare Web Analytics, installé par l’extrait JavaScript officiel (« manual JS snippet ») placé avant la fin de `<body>` sur chaque page, avec le jeton du site (public). L’installation automatique n’est pas documentée pour un Worker : l’extrait rend le comportement vérifiable par un test. TODO(Jospin): jeton du site Web Analytics `lab.cabrelfosso.com`. Sans jeton, aucun extrait n’est ajouté et la page Confidentialité n’affiche pas le paragraphe « Mesure d’audience » : la page ne décrit jamais une mesure qui n’existe pas.
 - D’après Cloudflare, ce service n’utilise ni cookie ni stockage du navigateur pour mesurer l’audience et ne suit pas les visiteurs d’un site à l’autre.
 - Page Confidentialité du Labo (annexe B.3), liée depuis le pied de page.
 
@@ -281,11 +282,11 @@ Page 404 (bilingue, une seule page) :
 **Français**
 
 - Titre de l’onglet : Confidentialité — Le Labo
-- Description : Ce que le Labo enregistre, et ce qu’il n’enregistre pas : mesure d’audience, préférences, hébergement.
+- Description : Ce que le Labo enregistre, et ce qu’il n’enregistre pas.
 - Titre : Confidentialité
 - Introduction : Ce que le Labo enregistre, et ce qu’il n’enregistre pas.
 - **Responsable** : Jospin Cabrel FOSSO TIOFOUET, joignable par la page Contact de mon portfolio (lien `https://cabrelfosso.com/fr/contact`).
-- **Mesure d’audience** : Cloudflare Web Analytics compte les visites et mesure la vitesse d’affichage des pages, de façon globale. D’après Cloudflare, ce service n’utilise ni cookie ni stockage dans votre navigateur pour cette mesure, et ne vous suit pas d’un site à l’autre.
+- **Mesure d’audience** (affiché seulement quand la mesure est active, section 6) : Cloudflare Web Analytics compte les visites et mesure la vitesse d’affichage des pages, de façon globale. D’après Cloudflare, ce service n’utilise ni cookie ni stockage dans votre navigateur pour cette mesure, et ne vous suit pas d’un site à l’autre.
 - **Préférences** : votre choix de thème (clair ou sombre) est enregistré dans votre propre navigateur ; il ne m’est pas transmis. Le choix de langue n’est pas enregistré : il figure dans l’adresse de la page (/fr ou /en). À l’adresse lab.cabrelfosso.com seule, la langue est choisie d’après la préférence qu’indique votre navigateur, sans rien enregistrer.
 - **Expériences** : les calculs se font dans votre navigateur ; vos réglages ne me sont pas envoyés.
 - **Ce que le Labo ne fait pas** : pas de compte, pas de formulaire, pas de publicité ; il ne vend aucune donnée et n’en partage avec personne à des fins commerciales.
@@ -296,11 +297,11 @@ Page 404 (bilingue, une seule page) :
 **English**
 
 - Tab title: Privacy — The Lab
-- Description: What the Lab records, and what it doesn’t: analytics, preferences, hosting.
+- Description: What the Lab records, and what it doesn’t.
 - Title: Privacy
 - Intro: What the Lab records, and what it doesn’t.
 - **Data controller**: Jospin Cabrel FOSSO TIOFOUET, reachable through the Contact page of my portfolio (link `https://cabrelfosso.com/en/contact`).
-- **Analytics**: Cloudflare Web Analytics counts visits and measures how fast pages load, in aggregate. According to Cloudflare, it uses no cookies or browser storage for this, and doesn’t track you from one site to another.
+- **Analytics** (shown only when analytics is active, section 6): Cloudflare Web Analytics counts visits and measures how fast pages load, in aggregate. According to Cloudflare, it uses no cookies or browser storage for this, and doesn’t track you from one site to another.
 - **Preferences**: your theme choice (light or dark) is stored in your own browser and never sent to me. Your language isn’t stored: it’s part of the page address (/fr or /en). Only at lab.cabrelfosso.com itself is the language picked from the preference your browser sends, and nothing is stored.
 - **Experiments**: all calculations run in your browser; your settings are never sent to me.
 - **What the Lab doesn’t do**: no accounts, no forms, no ads. It doesn’t sell any data or share it with anyone for commercial purposes.
@@ -312,3 +313,4 @@ Page 404 (bilingue, une seule page) :
 
 - Version 0.1 (23 novembre 2026) : décision du Labo ; publics ; adresses et table de correspondance ; expériences prévues ; stack statique sur Cloudflare Workers ; feuille de route L1 à L3 ; proposition pour la démo 3-SAT.
 - Version 0.2 (24 novembre 2026) : racine `/` par un Worker limité à cette adresse ; stack vérifiée (sans adaptateur, TypeScript 5.9, ESLint 9) et configuration Cloudflare ; en-têtes de sécurité ; noms « Le Labo » et « The Lab », voix à la première personne ; licences MIT (code) et CC BY 4.0 (textes et figures) ; Cloudflare Web Analytics et page Confidentialité ; sitemap envoyé à la Search Console en L2 ; annexe B (textes de L1).
+- Version 0.3 (24 novembre 2026) : étape L1.1 ; paragraphe « Mesure d’audience » de la page Confidentialité conditionné au jeton Web Analytics, et description de la page sans mention de la mesure d’audience, pour rester exacte dans les deux cas (section 6, annexe B.3) ; fichier technique `/_not-found` gardé, avec `noindex` (section 4).
