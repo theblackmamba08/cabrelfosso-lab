@@ -170,3 +170,15 @@ describe("autres fichiers", () => {
     expect((await request("/_headers")).status).toBe(404);
   });
 });
+
+// Adresses que le navigateur précharge (next/link) : mal nommées par un export fait sous Windows.
+describe("fichiers de préchargement", () => {
+  it.each([
+    "/fr/__next.%24d%24lang.__PAGE__.txt",
+    "/en/privacy/__next.%24d%24lang.%24d%24section.__PAGE__.txt",
+    "/fr/__next._tree.txt",
+    "/fr.txt",
+  ])("%s répond 200", async (path) => {
+    expect((await request(path)).status).toBe(200);
+  });
+});

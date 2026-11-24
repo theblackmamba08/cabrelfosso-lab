@@ -86,7 +86,7 @@ process.on("exit", () => {
 
 try {
   const code = await runIntegration({
-    build: () => runToEnd("npx next build"),
+    build: () => runToEnd("npm run build"),
     startServer,
     runTests: () =>
       runToEnd("npx vitest run --config vitest.integration.config.mts", {
