@@ -25,6 +25,12 @@ const pages = [
   ["/en", "en", "Understand physics"],
   ["/fr/confidentialite", "fr", "Confidentialité"],
   ["/en/privacy", "en", "Privacy"],
+  ["/fr/physique", "fr", "Physique"],
+  ["/en/physics", "en", "Physics"],
+  ["/fr/physique/projectile", "fr", "Le mouvement d’un projectile"],
+  ["/en/physics/projectile", "en", "Projectile motion"],
+  ["/fr/physique/pendule-de-newton", "fr", "Le pendule de Newton"],
+  ["/en/physics/newtons-cradle", "en", "Newton’s cradle"],
 ] as const;
 
 describe("racine", () => {
@@ -116,16 +122,33 @@ it("le sélecteur de langue mène à la même page dans l’autre langue", async
   expect(html).toMatch(/<a [^>]*href="\/en\/privacy"[^>]*hrefLang="en"/);
 });
 
+it("le sélecteur de langue mène à la même expérience dans l’autre langue", async () => {
+  const html = await (await request("/fr/physique/pendule-de-newton")).text();
+  expect(html).toMatch(/<a [^>]*href="\/en\/physics\/newtons-cradle"[^>]*hrefLang="en"/);
+});
+
+it("le menu signale la page Physique, et elle seule (aria-current)", async () => {
+  const menu = async (path: string) =>
+    (await (await request(path)).text()).match(/<nav aria-label="Menu principal"[\s\S]*?<\/nav>/)?.[0] ?? "";
+  expect(await menu("/fr/physique")).toContain('aria-current="page"');
+  expect(await menu("/fr/physique/projectile")).not.toContain("aria-current");
+  expect(await menu("/fr")).toContain('href="/fr/physique"');
+});
+
 describe("adresses inconnues ou non publiées", () => {
   it.each([
     "/n-importe-quoi",
-    "/fr/physique",
-    "/en/physics",
+    "/fr/informatique",
+    "/en/computing",
+    "/en/physics/pendule-de-newton",
+    "/fr/physique/newtons-cradle",
+    "/fr/physique/inconnu",
+    "/fr/confidentialite/projectile",
     "/en/confidentialite",
     "/fr/privacy",
     "/de",
     "/fr/confidentialite/x",
-    "/og/fr/physique.png",
+    "/og/fr/informatique.png",
   ])("%s : 404 bilingue", async (path) => {
     const response = await request(path);
     expect(response.status).toBe(404);
@@ -180,6 +203,7 @@ describe("fichiers de préchargement", () => {
   it.each([
     "/fr/__next.%24d%24lang.__PAGE__.txt",
     "/en/privacy/__next.%24d%24lang.%24d%24section.__PAGE__.txt",
+    "/fr/physique/projectile/__next.%24d%24lang.%24d%24section.%24d%24experiment.__PAGE__.txt",
     "/fr/__next._tree.txt",
     "/fr.txt",
   ])("%s répond 200", async (path) => {
