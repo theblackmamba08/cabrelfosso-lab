@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
+import { webAnalyticsToken } from "../../src/lib/analytics";
 import { securityHeaders } from "../../src/lib/security-headers";
-import { normalizeBase, runSmoke } from "./smoke.mjs";
+import { normalizeBase, readAnalyticsToken, runSmoke } from "./smoke.mjs";
 
 const PROD = "https://lab.cabrelfosso.com";
 const secure = Object.fromEntries(securityHeaders.map(({ key, value }) => [key.toLowerCase(), value]));
@@ -39,14 +40,20 @@ function fakeSite(overrides: Record<string, Reply>, base: string) {
     },
     ...overrides,
   };
-  const requests: Array<{ method: string; url: string }> = [];
+  const requests: Array<{ method: string; url: string; agent: string; accept: string }> = [];
   const fetchFn = async (url: RequestInfo | URL, init: RequestInit = {}) => {
     const method = init.method ?? "GET";
     const { pathname, search, origin } = new URL(String(url));
     expect(origin).toBe(base);
     const language = new Headers(init.headers).get("accept-language");
     const key = `${method} ${pathname}${search}`;
-    requests.push({ method, url: String(url) });
+    const headers = new Headers(init.headers);
+    requests.push({
+      method,
+      url: String(url),
+      agent: headers.get("user-agent") ?? "",
+      accept: headers.get("accept") ?? "",
+    });
     const reply = replies[pathname === "/" && method !== "POST" ? `${key} [${language ?? ""}]` : key] ?? { status: 404 };
     return new Response(method === "HEAD" ? null : (reply.body ?? ""), {
       status: reply.status ?? 200,
@@ -56,9 +63,9 @@ function fakeSite(overrides: Record<string, Reply>, base: string) {
   return { fetchFn, requests };
 }
 
-async function run(overrides: Record<string, Reply> = {}, base = PROD) {
+async function run(overrides: Record<string, Reply> = {}, base = PROD, analyticsToken: string | null = null) {
   const site = fakeSite(overrides, base);
-  const result = await runSmoke({ baseUrl: base, fetchFn: site.fetchFn });
+  const result = await runSmoke({ baseUrl: base, fetchFn: site.fetchFn, analyticsToken });
   return { ...result, requests: site.requests };
 }
 
@@ -83,7 +90,7 @@ describe("vérification d'un site servi", () => {
   it("n'envoie que des GET et des HEAD, plus un seul POST sur /", async () => {
     const { requests } = await run();
     const others = requests.filter((r) => !["GET", "HEAD"].includes(r.method));
-    expect(others).toEqual([{ method: "POST", url: `${PROD}/` }]);
+    expect(others).toMatchObject([{ method: "POST", url: `${PROD}/` }]);
   });
 
   it.each<[string, Record<string, Reply>, RegExp]>([
@@ -102,5 +109,41 @@ describe("vérification d'un site servi", () => {
     ["une image de partage absente", { "GET /og/en/privacy.png": { status: 404 } }, /og\/en\/privacy/],
   ])("signale %s", async (_name, overrides, message) => {
     expect((await run(overrides)).failures.join("\n")).toMatch(message);
+  });
+});
+
+describe("mesure d'audience (cahier, section 6)", () => {
+  const beacon = (token: string) =>
+    `<script type="module" src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "${token}"}'></script>`;
+  const page = (body: string): Reply => ({ headers: { ...secure, "content-type": "text/html" }, body });
+  const all = (body: string) => ({ "GET /fr": page(body), "GET /en/privacy": page(body) });
+
+  it("demande les pages comme un navigateur : Cloudflare n'injecte son script que dans ce cas", async () => {
+    const { requests } = await run();
+    for (const path of ["/fr", "/en/privacy"]) {
+      const request = requests.find((r) => r.url === PROD + path);
+      expect(request?.agent).toMatch(/^Mozilla\/5\.0 .*Chrome\//);
+      expect(request?.accept).toContain("text/html");
+    }
+  });
+
+  it("sans jeton : échoue si une page contient un script de mesure", async () => {
+    const { failures } = await run({ "GET /en/privacy": page(beacon("autre")) });
+    expect(failures.join("\n")).toMatch(/\/en\/privacy.*cloudflareinsights/);
+    expect((await run()).failures).toEqual([]);
+  });
+
+  it("avec un jeton : exactement un extrait par page", async () => {
+    expect((await run(all(beacon("jeton")), PROD, "jeton")).failures).toEqual([]);
+    expect((await run({}, PROD, "jeton")).failures.join("\n")).toMatch(/0 extrait/);
+    expect((await run(all(beacon("jeton") + beacon("autre")), PROD, "jeton")).failures.join("\n")).toMatch(/2 extraits/);
+    expect((await run(all(beacon("autre")), PROD, "jeton")).failures.join("\n")).toMatch(/jeton/);
+  });
+
+  it("lit le jeton dans src/lib/analytics.ts", () => {
+    expect(readAnalyticsToken('export const webAnalyticsToken: string | null = null;')).toBeNull();
+    expect(readAnalyticsToken('export const webAnalyticsToken: string | null = "abc123";')).toBe("abc123");
+    expect(() => readAnalyticsToken("rien")).toThrow(/webAnalyticsToken/);
+    expect(readAnalyticsToken()).toBe(webAnalyticsToken);
   });
 });
