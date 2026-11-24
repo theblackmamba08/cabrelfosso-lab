@@ -26,6 +26,33 @@ describe("localizedPath", () => {
   });
 });
 
+describe("expériences", () => {
+  const cradle = { fr: "pendule-de-newton", en: "newtons-cradle" };
+
+  it("ont leur nom d’adresse dans chaque langue, sous leur catégorie", () => {
+    expect(localizedPath("physics", "fr", cradle)).toBe("/fr/physique/pendule-de-newton");
+    expect(alternatePaths("physics", cradle)).toEqual({
+      fr: "/fr/physique/pendule-de-newton",
+      en: "/en/physics/newtons-cradle",
+    });
+  });
+
+  it("appartiennent à leur catégorie (menu)", () => {
+    expect(routeKeyFromPath("/fr/physique", "fr")).toBe("physics");
+    expect(routeKeyFromPath("/en/physics/newtons-cradle", "en")).toBe("physics");
+    expect(routeKeyFromPath("/fr/physique/inconnu", "fr")).toBe("home");
+  });
+
+  it("mènent à la même expérience dans l’autre langue", () => {
+    expect(pathInLocale("/fr/physique/pendule-de-newton", "fr", "en")).toBe("/en/physics/newtons-cradle");
+    expect(pathInLocale("/en/physics/newtons-cradle", "en", "fr")).toBe("/fr/physique/pendule-de-newton");
+    expect(pathInLocale("/fr/physique/projectile", "fr", "en")).toBe("/en/physics/projectile");
+    expect(pathInLocale("/fr/physique", "fr", "en")).toBe("/en/physics");
+    expect(pathInLocale("/en/physics/pendule-de-newton", "en", "fr")).toBe("/fr");
+    expect(pathInLocale("/fr/informatique/projectile", "fr", "en")).toBe("/en");
+  });
+});
+
 describe("alternatePaths", () => {
   it("liste l’adresse de la page dans chaque langue", () => {
     expect(alternatePaths("privacy")).toEqual({ fr: "/fr/confidentialite", en: "/en/privacy" });
