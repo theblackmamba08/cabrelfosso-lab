@@ -1,6 +1,6 @@
 # Cahier des charges — le Labo de Cabrel FOSSO
 
-Version 0.4, du 24 novembre 2026 : étape L2a, déménagement du projectile et du pendule de Newton dans le Labo, page Physique, menu et fil d’Ariane, sources, règle Cloudflare de mesure d’audience (sections 2, 4.1, 5, 6, 8, annexes B.2 et C).
+Version 0.5, du 24 novembre 2026 : relecture de L2a ; ordre des chocs du pendule précisé (section 4.1) ; nom « Cabrel FOSSO » de l’en-tête sous 640 px (section 5) ; textes anglais des sources (annexe C).
 
 Rédigée par Claude dans le projet claude.ai « Labo », à partir de la version 0.1 (projet « Portfolio », 23 novembre 2026) et des réponses de Jospin du 24 novembre 2026. Les marqueurs TODO(Jospin) signalent une information encore manquante. Ce fichier est copié dans le dépôt `cabrelfosso-lab` sous `docs/cahier-des-charges.md` ; c’est cette copie qui fait foi.
 
@@ -125,7 +125,7 @@ Reprises de la section 13 du cahier du portfolio (« Phase 4 — décisions » e
 - **Pendule de Newton, montage** : 5 billes identiques de masse m = 50 g, suspendues à des fils de longueur L = 20 cm, g = 9,8 m/s². Ces valeurs sont choisies pour la démo et affichées ; elles ne décrivent pas un objet réel.
 - **Pendule de Newton, mouvement entre les chocs** : chaque bille est un pendule simple, d’équation θ″ = −(g/L) sin θ, intégrée numériquement (méthode de Runge-Kutta d’ordre 4, pas de temps fixe). Aucune approximation des petits angles.
 - **Pendule de Newton, chocs** : instantanés, entre deux billes voisines seulement, quand elles se touchent et se rapprochent. Pour deux billes identiques de vitesses v₁ et v₂ : v₁′ = [(1 − e) v₁ + (1 + e) v₂] / 2 et v₂′ = [(1 + e) v₁ + (1 − e) v₂] / 2, où e est le coefficient de restitution (e = 1 : choc parfaitement élastique). Ces formules découlent de la conservation de la quantité de mouvement et de la définition de e (sources de l’annexe C.3).
-- **Pendule de Newton, ordre des chocs au point bas** : quand plusieurs billes se touchent, les chocs sont traités par balayages successifs de gauche à droite (billes écartées à gauche), jusqu’à ce qu’aucune bille n’en rattrape une autre. Les valeurs de contrôle de l’annexe C.3 dépendent de cet ordre. « Après le choc » désigne l’état atteint quand plus aucune bille n’en rattrape une autre.
+- **Pendule de Newton, ordre des chocs au point bas** : quand plusieurs billes se touchent, les chocs sont traités par balayages successifs **dans le sens du mouvement** : de gauche à droite quand la quantité de mouvement totale est positive ou nulle (billes lâchées à gauche, cas des valeurs de contrôle), de droite à gauche quand elle est négative (au retour), jusqu’à ce qu’aucune bille n’en rattrape une autre. Ainsi, le retour est l’image miroir exacte de l’aller. Les valeurs de contrôle de l’annexe C.3 dépendent de cet ordre. « Après le choc » désigne l’état atteint quand plus aucune bille n’en rattrape une autre.
 - **Pendule de Newton, animation** : elle ne démarre qu’au bouton « Lâcher », puis continue ; bouton Pause / Reprendre (WCAG 2.2, critère 2.2.2) et ralenti ×0,1. Avec `prefers-reduced-motion`, le ralenti est coché par défaut.
 - **Pendule de Newton, affichage** : barres de la quantité de mouvement totale et de l’énergie cinétique totale, avant et après le choc, à la même échelle ; valeurs chiffrées en unités SI (p en kg·m/s, Ec en J), 3 chiffres significatifs.
 - **Sources** : chaque expérience a sa rubrique « Pour aller plus loin » (annexes C.2 et C.3). Le tableau « Affirmations et sources » de chaque annexe dit quelle source appuie quelle affirmation ; il sert à la relecture et n’est pas affiché sur le site.
@@ -133,7 +133,7 @@ Reprises de la section 13 du cahier du portfolio (« Phase 4 — décisions » e
 ## 5. Identité visuelle
 
 - Même identité que le portfolio : couleurs, polices (Space Grotesk, Inter, JetBrains Mono, hébergées avec le site), papier millimétré, thème sombre par défaut, typographie française. Source : section 7 du cahier du portfolio et `docs/design-system.md`, recopiés dans le dépôt du Labo à l’étape L1 ; pas de paquet partagé.
-- En-tête (barre flottante du portfolio) : « Le Labo » / « The Lab », avec « Cabrel FOSSO » ; sélecteur FR/EN ; bouton de thème ; lien « Portfolio » vers `https://cabrelfosso.com/fr` ou `/en`. Menu : une entrée par catégorie publiée, à partir de L2 « Physique » / « Physics » (annexe C.1) ; elle a le style de page courante sur la page de catégorie et sur ses expériences, et `aria-current="page"` seulement sur la page de catégorie elle-même. Sous 480 px, le menu passe sur une seconde ligne de la barre, sans défilement horizontal.
+- En-tête (barre flottante du portfolio) : « Le Labo » / « The Lab », avec « Cabrel FOSSO » ; sélecteur FR/EN ; bouton de thème ; lien « Portfolio » vers `https://cabrelfosso.com/fr` ou `/en`. Menu : une entrée par catégorie publiée, à partir de L2 « Physique » / « Physics » (annexe C.1) ; elle a le style de page courante sur la page de catégorie et sur ses expériences, et `aria-current="page"` seulement sur la page de catégorie elle-même. Sous 480 px, le menu passe sur une seconde ligne de la barre, sans défilement horizontal. Sous 640 px, « Cabrel FOSSO » est masqué visuellement dans la barre (il reste dans le nom accessible du lien), pour que le menu tienne sur la première ligne dès 480 px.
 - Fil d’Ariane visible (composant `Breadcrumb` du portfolio) sur les pages de catégorie et d’expérience : « Le Labo › Physique › {expérience} » / « The Lab › Physics › {experiment} », dernière étape sans lien avec `aria-current="page"` ; données structurées `BreadcrumbList` identiques.
 - Pied de page : lien vers mon portfolio, lien vers le code (dépôt public), Confidentialité, mention des licences (section 7).
 - Le choix du thème est enregistré par site (stockage du navigateur, propre à chaque adresse) : il peut différer entre le portfolio et le Labo.
@@ -446,7 +446,7 @@ Axes: origin on the ground, directly below the launch point; x-axis horizontal, 
 #### Pour aller plus loin — projectile
 
 - OpenStax, *University Physics Volume 1*, section 4.3 « Projectile Motion » (en anglais) → `https://openstax.org/books/university-physics-volume-1/pages/4-3-projectile-motion`
-- EN : OpenStax, *University Physics Volume 1*, section 4.3 “Projectile Motion” → même lien
+- EN : OpenStax, *University Physics Volume 1*, section 4.3 “Projectile Motion” → same link
 
 **Affirmations et sources** (relecture, non affiché)
 
@@ -546,8 +546,18 @@ Choc isolé de deux billes, la seconde immobile, e = 0,8 : v₁′ = 0,1 v₁ et
 - OpenStax, *University Physics Volume 1*, section 8.3 « Conservation of Energy » (exemple 8.7 : le pendule simple) (en anglais) → `https://openstax.org/books/university-physics-volume-1/pages/8-3-conservation-of-energy`
 - OpenStax, *University Physics Volume 1*, section 9.3 « Conservation of Linear Momentum » (en anglais) → `https://openstax.org/books/university-physics-volume-1/pages/9-3-conservation-of-linear-momentum`
 - OpenStax, *University Physics Volume 1*, section 9.4 « Types of Collisions » (en anglais) → `https://openstax.org/books/university-physics-volume-1/pages/9-4-types-of-collisions`
-- Wikipédia, « Coefficient de restitution » → `https://fr.wikipedia.org/wiki/Coefficient_de_restitution` (EN : Wikipedia, “Coefficient of restitution” → `https://en.wikipedia.org/wiki/Coefficient_of_restitution`)
-- S. Hutzler, G. Delaney, D. Weaire et F. MacLeod, « Rocking Newton’s cradle », *American Journal of Physics*, vol. 72, n° 12, p. 1508-1516, 2004 (en anglais) → `https://doi.org/10.1119/1.1783898` (EN : same reference, “pp. 1508–1516”)
+- Wikipédia, « Coefficient de restitution » → `https://fr.wikipedia.org/wiki/Coefficient_de_restitution`
+- S. Hutzler, G. Delaney, D. Weaire et F. MacLeod, « Rocking Newton’s cradle », *American Journal of Physics*, vol. 72, n° 12, p. 1508-1516, 2004 (en anglais) → `https://doi.org/10.1119/1.1783898`
+
+English (same links, except Wikipedia):
+
+- OpenStax, *University Physics Volume 1*, section 8.3 “Conservation of Energy” (Example 8.7: the simple pendulum)
+- OpenStax, *University Physics Volume 1*, section 9.3 “Conservation of Linear Momentum”
+- OpenStax, *University Physics Volume 1*, section 9.4 “Types of Collisions”
+- Wikipedia, “Coefficient of restitution” → `https://en.wikipedia.org/wiki/Coefficient_of_restitution`
+- S. Hutzler, G. Delaney, D. Weaire and F. MacLeod, “Rocking Newton’s cradle”, *American Journal of Physics*, vol. 72, no. 12, pp. 1508–1516, 2004
+
+Le lien DOI répond 403 aux outils automatiques (vérification de L2a) ; il s’ouvre normalement dans un navigateur.
 
 **Affirmations et sources** (relecture, non affiché)
 
@@ -566,3 +576,4 @@ Choc isolé de deux billes, la seconde immobile, e = 0,8 : v₁′ = 0,1 v₁ et
 - Version 0.2 (24 novembre 2026) : racine `/` par un Worker limité à cette adresse ; stack vérifiée (sans adaptateur, TypeScript 5.9, ESLint 9) et configuration Cloudflare ; en-têtes de sécurité ; noms « Le Labo » et « The Lab », voix à la première personne ; licences MIT (code) et CC BY 4.0 (textes et figures) ; Cloudflare Web Analytics et page Confidentialité ; sitemap envoyé à la Search Console en L2 ; annexe B (textes de L1).
 - Version 0.3 (24 novembre 2026) : étape L1.1 ; paragraphe « Mesure d’audience » de la page Confidentialité conditionné au jeton Web Analytics, et description de la page sans mention de la mesure d’audience, pour rester exacte dans les deux cas (section 6, annexe B.3) ; fichier technique `/_not-found` gardé, avec `noindex` (section 4).
 - Version 0.4 (24 novembre 2026) : étape L2a ; L1 terminée ; physique publiée (section 2) ; modèles et conventions des expériences (section 4.1) ; menu et fil d’Ariane (section 5) ; règle Cloudflare « Labo : pas de mesure automatique » (section 6) ; L2 découpée en L2a et L2b (section 8) ; accueil avec la section « Physique », bloc provisoire retiré (annexe B.2) ; annexe C : page Physique, projectile et pendule de Newton, sources vérifiées le 24 novembre 2026.
+- Version 0.5 (24 novembre 2026) : relecture de L2a ; ordre des chocs du pendule « dans le sens du mouvement », comme le code du portfolio (section 4.1) ; « Cabrel FOSSO » masqué visuellement sous 640 px (section 5) ; textes anglais des sources, validés (annexe C).
