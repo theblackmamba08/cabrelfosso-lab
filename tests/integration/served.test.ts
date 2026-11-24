@@ -142,6 +142,10 @@ describe("adresses inconnues ou non publiées", () => {
   });
 });
 
+it("/_not-found, fichier technique de Next.js, répond avec noindex", async () => {
+  expect(await (await request("/_not-found")).text()).toContain('<meta name="robots" content="noindex"/>');
+});
+
 describe("autres fichiers", () => {
   it.each([
     ["/sitemap.xml", /xml/],

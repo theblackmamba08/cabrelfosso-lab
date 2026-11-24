@@ -1,6 +1,7 @@
 /** Résultat de la construction (out/), avant toute mise en ligne. */
 import { existsSync, readdirSync, readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
+import { webAnalyticsToken } from "../../src/lib/analytics";
 
 const out = new URL("../../out/", import.meta.url);
 const file = (path: string) => new URL(path, out);
@@ -52,6 +53,34 @@ describe("page 404", () => {
     expect(robots).toEqual(["noindex"]);
     expect(html).toContain("dataset.theme");
     expect(html).toMatch(/rel="stylesheet"/);
+  });
+});
+
+describe("mesure d’audience : l’extrait et son paragraphe vont ensemble", () => {
+  const active = webAnalyticsToken !== null;
+
+  it.each(["fr/confidentialite.html", "en/privacy.html"])("%s ne la décrit que si elle est active", (path) => {
+    expect(read(path).includes("Cloudflare Web Analytics")).toBe(active);
+  });
+
+  it.each(["fr.html", "en.html", "fr/confidentialite.html", "en/privacy.html", "404.html"])(
+    "%s ne charge l’extrait que si elle est active",
+    (path) => {
+      expect(read(path).includes("static.cloudflareinsights.com")).toBe(active);
+    },
+  );
+});
+
+describe("fichier technique /_not-found de Next.js (cahier, section 4)", () => {
+  it("est gardé, en noindex", () => {
+    expect(read("_not-found.html")).toContain('<meta name="robots" content="noindex"/>');
+  });
+
+  it("n’est ni dans le sitemap, ni lié depuis une page publiée", () => {
+    expect(read("sitemap.xml")).not.toContain("_not-found");
+    for (const path of ["fr.html", "en.html", "fr/confidentialite.html", "en/privacy.html"]) {
+      expect(read(path), path).not.toMatch(/href="[^"]*_not-found/);
+    }
   });
 });
 
