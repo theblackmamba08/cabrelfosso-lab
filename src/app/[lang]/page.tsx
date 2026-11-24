@@ -8,7 +8,7 @@ import { pageMetadata } from "@/i18n/metadata";
 export async function generateMetadata({ params }: PageProps<"/[lang]">): Promise<Metadata> {
   const { lang } = await params;
   if (!isLocale(lang)) return {};
-  return pageMetadata("home", lang, await getMessages(lang));
+  return pageMetadata({ key: "home" }, lang, await getMessages(lang));
 }
 
 export default async function Page({ params }: PageProps<"/[lang]">) {

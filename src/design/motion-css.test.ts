@@ -57,7 +57,7 @@ describe("animations CSS", () => {
     for (const { name } of keyframes) expect(motionOk).toContain(name);
   });
 
-  it("ne bouclent jamais : pas de bouton Pause à l'étape L1 (WCAG 2.2, critère 2.2.2)", () => {
+  it("ne bouclent jamais : pas de bouton Pause général (WCAG 2.2, critère 2.2.2)", () => {
     expect(css).not.toMatch(/infinite|data-loop|data-motion/);
   });
 

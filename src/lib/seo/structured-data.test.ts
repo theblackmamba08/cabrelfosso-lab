@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { serializeJsonLd, websiteLd } from "./structured-data";
+import { breadcrumbLd, serializeJsonLd, websiteLd } from "./structured-data";
 
 describe("WebSite", () => {
   it("nomme le site, son adresse canonique, sa langue et son auteur", () => {
@@ -14,6 +14,23 @@ describe("WebSite", () => {
       name: "Le Labo — Cabrel FOSSO",
       url: "https://lab.cabrelfosso.com/fr",
       inLanguage: "fr",
+    });
+  });
+});
+
+describe("BreadcrumbList", () => {
+  it("reprend les étapes du fil d’Ariane, en URL absolues", () => {
+    expect(
+      breadcrumbLd([
+        { label: "Le Labo", href: "/fr" },
+        { label: "Physique", href: "/fr/physique" },
+      ]),
+    ).toEqual({
+      "@type": "BreadcrumbList",
+      itemListElement: [
+        { "@type": "ListItem", position: 1, name: "Le Labo", item: "https://lab.cabrelfosso.com/fr" },
+        { "@type": "ListItem", position: 2, name: "Physique", item: "https://lab.cabrelfosso.com/fr/physique" },
+      ],
     });
   });
 });
