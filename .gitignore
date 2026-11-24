@@ -1,0 +1,41 @@
+# Dépendances
+/node_modules
+/.pnp
+.pnp.*
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/versions
+
+# Tests
+/coverage
+
+# Next.js : dossier de travail et export statique (out/ est reconstruit à chaque build)
+/.next/
+/out/
+/build
+
+# Divers
+.DS_Store
+*.pem
+
+# Journaux de débogage
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# Variables d'environnement : le Labo n'en a pas besoin ; aucune ne doit être versionnée
+.env*
+
+# TypeScript
+*.tsbuildinfo
+next-env.d.ts
+
+# Cloudflare / Wrangler
+.wrangler
+.dev.vars*
+
+# Rapports bruts de Lighthouse : hors du dépôt
+/lighthouse-reports/
