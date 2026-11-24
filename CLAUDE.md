@@ -1,3 +1,5 @@
+@AGENTS.md
+
 # CLAUDE.md — le Labo de Cabrel FOSSO
 
 Ce fichier donne le contexte permanent du projet. Il est lu au début de chaque session.
@@ -44,7 +46,13 @@ Le Labo (`lab.cabrelfosso.com`) : site bilingue français/anglais d’expérienc
 
 ## Commandes
 
-(À compléter par l’étape L1, quand les scripts existent.)
+- `npm ci` : installer les dépendances.
+- `npm run check` : types, lint, tests unitaires, build.
+- `npm run test:integration` : build, puis site servi par `wrangler dev`, tests d’intégration.
+- `npm run dev` : serveur de développement.
+- `npm run preview` : build, puis site servi avec le vrai Worker sur http://localhost:8787.
+- `npm run smoke -- <adresse>` et `npm run linkcheck -- <adresse>` : contrôles d’un site servi.
+- `npm run cf-typegen` : types du Worker, après un changement de `wrangler.jsonc`.
 
 ## Méthode : TDD
 
