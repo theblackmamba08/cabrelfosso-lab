@@ -55,7 +55,7 @@ function analyticsProblems(html, token) {
   if (token === null) {
     return html.includes("cloudflareinsights") ? ["script cloudflareinsights présent alors qu'il n'y a pas de jeton"] : [];
   }
-  const snippets = [...html.matchAll(/<scriptb[^>]*static\.cloudflareinsights\.com[^>]*>/g)].map((m) => m[0]);
+  const snippets = [...html.matchAll(/<script\b[^>]*static\.cloudflareinsights\.com[^>]*>/g)].map((m) => m[0]);
   if (snippets.length !== 1) {
     return [`${snippets.length} extrait${snippets.length > 1 ? "s" : ""} de mesure (1 attendu)`];
   }
