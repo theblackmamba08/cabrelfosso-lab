@@ -104,20 +104,19 @@ describe("sources « Pour aller plus loin »", () => {
     expect(en.experiment.inEnglish).toBe("");
   });
 
-  it("anglais : textes donnés par l'annexe C", () => {
-    expect(projectileSources).toContain(plain(en.demos.projectile.sources[0].text));
-    const cradle = en.demos["newtons-cradle"].sources.map((s) => plain(s.text));
-    expect(cradleSources).toContain(cradle[3]);
-    expect(cradle[4]).toContain("pp. 1508–1516");
-    for (const [index, title] of [
-      [0, "Conservation of Energy"],
-      [1, "Conservation of Linear Momentum"],
-      [2, "Types of Collisions"],
-      [4, "Rocking Newton's cradle"],
-    ] as const) {
-      expect(cradleSources).toContain(title);
-      expect(cradle[index]).toContain(title);
-    }
+  // Lignes entières : un texte tronqué ou complété dans le code ne passe pas.
+  it.each([
+    ...en.demos.projectile.sources.map(({ text }) => [text, projectileSources, `- EN : ${plain(text)} → same link`] as const),
+    ...en.demos["newtons-cradle"].sources.map(
+      ({ text, href }) =>
+        [
+          text,
+          cradleSources.slice(cradleSources.indexOf("English (same links, except Wikipedia):")),
+          `- ${plain(text)}${href.includes("wikipedia") ? ` → \`${href}\`` : ""}`,
+        ] as const,
+    ),
+  ])("anglais, mot pour mot : %s", (_text, annexe, line) => {
+    expect(annexe.split("\n")).toContain(line);
   });
 });
 
