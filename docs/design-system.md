@@ -20,6 +20,9 @@
 | `Breadcrumb`, `PageTrail` | `breadcrumb.tsx`, `page-trail.tsx` | Fil d'Ariane, et ses données structurées à partir des mêmes étapes |
 | `ExperimentCards`, `DemoFigure` | `experiment-cards.tsx`, `demos/demo-figure.tsx` | Cartes d'expériences, avec leur petite figure décorative (`aria-hidden`) |
 | Bouton Pause / Reprendre du pendule | `demos/newtons-cradle/newtons-cradle-demo.tsx` | Arrête l'animation (WCAG 2.2.2) ; ralenti coché par défaut avec `prefers-reduced-motion` |
+| `ChartFigure`, `ChartLegend` | `demos/three-sat/chart-figure.tsx` | Graphique SVG et sa légende (voir « Graphiques ») |
+| `ActionButton` | `demos/three-sat/action-button.tsx` | Bouton `aria-disabled`, qui garde le focus quand il devient indisponible |
+| `RichText` | `demos/three-sat/rich-text.tsx` | Gras, indices HTML, symboles dans la police des formules |
 | `SiteFooter` | `site-footer.tsx` | Liens, licences, droits |
 | `LanguageSwitcher` | `language-switcher.tsx` | Même page dans l'autre langue, par un lien ordinaire |
 | `ThemeToggle` | `theme-toggle.tsx` | Thème clair ou sombre, clé `theme` du navigateur |
@@ -122,11 +125,24 @@ Contrastes vérifiés par `src/design/contrast.test.ts`, dans les deux thèmes :
 ## Barre flottante
 
 ```
-≥ 640 px   ( Le Labo Cabrel FOSSO   Physique      FR EN ◐  (Portfolio) )
-480–639    ( Le Labo   Physique                   FR EN ◐  (Portfolio) )   « Cabrel FOSSO » reste dans le nom accessible
+≥ 640 px   ( Le Labo Cabrel FOSSO   Physique  Informatique   FR EN ◐  (Portfolio) )
+480–639    ( Le Labo   Physique  Informatique             FR EN ◐  (Portfolio) )   « Cabrel FOSSO » reste dans le nom accessible
 < 480 px   ( Le Labo                              FR EN ◐  (Portfolio) )
-           ( Physique                                                  )
+           ( Physique  Informatique                                    )
 ```
+
+## Graphiques et énigmes (3-SAT)
+
+- **Axes** : quadrillage `line`, axes et textes `ink-muted` ; viewBox fixe, texte de 22, 16 ou 13 unités
+  selon la largeur, pour rester lisible de 360 à 1920 px.
+- **Courbes** : un trait et un marqueur par n (20 : `ink-muted`, pointillé court, cercle ; 30 : `ink`,
+  tirets, carré ; 40 : `accent`, plein, triangle ; 50 : `ink`, tiret-point, losange creux). Jamais la couleur seule.
+- **Ligne de référence** (4,27) : `ink-muted`, pointillé fin, expliquée dans la légende.
+- **Pastilles de clauses** : bordure `line` ; clause de l'étape en cours : bordure `accent`, fond
+  `accent-soft`. L'état est écrit, avec une icône SVG.
+- **Formules** : α vient de JetBrains Mono (grec), ¬ du latin ; ∨ et ∧, absents des fichiers hébergés,
+  viennent d'une police de repli du système, comme √.
+- **Figure de l'informatique** (carte) : trois pastilles reliées, une seule pleine, sans texte.
 
 ## Mouvement
 
