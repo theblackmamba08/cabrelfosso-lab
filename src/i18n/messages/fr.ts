@@ -138,10 +138,10 @@ const fr = {
   physics: {
     metaTitle: "Physique — Le Labo",
     metaDescription:
-      "Des expériences de mécanique à régler vous-même : la trajectoire d’un projectile, les chocs du pendule de Newton.",
+      "Des expériences de physique à régler vous-même : la trajectoire d’un projectile, les chocs du pendule de Newton, le trajet de la lumière.",
     title: "Physique",
     intro:
-      "Des expériences de mécanique à régler vous-même : la trajectoire d’un projectile, les chocs du pendule de Newton.",
+      "Des expériences de physique à régler vous-même : la trajectoire d’un projectile, les chocs du pendule de Newton, le trajet de la lumière.",
   },
   computing: {
     metaTitle: "Informatique — Le Labo",

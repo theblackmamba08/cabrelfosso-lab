@@ -135,10 +135,10 @@ const en: Messages = {
   physics: {
     metaTitle: "Physics — The Lab",
     metaDescription:
-      "Mechanics experiments you can set up yourself: the path of a projectile and the collisions in Newton’s cradle.",
+      "Physics experiments you can set up yourself: the path of a projectile, the collisions in Newton’s cradle, and the path of light.",
     title: "Physics",
     intro:
-      "Mechanics experiments you can set up yourself: the path of a projectile and the collisions in Newton’s cradle.",
+      "Physics experiments you can set up yourself: the path of a projectile, the collisions in Newton’s cradle, and the path of light.",
   },
   computing: {
     metaTitle: "Computing — The Lab",
