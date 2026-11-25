@@ -1,16 +1,16 @@
 # Guide de maintenance
 
-Le cahier des charges (`docs/cahier-des-charges.md`) dit **ce que le site doit être**. Ce guide dit **où le changer et quoi faire ensuite**. Vérifié dans le dépôt le 25 novembre 2026 (étape L3). À mettre à jour quand une étape déplace un de ces fichiers.
+Le cahier des charges (`docs/cahier-des-charges.md`) dit **ce que le site doit être**. Ce guide dit **où le changer et quoi faire ensuite**. Vérifié dans le dépôt le 25 novembre 2026 (étape L4). À mettre à jour quand une étape déplace un de ces fichiers.
 
 ## 1. Règle d’or
 
-Le cahier d’abord, puis le code, puis les tests. Un texte changé seulement dans le code fait échouer `npm run check` : `src/i18n/messages/texts.test.ts` et `demos.test.ts` le comparent aux annexes B, C et D. Chaque changement suit le flux Git de `CLAUDE.md`.
+Le cahier d’abord, puis le code, puis les tests. Un texte changé seulement dans le code fait échouer `npm run check` : `src/i18n/messages/texts.test.ts` et `demos.test.ts` le comparent aux annexes B à E. Chaque changement suit le flux Git de `CLAUDE.md`.
 
 ## 2. Je veux… → où → et ensuite
 
 | Je veux… | Où | Et ensuite |
 | --- | --- | --- |
-| Modifier un texte | Cahier (annexes B, C et D), puis `src/i18n/messages/fr.ts` et `en.ts` (mêmes clés) | Typographie vérifiée par `src/content/typography.test.ts`. Pour la page Confidentialité, changer aussi la date : `privacyLastUpdated` dans `src/content/privacy.ts` (et son test) |
+| Modifier un texte | Cahier (annexes B à E), puis `src/i18n/messages/fr.ts` et `en.ts` (mêmes clés) | Typographie vérifiée par `src/content/typography.test.ts`. Pour la page Confidentialité, changer aussi la date : `privacyLastUpdated` dans `src/content/privacy.ts` (et son test) |
 | Ajouter une page | Son nom dans chaque langue : `src/i18n/routes.ts`. La publier : `publishedKeys` dans `src/i18n/published.ts`. Ses textes (`title`, `metaTitle`, `metaDescription`) : une clé du même nom dans les messages. Son composant : table `pages` de `src/app/[lang]/[section]/page.tsx` | Sitemap, hreflang, URL canonique, image de partage et sélecteur de langue suivent seuls. Adapter les tests qui fixent la liste des pages publiées (`published.test.ts`, `crawl.test.ts`, `tests/integration/`) |
 | Changer l’adresse d’une page | Interdit : les adresses publiées ne changent plus (cahier, section 2) | |
 | Ajouter une expérience | 1. Cahier : textes, valeurs de contrôle, sources vérifiées et tableau « Affirmations et sources » (modèle : annexe C). 2. `src/demos/registry.ts` (identifiant, catégorie, nom d’adresse par langue ; `published: true` quand la page est prête). 3. `src/demos/<identifiant>/` : calculs purs et leurs tests (valeurs de contrôle du cahier), figure, composant chargé par import dynamique (`…-lazy.tsx`). 4. Textes : clé `demos` des messages (`card`, `sources` comprises). 5. Brancher : `Simulation` dans `src/components/experiment-page.tsx`, figure de la carte dans `src/demos/demo-figure.tsx` | Adresse, cartes de l’accueil et de la catégorie, sitemap, hreflang, image de partage, fil d’Ariane et sélecteur de langue suivent seuls. Adapter les tests qui fixent la liste des pages et `demos.test.ts`. Première expérience d’une catégorie : publier aussi la catégorie (`published.ts`), ses textes (`home`, `nav` et page de catégorie des messages) et sa page (table `pages` de `[section]/page.tsx`) ; le menu et l’accueil suivent |
@@ -46,4 +46,5 @@ Où : tableau de bord Cloudflare, zone `cabrelfosso.com`, Rules → Configuratio
 | Worker `cabrelfosso-lab` | Cloudflare, Workers & Pages | Fichiers statiques de `out/` ; code exécuté pour `/` seulement. Adresses `workers.dev` et d’aperçu désactivées, aucun journal |
 | Domaine `lab.cabrelfosso.com` | Domaine personnalisé du Worker | Enregistrement DNS et certificat créés par Cloudflare au premier déploiement |
 | Mesure d’audience | Cloudflare Web Analytics, site `lab.cabrelfosso.com` | Extrait JavaScript, sans cookie |
+| Expériences publiées | `src/demos/registry.ts` | Physique : `projectile`, `newtons-cradle`, `refraction`. Informatique : `three-sat`, `think-of-a-number` |
 | Dépôt `theblackmamba08/cabrelfosso-lab` | GitHub, public | Code (MIT), contenus (CC BY 4.0) |
