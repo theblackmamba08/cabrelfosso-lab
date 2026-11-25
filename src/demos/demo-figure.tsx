@@ -6,6 +6,7 @@ import type { PublishedDemo } from "./registry";
  * Couleurs : jetons du thème seulement (accent, ligne, texte secondaire).
  */
 export function DemoFigure({ id }: { id: PublishedDemo["id"] }) {
+  const Figure = figures[id];
   return (
     <svg
       viewBox="0 0 240 120"
@@ -16,10 +17,18 @@ export function DemoFigure({ id }: { id: PublishedDemo["id"] }) {
       fill="none"
       strokeLinecap="round"
     >
-      {id === "projectile" ? <Projectile /> : id === "newtons-cradle" ? <Cradle /> : <ThreeSat />}
+      <Figure />
     </svg>
   );
 }
+
+const figures: Record<PublishedDemo["id"], () => React.ReactNode> = {
+  projectile: Projectile,
+  "newtons-cradle": Cradle,
+  "three-sat": ThreeSat,
+  refraction: Refraction,
+  "think-of-a-number": ThinkOfANumber,
+};
 
 /**
  * Trajectoire d'un projectile : la courbe de Bézier quadratique de points (24, 104), (120, −16),
@@ -77,6 +86,57 @@ function ThreeSat() {
           stroke="var(--accent)"
           strokeWidth="2"
         />
+      ))}
+    </>
+  );
+}
+
+/**
+ * Réfraction de l'air vers l'eau : incidence de 48°, réfraction de 34° (sin 34° ≈ sin 48° / 1,33),
+ * rayons de 64 et 56 issus du point (120, 60).
+ */
+function Refraction() {
+  const end = (length: number, degrees: number) => ({
+    x: (120 + length * Math.sin((degrees * Math.PI) / 180)).toFixed(2),
+    y: (60 - length * Math.cos((degrees * Math.PI) / 180)).toFixed(2),
+  });
+  const [incident, reflected, refracted] = [end(64, -48), end(64, 48), end(56, 180 - 34)];
+  return (
+    <>
+      <rect x="12" y="60" width="216" height="52" rx="4" fill="var(--accent-soft)" />
+      <line x1="12" y1="60" x2="228" y2="60" stroke="var(--ink-muted)" strokeWidth="1.5" />
+      <line x1="120" y1="10" x2="120" y2="110" stroke="var(--ink-muted)" strokeWidth="1.5" strokeDasharray="3 5" />
+      <line x1="120" y1="60" x2={reflected.x} y2={reflected.y} stroke="var(--accent)" strokeWidth="1" />
+      <line x1={incident.x} y1={incident.y} x2="120" y2="60" stroke="var(--accent)" strokeWidth="2.5" />
+      <line x1="120" y1="60" x2={refracted.x} y2={refracted.y} stroke="var(--ink)" strokeWidth="2.5" />
+    </>
+  );
+}
+
+/** Nombre mystère : à chaque ligne, la moitié des possibilités disparaît. */
+function ThinkOfANumber() {
+  const rows = [
+    { x: 12, width: 216 },
+    { x: 120, width: 108 },
+    { x: 120, width: 54 },
+    { x: 147, width: 27 },
+  ];
+  return (
+    <>
+      {rows.map(({ x, width }, i) => (
+        <g key={i}>
+          <rect x="12" y={14 + 25 * i} width="216" height="16" rx="4" fill="var(--line)" opacity="0.5" />
+          <rect
+            x={x}
+            y={14 + 25 * i}
+            width={width}
+            height="16"
+            rx="4"
+            fill={i === 3 ? "var(--accent)" : "var(--accent-soft)"}
+            stroke="var(--accent)"
+            strokeWidth="2"
+          />
+        </g>
       ))}
     </>
   );

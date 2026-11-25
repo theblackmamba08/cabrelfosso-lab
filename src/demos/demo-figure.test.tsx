@@ -23,7 +23,16 @@ describe("DemoFigure (cartes des expériences)", () => {
       renderToStaticMarkup(<DemoFigure id={id as "projectile" | "newtons-cradle"} />),
     );
     const threeSat = renderToStaticMarkup(<DemoFigure id="three-sat" />);
-    expect(new Set([projectile, cradle, threeSat]).size).toBe(3);
+    const [refraction, number] = (["refraction", "think-of-a-number"] as const).map((id) =>
+      renderToStaticMarkup(<DemoFigure id={id} />),
+    );
+    expect(new Set([projectile, cradle, threeSat, refraction, number]).size).toBe(5);
+    // La réfraction : deux milieux, une normale en pointillés, trois rayons.
+    expect(refraction).toMatch(/<rect /);
+    expect(refraction).toContain("stroke-dasharray");
+    expect(refraction.match(/<line /g)!.length).toBeGreaterThanOrEqual(4);
+    // Le nombre mystère : des intervalles de plus en plus petits.
+    expect(number.match(/<rect /g)!.length).toBeGreaterThanOrEqual(4);
     // 3-SAT : trois pastilles reliées.
     expect(threeSat.match(/<circle /g)).toHaveLength(3);
     expect(threeSat.match(/<line /g)).toHaveLength(3);

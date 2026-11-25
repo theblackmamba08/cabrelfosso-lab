@@ -1,5 +1,5 @@
 import { Fragment } from "react";
-import { parseMath } from "./equations";
+import { parseMath } from "./math";
 
 /** Formule en HTML : variables en italique, indices et exposants ; aucune bibliothèque. */
 export function MathText({ source }: { source: string }) {

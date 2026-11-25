@@ -18,6 +18,10 @@ const experiments = [
   "en/physics/newtons-cradle.html",
   "fr/informatique/transition-de-phase-3-sat.html",
   "en/computing/3-sat-phase-transition.html",
+  "fr/physique/refraction.html",
+  "en/physics/refraction.html",
+  "fr/informatique/pensez-a-un-nombre.html",
+  "en/computing/think-of-a-number.html",
 ];
 
 describe("pages exportées", () => {
@@ -48,6 +52,8 @@ describe("pages exportées", () => {
     "en/computing/transition-de-phase-3-sat.html",
     "fr/informatique/3-sat-phase-transition.html",
     "fr/physique/transition-de-phase-3-sat.html",
+    "en/computing/pensez-a-un-nombre.html",
+    "fr/informatique/think-of-a-number.html",
     "index.html",
   ])("%s n’existe pas", (path) => {
     expect(existsSync(file(path))).toBe(false);
@@ -124,6 +130,9 @@ describe("code des simulations, chargé seulement sur sa page", () => {
   // Propre à three-sat-demo.tsx, et constante de SplitMix64 (three-sat/random.ts), gardée par la minification.
   const threeSat = "erreur-graine";
   const solver = /0x9e3779b97f4a7c15/i;
+  // Constantes de refraction/optics.ts ; attribut propre à think-of-a-number-demo.tsx.
+  const refraction = /water:1\.33,glass:1\.52,diamond:2\.42/;
+  const number = "data-number-answers";
 
   it.each([
     "fr.html",
@@ -139,6 +148,8 @@ describe("code des simulations, chargé seulement sur sa page", () => {
     expect(scripts(path)).not.toContain(cradle);
     expect(scripts(path)).not.toContain(threeSat);
     expect(scripts(path)).not.toMatch(solver);
+    expect(scripts(path)).not.toMatch(refraction);
+    expect(scripts(path)).not.toContain(number);
   });
 
   it.each(experiments)("%s : le sien seulement", (path) => {
@@ -146,10 +157,12 @@ describe("code des simulations, chargé seulement sur sa page", () => {
     expect(scripts(path).includes(cradle)).toBe(/pendule|cradle/.test(path));
     expect(scripts(path).includes(threeSat)).toBe(path.includes("3-sat"));
     expect(solver.test(scripts(path))).toBe(path.includes("3-sat"));
+    expect(refraction.test(scripts(path))).toBe(path.includes("refraction"));
+    expect(scripts(path).includes(number)).toBe(/nombre|number/.test(path));
   });
 
   it.each(experiments)("%s : réglages et résultats déjà dans le HTML, sans JavaScript", (path) => {
-    expect(read(path)).toMatch(path.includes("3-sat") ? /<select/ : /<input[^>]*type="range"/);
+    expect(read(path)).toMatch(/3-sat|nombre|number/.test(path) ? /<select/ : /<input[^>]*type="range"/);
     expect(read(path)).toMatch(/<svg[^>]*role="img"/);
   });
 });
@@ -200,6 +213,53 @@ describe("expérience 3-SAT", () => {
   });
 });
 
+describe("série « découverte » : le gabarit, dans l’ordre, sans JavaScript", () => {
+  const inOrder = (html: string, texts: string[]) => {
+    const order = texts.map((text) => html.indexOf(`>${text}</`));
+    expect(order).not.toContain(-1);
+    expect(order).toEqual([...order].sort((a, b) => a - b));
+  };
+
+  it.each([
+    ["fr/physique/refraction.html", fr, "28,9°"],
+    ["en/physics/refraction.html", en, "28.9°"],
+  ] as const)("%s", (path, messages, angle) => {
+    const t = messages.demos.refraction;
+    inOrder(read(path), [
+      t.title,
+      t.intro,
+      t.controls.title,
+      t.legend.incident,
+      t.results.title,
+      angle,
+      t.laws.title,
+      t.assumptions.title,
+      t.tryThis.title,
+      messages.experiment.sources,
+      messages.experiment.portfolio,
+    ]);
+  });
+
+  it.each([
+    ["fr/informatique/pensez-a-un-nombre.html", fr],
+    ["en/computing/think-of-a-number.html", en],
+  ] as const)("%s", (path, messages) => {
+    const t = messages.demos["think-of-a-number"];
+    inOrder(read(path), [
+      t.title,
+      t.subtitle,
+      t.intro,
+      t.controls.range,
+      t.buttons.ready,
+      t.how.title,
+      t.assumptions.title,
+      t.tryThis.title,
+      messages.experiment.sources,
+      messages.experiment.portfolio,
+    ]);
+  });
+});
+
 describe("sous-ensemble grec de JetBrains Mono", () => {
   const greek = /[α-ωΑ-Ω]/;
   const body = (path: string) => read(path).replace(/<script[\s\S]*?<\/script>/g, "");
@@ -211,8 +271,8 @@ describe("sous-ensemble grec de JetBrains Mono", () => {
   });
 
   // Le navigateur ne télécharge une police que pour un caractère qu'elle seule contient.
-  it("ne sert que sur les pages d’expérience : aucune lettre grecque ailleurs", () => {
-    for (const path of pages) expect(greek.test(body(path)), path).toBe(experiments.includes(path));
+  it("ne sert que sur les pages des expériences qui ont des lettres grecques", () => {
+    for (const path of pages) expect(greek.test(body(path)), path).toBe(/projectile|pendule|cradle|3-sat/.test(path));
   });
 });
 
@@ -228,12 +288,12 @@ describe("images de partage", () => {
 
   it("il n’y en a pas d’autre", () => {
     const images = readdirSync(file("og/"), { recursive: true, encoding: "utf8" }).filter((name) => name.endsWith(".png"));
-    expect(images).toHaveLength(14);
+    expect(images).toHaveLength(18);
   });
 });
 
 describe("sitemap.xml et robots.txt", () => {
-  it("le sitemap liste les quatorze adresses, avec leurs équivalents", () => {
+  it("le sitemap liste les dix-huit adresses, avec leurs équivalents", () => {
     const xml = read("sitemap.xml");
     expect([...xml.matchAll(/<loc>([^<]+)<\/loc>/g)].map((m) => m[1])).toEqual([
       "https://lab.cabrelfosso.com/fr",
@@ -248,10 +308,14 @@ describe("sitemap.xml et robots.txt", () => {
       "https://lab.cabrelfosso.com/en/physics/projectile",
       "https://lab.cabrelfosso.com/fr/physique/pendule-de-newton",
       "https://lab.cabrelfosso.com/en/physics/newtons-cradle",
+      "https://lab.cabrelfosso.com/fr/physique/refraction",
+      "https://lab.cabrelfosso.com/en/physics/refraction",
       "https://lab.cabrelfosso.com/fr/informatique/transition-de-phase-3-sat",
       "https://lab.cabrelfosso.com/en/computing/3-sat-phase-transition",
+      "https://lab.cabrelfosso.com/fr/informatique/pensez-a-un-nombre",
+      "https://lab.cabrelfosso.com/en/computing/think-of-a-number",
     ]);
-    expect(xml.match(/<xhtml:link /g)).toHaveLength(42);
+    expect(xml.match(/<xhtml:link /g)).toHaveLength(54);
     expect(xml).toContain('hreflang="x-default" href="https://lab.cabrelfosso.com/fr/confidentialite"');
   });
 

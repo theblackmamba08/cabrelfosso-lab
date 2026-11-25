@@ -1,6 +1,7 @@
 import { readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
-import { equations, motionEquations, parseMath, plainMath, type Equation } from "./equations";
+import { equations, motionEquations, type Equation } from "./equations";
+import { parseMath, plainMath } from "./math";
 import type { Launch } from "./physics";
 
 const launch: Launch = { speed: 10, angle: 45, height: 0, gravity: 9.8 };

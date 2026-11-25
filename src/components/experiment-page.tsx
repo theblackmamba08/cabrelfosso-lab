@@ -1,7 +1,10 @@
-import { CradleLaws } from "@/demos/newtons-cradle/cradle-laws";
+import { CradleLaws, LawText } from "@/demos/newtons-cradle/cradle-laws";
 import { NewtonsCradleDemoLazy } from "@/demos/newtons-cradle/newtons-cradle-demo-lazy";
 import { ProjectileDemoLazy } from "@/demos/projectile/projectile-demo-lazy";
+import { RefractionDemoLazy } from "@/demos/refraction/refraction-demo-lazy";
 import type { PublishedDemo } from "@/demos/registry";
+import { HowItWorks } from "@/demos/think-of-a-number/how-it-works";
+import { ThinkOfANumberDemoLazy } from "@/demos/think-of-a-number/think-of-a-number-demo-lazy";
 import { RichText } from "@/demos/three-sat/rich-text";
 import { ThreeSatDemoLazy } from "@/demos/three-sat/three-sat-demo-lazy";
 import { ThreeSatTheory } from "@/demos/three-sat/three-sat-theory";
@@ -25,6 +28,20 @@ function Simulation({ demo, locale, t }: { demo: PublishedDemo; locale: Locale; 
     const { controls, buttons, status, charts, summaries, table, steps } = t.demos["three-sat"];
     return <ThreeSatDemoLazy locale={locale} texts={{ controls, buttons, status, charts, summaries, table, steps }} />;
   }
+  if (demo.id === "refraction") {
+    const { controls, results, legend, summary, laws } = t.demos.refraction;
+    return <RefractionDemoLazy locale={locale} texts={{ controls, results, legend, summary, laws }} />;
+  }
+  if (demo.id === "think-of-a-number") {
+    const { controls, instruction, buttons, question, counter, possibilities, history, end, contradiction, bar } =
+      t.demos["think-of-a-number"];
+    return (
+      <ThinkOfANumberDemoLazy
+        locale={locale}
+        texts={{ controls, instruction, buttons, question, counter, possibilities, history, end, contradiction, bar }}
+      />
+    );
+  }
   const { controls, fixed, buttons, readings, summary } = t.demos["newtons-cradle"];
   return <NewtonsCradleDemoLazy locale={locale} texts={{ controls, fixed, buttons, readings, summary }} />;
 }
@@ -35,15 +52,16 @@ function SourceText({ text }: { text: string }) {
 }
 
 /**
- * Page d'une expérience (cahier, section 3, gabarit ; textes des annexes C et D).
- * TODO(Jospin): classe concernée. La mention « Au programme de… » reste absente tant qu'elle manque.
- * TODO(Jospin): niveau concerné (3-SAT). La mention « Niveau » reste absente tant qu'il manque.
+ * Page d'une expérience (cahier, section 3, gabarit ; textes des annexes C, D et E).
+ * TODO(Jospin): classe concernée (projectile, pendule, réfraction). La mention « Au programme de… » reste absente tant qu'elle manque.
+ * TODO(Jospin): niveau concerné (3-SAT, nombre mystère). La mention « Niveau » reste absente tant qu'il manque.
  */
 export function ExperimentPage({ locale, t, demo }: { locale: Locale; t: Messages; demo: PublishedDemo }) {
-  const { title, intro, assumptions, tryThis, sources } = t.demos[demo.id];
+  const texts = t.demos[demo.id];
+  const { title, intro, assumptions, tryThis, sources } = texts;
   const threeSat = demo.id === "three-sat" ? t.demos[demo.id] : undefined;
-  /** Les textes de physique gardent leur écriture ; ceux de 3-SAT ont α et des indices. */
-  const rich = (text: string) => (threeSat ? <RichText text={text} /> : text);
+  /** Formules entre deux `$` ; les textes de 3-SAT ont leur propre écriture (α, indices Unicode). */
+  const rich = (text: string) => (threeSat ? <RichText text={text} /> : <LawText source={text} />);
 
   return (
     <article>
@@ -55,7 +73,7 @@ export function ExperimentPage({ locale, t, demo }: { locale: Locale; t: Message
           { label: title, href: localizedPath(demo.category, locale, demo.slugs) },
         ]}
       />
-      <PageHero title={title} subtitle={threeSat?.subtitle} intro={intro} />
+      <PageHero title={title} subtitle={"subtitle" in texts ? texts.subtitle : undefined} intro={intro} />
 
       <Simulation demo={demo} locale={locale} t={t} />
 
@@ -63,6 +81,8 @@ export function ExperimentPage({ locale, t, demo }: { locale: Locale; t: Message
         {demo.id === "newtons-cradle" && <CradleLaws laws={t.demos["newtons-cradle"].laws} />}
 
         {threeSat && <ThreeSatTheory {...threeSat} />}
+
+        {demo.id === "think-of-a-number" && <HowItWorks how={t.demos["think-of-a-number"].how} />}
 
         <PageSection id="hypotheses" title={assumptions.title}>
           <Card className="max-w-3xl md:p-8">

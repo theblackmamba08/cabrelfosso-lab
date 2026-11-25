@@ -135,10 +135,10 @@ const en: Messages = {
   physics: {
     metaTitle: "Physics — The Lab",
     metaDescription:
-      "Mechanics experiments you can set up yourself: the path of a projectile and the collisions in Newton’s cradle.",
+      "Physics experiments you can set up yourself: the path of a projectile, the collisions in Newton’s cradle, and the path of light.",
     title: "Physics",
     intro:
-      "Mechanics experiments you can set up yourself: the path of a projectile and the collisions in Newton’s cradle.",
+      "Physics experiments you can set up yourself: the path of a projectile, the collisions in Newton’s cradle, and the path of light.",
   },
   computing: {
     metaTitle: "Computing — The Lab",
@@ -550,6 +550,188 @@ const en: Messages = {
         {
           text: "S. Cook, “The P versus NP Problem”, Clay Mathematics Institute",
           href: "https://www.claymath.org/wp-content/uploads/2022/06/pvsnp.pdf",
+          english: true,
+        },
+      ],
+    },
+    refraction: {
+      card: {
+        title: "Refraction of light",
+        text: "Change the angle of a light ray and the materials it crosses: watch it bend, then get trapped.",
+      },
+      metaTitle: "Refraction of light — The Lab",
+      metaDescription:
+        "Interactive refraction simulation: Snell’s law, critical angle and total internal reflection, updated live.",
+      title: "Refraction of light",
+      intro:
+        "In a fish tank, a fish can seem to be in two places at once: light changes direction when it passes from water into air. Set up the ray and watch it bend.",
+      controls: {
+        title: "Controls",
+        from: "Material the light comes from",
+        to: "Material the light enters",
+        angle: "Angle of incidence (°)",
+        media: {
+          air: "Air (n = 1.00)",
+          water: "Water (n = 1.33)",
+          glass: "Glass (n = 1.52)",
+          diamond: "Diamond (n = 2.42)",
+        },
+      },
+      results: {
+        title: "Results",
+        reflection: "Angle of reflection",
+        refraction: "Angle of refraction",
+        critical: "Critical angle",
+        total: "none: total internal reflection",
+        noCritical: "none: the light enters a material with an equal or higher index",
+      },
+      legend: {
+        incident: "Incident ray",
+        reflected: "Reflected ray",
+        refracted: "Refracted ray",
+        normal: "Normal",
+      },
+      summary: {
+        refracted: "Incident ray at {i₁}; refracted ray at {i₂}.",
+        total: "Incident ray at {i₁}; total internal reflection: no refracted ray.",
+      },
+      laws: {
+        title: "The laws",
+        intro:
+          "Angles are measured from the normal, the line perpendicular to the surface where the ray meets it.",
+        items: [
+          "Index of refraction of a material: $*n* = *c* / *v*$, where $*c*$ is the speed of light in a vacuum and $*v*$ its speed in the material.",
+          "Law of reflection: $*r* = *i*_{1}$",
+          "Law of refraction (Snell’s law): $*n*_{1} sin *i*_{1} = *n*_{2} sin *i*_{2}$",
+          "With the current settings: $sin *i*_{2} = *n*_{1} sin *i*_{1} / *n*_{2} = {s}$",
+          "If this number is greater than 1, no angle $*i*_{2}$ fits: there is no refracted ray and all the light is reflected. This is total internal reflection.",
+          "Critical angle, when light passes into a material with a lower index ($*n*_{1} > *n*_{2}$): $sin *i*_{lim} = *n*_{2} / *n*_{1}$. Beyond this angle, the reflection is total.",
+        ],
+      },
+      assumptions: {
+        title: "Assumptions",
+        text: "The light is a single colour (yellow, 589 nm): a material’s index varies slightly with colour. The materials are transparent and uniform, and the surface between them is flat. The figure doesn’t show how bright each ray is: in reality, some light is always reflected, even when it crosses the surface.",
+      },
+      tryThis: {
+        title: "Try this",
+        show: "Show the explanation",
+        items: {
+          closer: {
+            question:
+              "From air into water, increase the angle of incidence from 0° to 89°. Does the refracted ray move towards the normal or away from it?",
+            answer:
+              "towards it, because water has a higher index than air. Even at 89°, the angle of refraction stays below 48.8°: $sin *i*_{2}$ can’t exceed 1.00 / 1.33.",
+          },
+          trapped: {
+            question: "Swap them: from water into air. At what angle does the refracted ray disappear?",
+            answer:
+              "between 48° and 49°. The critical angle is 48.8°, since $sin *i*_{lim} = 1.00 / 1.33$. Beyond it, the light stays trapped in the water: this is total internal reflection.",
+          },
+          diamond: {
+            question: "Compare the critical angle from diamond into air with the one from water into air.",
+            answer:
+              "24.4° for diamond, against 48.8° for water. The higher the index of the first material, the smaller the critical angle, and the more easily light stays trapped inside. Optical fibres use total internal reflection to guide light.",
+          },
+        },
+      },
+      sources: [
+        {
+          text: "OpenStax, *University Physics Volume 3*, section 1.3 “Refraction”",
+          href: "https://openstax.org/books/university-physics-volume-3/pages/1-3-refraction",
+          english: true,
+        },
+        {
+          text: "OpenStax, *University Physics Volume 3*, section 1.4 “Total Internal Reflection”",
+          href: "https://openstax.org/books/university-physics-volume-3/pages/1-4-total-internal-reflection",
+          english: true,
+        },
+        {
+          text: "OpenStax, *University Physics Volume 3*, section 1.5 “Dispersion”",
+          href: "https://openstax.org/books/university-physics-volume-3/pages/1-5-dispersion",
+          english: true,
+        },
+      ],
+    },
+    "think-of-a-number": {
+      card: {
+        title: "Think of a number",
+        text: "Pick a number between 1 and 1,000: the computer finds it in 10 questions or fewer.",
+      },
+      metaTitle: "Think of a number — The Lab",
+      metaDescription:
+        "Interactive game: pick a number, and the computer finds it in just a few questions using binary search.",
+      title: "Think of a number",
+      subtitle: "Binary search",
+      intro:
+        "Think of a number, and keep it to yourself. The computer will find it with very few questions. Its secret: each time, it cuts the list of numbers that are still possible in half.",
+      controls: { range: "Pick a number between 1 and…" },
+      instruction: "Pick a number between 1 and {N}, keep it in mind, then click “I’ve picked”.",
+      buttons: {
+        ready: "I’ve picked",
+        higher: "Higher",
+        lower: "Lower",
+        found: "That’s it!",
+        undo: "Undo last answer",
+        replay: "Play again",
+      },
+      question: "Is your number {g}?",
+      counter: "Question {k} of {Q} at most",
+      possibilities: {
+        many: "{r} numbers are still possible, from {a} to {b}.",
+        one: "Only one number is still possible: {a}.",
+      },
+      history: {
+        title: "Questions asked",
+        higher: "{g}? Higher",
+        lower: "{g}? Lower",
+        found: "{g}? That’s it!",
+      },
+      end: {
+        many: "Found it! Your number is {g}, found in {k} questions.",
+        one: "Found it! Your number is {g}, found with the very first question.",
+      },
+      contradiction:
+        "Your answers contradict each other: no number from 1 to {N} fits them all. Undo your last answer or play again.",
+      bar: "Numbers still possible: from {a} to {b}, out of 1 to {N}.",
+      how: {
+        title: "How does the computer do it?",
+        items: [
+          "It always guesses the number in the middle of the numbers that are still possible. Your answer rules out half of them at once.",
+          "With 1,000 numbers, at most 500 are left after the first question, then 250, 125, 62, 31, 15, 7, 3, 1. So it needs 10 questions at most.",
+          "In general, $*N*$ numbers take at most $⌊log_{2} *N*⌋ + 1$ questions: the number of times $*N*$ can be halved, plus one. For a million numbers, 20 questions are enough, because $2^{20} = 1,048,576$.",
+          "This method is called binary search. It works wherever data is kept in order: a word in a dictionary, a name in a sorted list, a value in a table.",
+          "If the computer guessed the numbers one by one (1, 2, 3…), it could take up to 1,000 questions for 1,000 numbers.",
+        ],
+      },
+      assumptions: {
+        title: "Assumptions",
+        text: "You answer honestly and don’t change your number during the game. The possible numbers are in order: that is what lets each answer rule out half of them.",
+      },
+      tryThis: {
+        title: "Try this",
+        show: "Show the explanation",
+        items: {
+          thousand: {
+            question: "Play with 1,000 numbers and pick 1,000. How many questions does it take?",
+            answer: "10, the maximum: 500, 750, 875, 938, 969, 985, 993, 997, 999, then 1,000.",
+          },
+          million: {
+            question: "Switch to a million numbers. How many questions at most?",
+            answer:
+              "20, only twice as many as for 1,000 numbers, even though there are a thousand times more numbers. Each extra question roughly doubles how many numbers can be told apart.",
+          },
+          lie: {
+            question:
+              "Lie on purpose: with 100 numbers, answer “Higher” to 50, then “Lower” to 75, then “Higher” to every question after that. What happens?",
+            answer:
+              "after 62, 68, 71, 73 and 74, no number is left: none can match all your answers, and the computer notices.",
+          },
+        },
+      },
+      sources: [
+        {
+          text: "Wikipedia, “Binary search”",
+          href: "https://en.wikipedia.org/wiki/Binary_search",
           english: true,
         },
       ],

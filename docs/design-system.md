@@ -144,6 +144,17 @@ Contrastes vérifiés par `src/design/contrast.test.ts`, dans les deux thèmes :
   viennent d'une police de repli du système, comme √.
 - **Figure de l'informatique** (carte) : trois pastilles reliées, une seule pleine, sans texte.
 
+## Série « découverte » (réfraction, nombre mystère)
+
+- **Figure de la réfraction** : milieu 1 en `paper`, milieu 2 en `accent-soft`, surface et normale
+  (pointillée) en `ink-muted`. Rayons incident et réfléchi en `accent`, rayon réfracté en `ink`, chacun
+  avec sa flèche ; rayon réfléchi fin, épais en réflexion totale. Arcs et noms des angles en `ink`.
+  Aucune animation.
+- **Barre d'intervalle** (nombre mystère) : cadre `ink-muted` sur `paper`, intervalle encore possible en
+  `accent`, large d'au moins 4 unités. Absente quand les réponses se contredisent.
+- **Figures de carte** : un rayon réfléchi et réfracté ; quatre barres, chacune moitié de la précédente.
+  Sans texte.
+
 ## Mouvement
 
 - Survols et apparitions : transitions courtes (0,6 s au plus). Dans une grille, les cartes

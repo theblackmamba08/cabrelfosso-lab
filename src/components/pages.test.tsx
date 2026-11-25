@@ -21,8 +21,14 @@ const text = (html: string) => html.replace(/<[^>]+>/g, "").replace(/&amp;/g, "&
 const experimentLinks = (locale: "fr" | "en", category: "physics" | "computing" = "physics") => {
   const open = messages[locale].home.physics.open;
   const paths = {
-    physics: { fr: ["/fr/physique/projectile", "/fr/physique/pendule-de-newton"], en: ["/en/physics/projectile", "/en/physics/newtons-cradle"] },
-    computing: { fr: ["/fr/informatique/transition-de-phase-3-sat"], en: ["/en/computing/3-sat-phase-transition"] },
+    physics: {
+      fr: ["/fr/physique/projectile", "/fr/physique/pendule-de-newton", "/fr/physique/refraction"],
+      en: ["/en/physics/projectile", "/en/physics/newtons-cradle", "/en/physics/refraction"],
+    },
+    computing: {
+      fr: ["/fr/informatique/transition-de-phase-3-sat", "/fr/informatique/pensez-a-un-nombre"],
+      en: ["/en/computing/3-sat-phase-transition", "/en/computing/think-of-a-number"],
+    },
   };
   return paths[category][locale].map((path) => [path, open]);
 };
@@ -88,8 +94,9 @@ describe.each(["fr", "en"] as const)("pages d’expérience (%s)", (locale) => {
       "data-breadcrumb",
       `>${texts.title}</h1>`,
       texts.intro,
-      ...("laws" in texts ? [texts.laws.title] : []),
-      ...("subtitle" in texts
+      // La réfraction a ses lois dans l'expérience, en import dynamique : ordre vérifié sur out/.
+      ...(demo.id === "newtons-cradle" ? [t.demos[demo.id].laws.title] : []),
+      ...("problem" in texts
         ? [
             // L'expérience et le pas à pas, en import dynamique : ordre vérifié sur out/.
             texts.problem.title + "</h2>",
@@ -97,6 +104,7 @@ describe.each(["fr", "en"] as const)("pages d’expérience (%s)", (locale) => {
             texts.complexity.title + "</h2>",
           ]
         : []),
+      ...("how" in texts ? [texts.how.title + "</h2>"] : []),
       texts.assumptions.text.slice(0, 40),
       texts.tryThis.title + "</h2>",
       t.experiment.sources + "</h2>",
@@ -124,7 +132,8 @@ describe.each(["fr", "en"] as const)("pages d’expérience (%s)", (locale) => {
     }
     const mentions = text(html).split("(en anglais)").length - 1;
     expect(mentions).toBe(locale === "fr" ? sources.filter((s) => s.english).length : 0);
-    expect(html).toContain(demo.id === "three-sat" ? "<i>Annals of Mathematics</i>" : "<i>University Physics Volume 1</i>");
+    const titles = sources.flatMap((source) => source.text.split("*").filter((_, index) => index % 2 === 1));
+    for (const title of titles) expect(html).toContain(`<i>${title}</i>`);
   });
 
   it.each(demos)("$id : explications repliables, aucune mention de programme", (demo) => {
@@ -166,6 +175,28 @@ describe.each(["fr", "en"] as const)("page 3-SAT (%s)", (locale) => {
   });
 });
 
+describe.each(["fr", "en"] as const)("page du nombre mystère (%s)", (locale) => {
+  const texts = messages[locale].demos["think-of-a-number"];
+  const html = renderToStaticMarkup(<ExperimentPage locale={locale} t={messages[locale]} demo={demos[4]} />);
+
+  it("a son sous-titre sous le titre, et met les formules en forme", () => {
+    expect(html.indexOf(`>${texts.subtitle}</p>`)).toBeGreaterThan(html.indexOf(`>${texts.title}</h1>`));
+    expect(html).toContain("2<sup>20</sup>");
+    expect(html).toContain("log<sub>2</sub>");
+    expect(text(html)).not.toMatch(/[$*]/);
+  });
+});
+
+describe.each(["fr", "en"] as const)("page de la réfraction (%s)", (locale) => {
+  const html = renderToStaticMarkup(<ExperimentPage locale={locale} t={messages[locale]} demo={demos[3]} />);
+
+  it("met en forme les indices des explications", () => {
+    expect(html).toContain("<i>i</i><sub>lim</sub>");
+    expect(html).toContain("<i>i</i><sub>2</sub>");
+    expect(text(html)).not.toMatch(/[₀-₉$*]/);
+  });
+});
+
 describe.each(["fr", "en"] as const)("accueil (%s)", (locale) => {
   const t = messages[locale].home;
   const html = renderToStaticMarkup(<HomePage locale={locale} t={messages[locale]} />);
@@ -184,8 +215,10 @@ describe.each(["fr", "en"] as const)("accueil (%s)", (locale) => {
       `h2 ${t.physics.title}`,
       `h3 ${messages[locale].demos.projectile.card.title}`,
       `h3 ${messages[locale].demos["newtons-cradle"].card.title}`,
+      `h3 ${messages[locale].demos.refraction.card.title}`,
       `h2 ${t.computing.title}`,
       `h3 ${messages[locale].demos["three-sat"].card.title}`,
+      `h3 ${messages[locale].demos["think-of-a-number"].card.title}`,
       `h2 ${t.how.title}`,
       `h3 ${t.how.steps.adjust.title}`,
       `h3 ${t.how.steps.observe.title}`,

@@ -27,6 +27,13 @@ export const demos = [
     slugs: { fr: "transition-de-phase-3-sat", en: "3-sat-phase-transition" },
     published: true,
   },
+  { id: "refraction", category: "physics", slugs: { fr: "refraction", en: "refraction" }, published: true },
+  {
+    id: "think-of-a-number",
+    category: "computing",
+    slugs: { fr: "pensez-a-un-nombre", en: "think-of-a-number" },
+    published: true,
+  },
 ] as const satisfies readonly DemoEntry[];
 
 export type Demo = (typeof demos)[number];
