@@ -26,7 +26,7 @@ export function CurveResults({
   const common = { axis: charts.axis, xTick: (alpha: number) => formatAlpha(alpha, locale) };
 
   return (
-    <div className="grid min-w-0 gap-6">
+    <div className="grid grid-cols-[minmax(0,1fr)] gap-6">
       <figure className="m-0">
         <figcaption className="font-semibold">{charts.share}</figcaption>
         <ChartFigure

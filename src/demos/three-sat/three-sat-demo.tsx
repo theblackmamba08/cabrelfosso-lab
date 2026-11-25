@@ -114,8 +114,8 @@ export default function ThreeSatDemo({
   }
 
   return (
-    <div className="mt-12 grid gap-20">
-      <div className="grid gap-10 lg:grid-cols-[minmax(0,20rem)_minmax(0,1fr)]">
+    <div className="mt-12 grid grid-cols-[minmax(0,1fr)] gap-20">
+      <div className="grid grid-cols-[minmax(0,1fr)] gap-10 lg:grid-cols-[minmax(0,20rem)_minmax(0,1fr)]">
         <section aria-labelledby="experience" className={`${panel} self-start`}>
           <h2 id="experience" className="text-xl md:text-2xl">
             {controls.title}
@@ -194,12 +194,12 @@ export default function ThreeSatDemo({
           </div>
         </section>
 
-        <div className={`${panel} min-w-0`}>
+        <div className={panel}>
           <CurveResults locale={locale} texts={texts} curves={curves} />
         </div>
       </div>
 
-      <StepByStep key={stepSeed} seed={stepSeed} texts={texts.steps} />
+      <StepByStep seed={stepSeed} texts={texts.steps} />
     </div>
   );
 }

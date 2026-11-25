@@ -29,11 +29,20 @@ function StateIcon({ state }: { state: ClauseState }) {
   );
 }
 
-/**
- * Le solveur sur une petite énigme, une étape par clic. Le composant est remonté (`key`) quand la
- * graine change : l'énigme de départ est alors recalculée.
- */
+/** Le solveur sur une petite énigme ; changer la graine recalcule l'énigme de départ (`key`). */
 export function StepByStep({ seed, texts }: { seed: number; texts: Messages["demos"]["three-sat"]["steps"] }) {
+  return (
+    <PageSection id="pas-a-pas" title={texts.title}>
+      <p className="max-w-prose">
+        <RichText text={texts.intro} />
+      </p>
+      <StepPanel key={seed} seed={seed} texts={texts} />
+    </PageSection>
+  );
+}
+
+/** Une étape de la trace par clic. */
+function StepPanel({ seed, texts }: { seed: number; texts: Messages["demos"]["three-sat"]["steps"] }) {
   const [number, setNumber] = useState(() => startNumber(seed));
   const [count, setCount] = useState(0);
   const { puzzle, solution } = useMemo(() => {
@@ -47,62 +56,57 @@ export function StepByStep({ seed, texts }: { seed: number; texts: Messages["dem
   const concerned = event && "clause" in event ? event.clause : 0;
 
   return (
-    <PageSection id="pas-a-pas" title={texts.title}>
-      <p className="max-w-prose">
-        <RichText text={texts.intro} />
+    <div className={`${panel} mt-6`}>
+      <p className="flex flex-wrap gap-x-8 gap-y-1 font-semibold">
+        <span>{fill(texts.number, { numéro: String(number), number: String(number) })}</span>
+        <span className="tabular-nums">{fill(texts.counter, { k: String(choicesAfter(events, count)) })}</span>
       </p>
-      <div className={`${panel} mt-6`}>
-        <p className="flex flex-wrap gap-x-8 gap-y-1 font-semibold">
-          <span>{fill(texts.number, { numéro: String(number), number: String(number) })}</span>
-          <span className="tabular-nums">{fill(texts.counter, { k: String(choicesAfter(events, count)) })}</span>
-        </p>
-        <div className="mt-4 flex flex-wrap gap-3">
-          <ActionButton
-            variant="primary"
-            unavailable={count === events.length}
-            onPress={() => setCount((value) => Math.min(value + 1, events.length))}
-          >
-            {texts.buttons.next}
-          </ActionButton>
-          <ActionButton onPress={() => setCount(0)}>{texts.buttons.restart}</ActionButton>
-          <ActionButton
-            onPress={() => {
-              setNumber(nextNumber(number));
-              setCount(0);
-            }}
-          >
-            {texts.buttons.another}
-          </ActionButton>
-        </div>
-        <p aria-live="polite" aria-atomic="true" className="mt-4 min-h-14">
-          {event && <RichText text={stepMessage(event, solution, texts)} />}
-        </p>
-        <ol className="mt-4 grid list-decimal gap-x-6 gap-y-2 marker:text-ink-muted sm:grid-cols-2 lg:grid-cols-3">
-          {puzzle.clauses.map((clause, index) => {
-            const state = clauseState(clause, assignment);
-            return (
-              <li key={index} className="ml-8">
-                <div
-                  className={`h-full rounded-box border px-3 py-2 ${
-                    index + 1 === concerned ? "border-accent bg-accent-soft" : "border-line"
-                  }`}
-                >
-                  <span aria-hidden="true" className="font-mono whitespace-nowrap">
-                    <RichText text={clauseSymbols(clause)} />
-                  </span>
-                  <span className="sr-only">
-                    <RichText text={clauseWords(clause, texts.words)} />
-                  </span>{" "}
-                  <span className="flex items-center gap-2 text-sm">
-                    <StateIcon state={state} />
-                    {texts.states[state]}
-                  </span>
-                </div>
-              </li>
-            );
-          })}
-        </ol>
+      <div className="mt-4 flex flex-wrap gap-3">
+        <ActionButton
+          variant="primary"
+          unavailable={count === events.length}
+          onPress={() => setCount((value) => Math.min(value + 1, events.length))}
+        >
+          {texts.buttons.next}
+        </ActionButton>
+        <ActionButton onPress={() => setCount(0)}>{texts.buttons.restart}</ActionButton>
+        <ActionButton
+          onPress={() => {
+            setNumber(nextNumber(number));
+            setCount(0);
+          }}
+        >
+          {texts.buttons.another}
+        </ActionButton>
       </div>
-    </PageSection>
+      <p aria-live="polite" aria-atomic="true" className="mt-4 min-h-14">
+        {event && <RichText text={stepMessage(event, solution, texts)} />}
+      </p>
+      <ol className="mt-4 grid list-decimal gap-x-6 gap-y-2 marker:text-ink-muted sm:grid-cols-2 lg:grid-cols-3">
+        {puzzle.clauses.map((clause, index) => {
+          const state = clauseState(clause, assignment);
+          return (
+            <li key={index} className="ml-8">
+              <div
+                className={`h-full rounded-box border px-3 py-2 ${
+                  index + 1 === concerned ? "border-accent bg-accent-soft" : "border-line"
+                }`}
+              >
+                <span aria-hidden="true" className="font-mono whitespace-nowrap">
+                  <RichText text={clauseSymbols(clause)} />
+                </span>
+                <span className="sr-only">
+                  <RichText text={clauseWords(clause, texts.words)} />
+                </span>{" "}
+                <span className="flex items-center gap-2 text-sm">
+                  <StateIcon state={state} />
+                  {texts.states[state]}
+                </span>
+              </div>
+            </li>
+          );
+        })}
+      </ol>
+    </div>
   );
 }
