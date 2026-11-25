@@ -1,6 +1,6 @@
 # Cahier des charges — le Labo de Cabrel FOSSO
 
-Version 0.8, du 25 novembre 2026 : clôture de L3 (sections 8 et 9) ; écarts acceptés lors de la réalisation de l’expérience 3-SAT (annexe D.2).
+Version 0.9, du 25 novembre 2026 : étape L4, série « découverte » (annexe E) : la réfraction de la lumière et le nombre mystère ; l’IA explicable passe après (sections 3 et 8).
 
 Rédigée par Claude dans le projet claude.ai « Labo », à partir de la version 0.1 (projet « Portfolio », 23 novembre 2026) et des réponses de Jospin du 24 novembre 2026. Les marqueurs TODO(Jospin) signalent une information encore manquante. Ce fichier est copié dans le dépôt `cabrelfosso-lab` sous `docs/cahier-des-charges.md` ; c’est cette copie qui fait foi.
 
@@ -36,8 +36,8 @@ Domaine : `lab.cabrelfosso.com`. Adresses en français et en anglais, sans barre
 | Confidentialité | /fr/confidentialite | /en/privacy | L1 (annexe B.3) |
 | Physique | /fr/physique | /en/physics | L2 (annexe C.1) |
 | Informatique | /fr/informatique | /en/computing | L3 (annexe D.1) |
-| Une expérience de physique | /fr/physique/[nom] | /en/physics/[name] | L2 : `projectile` / `projectile` (annexe C.2) ; `pendule-de-newton` / `newtons-cradle` (annexe C.3) |
-| Une expérience d’informatique | /fr/informatique/[nom] | /en/computing/[name] | L3 : `transition-de-phase-3-sat` / `3-sat-phase-transition` (annexe D.3) |
+| Une expérience de physique | /fr/physique/[nom] | /en/physics/[name] | L2 : `projectile` / `projectile` (annexe C.2) ; `pendule-de-newton` / `newtons-cradle` (annexe C.3) ; L4 : `refraction` / `refraction` (annexe E.2) |
+| Une expérience d’informatique | /fr/informatique/[nom] | /en/computing/[name] | L3 : `transition-de-phase-3-sat` / `3-sat-phase-transition` (annexe D.3) ; L4 : `pensez-a-un-nombre` / `think-of-a-number` (annexe E.3) |
 | Page 404 bilingue, sitemap.xml, robots.txt | | | L1 |
 
 Une page de catégorie n’apparaît qu’à partir de sa première expérience publiée. Une adresse non publiée répond 404.
@@ -75,7 +75,9 @@ Options écartées : page racine bilingue (un clic de plus, page pauvre indexée
 | Le mouvement d’un projectile | Physique | L2 | Déménage du portfolio (textes : annexe B.6 du cahier du portfolio) |
 | Le pendule de Newton | Physique | L2 | Déménage du portfolio (textes : annexe B.6 du cahier du portfolio) |
 | Où se cachent les problèmes difficiles ? (transition de phase de 3-SAT) | Informatique | L3 | Nouvelle (annexe D) |
-| IA explicable (ex-démo 4.3) : série temporelle jouet décomposée en niveau, tendance, calendrier ; volet « Expliquer coûte cher » sur le coût du calcul exact des valeurs de Shapley | Informatique | Après L3 | Prévue dans le cahier du portfolio (section 6) |
+| La réfraction de la lumière | Physique | L4 | Nouvelle, série « découverte » (annexe E.2) |
+| Pensez à un nombre (recherche dichotomique) | Informatique | L4 | Nouvelle, série « découverte » (annexe E.3) |
+| IA explicable (ex-démo 4.3) : série temporelle jouet décomposée en niveau, tendance, calendrier ; volet « Expliquer coûte cher » sur le coût du calcul exact des valeurs de Shapley | Informatique | Après L4 | Prévue dans le cahier du portfolio (section 6) |
 | Vérifier ou trouver (exemple de prix au marché, en FCFA) | Informatique | Plus tard | Nouvelle |
 | De Chomsky à P et NP (lien avec Word Wizard) | Informatique | Plus tard | Nouvelle |
 | Autres expériences de physique, du lycée puis du supérieur | Physique | Plus tard | |
@@ -179,6 +181,7 @@ Le même que pour le portfolio (section 13 de son cahier) :
 | L2a. Déménagement, côté Labo (terminée le 24 novembre 2026 : version `7ba02663` ; sitemap envoyé dans la propriété « domaine » `cabrelfosso.com` de la Search Console, 10 pages découvertes) | Projectile et pendule de Newton (code, tests, textes, sources) ; page Physique ; menu et fil d’Ariane ; accueil avec la section « Physique », sans le bloc provisoire ; mise en ligne ; sitemap envoyé à la Search Console |
 | L2b. Déménagement, côté portfolio (terminée le 24 novembre 2026 : version du portfolio `f10afe9f` ; six redirections 308 mesurées par `curl` et par les tests `smoke` du portfolio) | Dans le dépôt du portfolio : redirections permanentes (308, que Google traite comme une 301) selon la table de la section 2, liens vers le Labo, lien du bandeau d’actualité, retrait du code des démos (section 15 du cahier du portfolio) |
 | L3. Transition de phase de 3-SAT (terminée le 25 novembre 2026 : version `42c36b41` ; contrôles de Jospin conformes : PageSpeed Insights mobile, durées de calcul sur téléphone, affichage de ∨ et ∧, sitemap de 14 adresses renvoyé à la Search Console) | Annexe D : page Informatique, expérience « Où se cachent les problèmes difficiles ? » (générateur, solveur DPLL, courbes, mode pas à pas, textes, sources), menu, accueil avec la section « Informatique » ; mise en ligne |
+| L4. Série « découverte » | Annexe E : la réfraction de la lumière (physique) et « Pensez à un nombre » (informatique), pages courtes et visuelles ; mise en ligne |
 | Ensuite | IA explicable, puis les autres expériences de la section 3 |
 
 ## 9. Checklist de recette
@@ -327,9 +330,9 @@ Textes du projectile et du pendule de Newton repris mot pour mot de l’annexe B
 **Page Physique — /fr/physique · /en/physics**
 
 - Titre de l’onglet : Physique — Le Labo / Physics — The Lab
-- Description : Des expériences de mécanique à régler vous-même : la trajectoire d’un projectile, les chocs du pendule de Newton. / Mechanics experiments you can set up yourself: the path of a projectile and the collisions in Newton’s cradle.
+- Description : Des expériences de physique à régler vous-même : la trajectoire d’un projectile, les chocs du pendule de Newton, le trajet de la lumière. / Physics experiments you can set up yourself: the path of a projectile, the collisions in Newton’s cradle, and the path of light.
 - Titre : Physique / Physics
-- Introduction : Des expériences de mécanique à régler vous-même : la trajectoire d’un projectile, les chocs du pendule de Newton. / Mechanics experiments you can set up yourself: the path of a projectile and the collisions in Newton’s cradle.
+- Introduction : Des expériences de physique à régler vous-même : la trajectoire d’un projectile, les chocs du pendule de Newton, le trajet de la lumière. / Physics experiments you can set up yourself: the path of a projectile, the collisions in Newton’s cradle, and the path of light.
 - Une carte par expérience publiée, avec les textes des cartes de l’accueil (annexe B.2), chacune avec sa petite figure décorative (`DemoFigure` du portfolio).
 
 ### C.2 Le mouvement d’un projectile — /fr/physique/projectile · /en/physics/projectile
@@ -917,6 +920,281 @@ Les liens DOI peuvent répondre 403 aux outils automatiques ; ils s’ouvrent no
 | Effet de taille finie | Mitchell, Selman et Levesque (1992) ; observable dans la démo |
 | Générateur xoshiro128++ et initialisation par SplitMix64 | `https://prng.di.unimi.it/`, consulté le 25 novembre 2026 |
 
+## Annexe E — Série « découverte » : la réfraction et le nombre mystère (étape L4)
+
+Décidée par Jospin le 25 novembre 2026 : des expériences simples et visuelles, pour donner envie de visiter le Labo, avant l’IA explicable. Paramètres et textes rédigés par Claude (choix délégués par Jospin), sources vérifiées le 25 novembre 2026. Une page « découverte » suit le gabarit de la section 3, en plus court. Les textes sont repris mot pour mot ; seule la typographie des espaces est appliquée dans le code.
+
+### E.1 Pages de catégorie et accueil
+
+- La description et l’introduction de la page Physique (annexe C.1) deviennent : Des expériences de physique à régler vous-même : la trajectoire d’un projectile, les chocs du pendule de Newton, le trajet de la lumière. / Physics experiments you can set up yourself: the path of a projectile, the collisions in Newton’s cradle, and the path of light.
+- Carte de la réfraction (accueil, section « Physique », et page Physique, après le pendule de Newton) : titre « La réfraction de la lumière » ; texte « Changez l’angle d’un rayon et les milieux qu’il traverse : regardez-le se briser, puis rester piégé. » ; lien « Ouvrir l’expérience »
+  - EN card: title “Refraction of light”; text “Change the angle of a light ray and the materials it crosses: watch it bend, then get trapped.”; link “Open the experiment”
+- Carte du nombre mystère (accueil, section « Informatique », et page Informatique, après 3-SAT) : titre « Pensez à un nombre » ; texte « Choisissez un nombre entre 1 et 1 000 : l’ordinateur le trouve en 10 questions au plus. » ; lien « Ouvrir l’expérience »
+  - EN card: title “Think of a number”; text “Pick a number between 1 and 1,000: the computer finds it in 10 questions or fewer.”; link “Open the experiment”
+- Fil d’Ariane : Le Labo › Physique › La réfraction de la lumière / The Lab › Physics › Refraction of light ; Le Labo › Informatique › Pensez à un nombre / The Lab › Computing › Think of a number.
+
+### E.2 La réfraction de la lumière — /fr/physique/refraction · /en/physics/refraction
+
+#### Réfraction : modèle et conventions
+
+- **Milieux** et indices de réfraction, arrondis à 3 chiffres significatifs à partir du tableau 1.1 d’OpenStax (lumière de longueur d’onde 589 nm) : Air (n = 1,00) ; Eau (n = 1,33) ; Verre (n = 1,52, verre « crown ») ; Diamant (n = 2,42). Les calculs utilisent exactement ces valeurs affichées.
+- **Réglages** : milieu 1 (d’où vient la lumière), milieu 2 (où elle entre), angle d’incidence i₁ de 0 à 89°, par pas de 1°. Départ : Air, Eau, 40°.
+- **Calculs** : r = i₁ ; s = n₁ sin i₁ / n₂ ; si s ≤ 1, i₂ = arcsin s ; si s > 1, pas de rayon réfracté (réflexion totale). Angle limite i_lim = arcsin (n₂ / n₁), seulement si n₁ > n₂.
+- **Affichage des nombres** : angles en degrés et sinus à 3 chiffres significatifs (0 s’écrit « 0 »), virgule décimale en français ; i₁ est affiché tel quel (entier).
+- **Figure** : SVG, surface de séparation horizontale, milieu 1 en haut, milieu 2 en bas (teintes différentes, par jetons du design system), normale en pointillés, rayon incident, rayon réfléchi (trait fin), rayon réfracté, arcs des angles i₁ et i₂ ; en cas de réflexion totale, pas de rayon réfracté et rayon réfléchi en trait épais. Aucune animation : la figure suit les réglages.
+- **Accessibilité** : `<select>` natifs pour les milieux, `<input type="range">` pour l’angle, avec étiquette et valeur affichée ; résumé textuel de la figure ; pas d’annonce `aria-live` à chaque mouvement du curseur.
+
+#### Réfraction — français
+
+- **Titre de l’onglet** : La réfraction de la lumière — Le Labo
+- **Description** : Simulation interactive de la réfraction : loi de Snell-Descartes, angle limite et réflexion totale, mis à jour en direct.
+- **Titre de la page** : La réfraction de la lumière
+- **Introduction** : Dans un aquarium, un poisson semble parfois se trouver à deux endroits à la fois : la lumière change de direction quand elle passe de l’eau à l’air. Réglez le rayon et regardez-le se briser.
+- **Mention** : Au programme de TODO(Jospin): classe concernée. (masquée tant que la classe manque)
+
+**Réglages**
+
+| Réglage | Étiquette | Valeurs | Valeur de départ |
+| --- | --- | --- | --- |
+| Milieu 1 | Milieu d’où vient la lumière | Air (n = 1,00) · Eau (n = 1,33) · Verre (n = 1,52) · Diamant (n = 2,42) | Air |
+| Milieu 2 | Milieu où entre la lumière | Air (n = 1,00) · Eau (n = 1,33) · Verre (n = 1,52) · Diamant (n = 2,42) | Eau |
+| Angle i₁ | Angle d’incidence (°) | 0 à 89, pas de 1 | 40 |
+
+- **Résultats** (titre « Résultats ») : Angle de réflexion · Angle de réfraction · Angle limite
+- **Angle de réfraction, en cas de réflexion totale** : aucun : réflexion totale
+- **Angle limite, si n₁ ≤ n₂** : aucun : la lumière entre dans un milieu d’indice égal ou plus grand
+- **Légende de la figure** : Rayon incident · Rayon réfléchi · Rayon réfracté · Normale
+- **Résumé textuel de la figure** : « Rayon incident à {i₁} ; rayon réfracté à {i₂}. » ou « Rayon incident à {i₁} ; réflexion totale : aucun rayon réfracté. »
+
+**Les lois**
+
+Les angles se mesurent par rapport à la normale, la droite perpendiculaire à la surface au point où arrive le rayon.
+
+- Indice de réfraction d’un milieu : n = c / v, où c est la vitesse de la lumière dans le vide et v sa vitesse dans le milieu.
+- Loi de la réflexion : r = i₁
+- Loi de la réfraction (loi de Snell-Descartes) : n₁ sin i₁ = n₂ sin i₂
+- Avec les valeurs réglées : sin i₂ = n₁ sin i₁ / n₂ = {s}
+- Si ce nombre dépasse 1, aucun angle i₂ ne convient : il n’y a pas de rayon réfracté, toute la lumière est réfléchie. C’est la réflexion totale.
+- Angle limite, quand la lumière passe dans un milieu d’indice plus petit (n₁ > n₂) : sin i_lim = n₂ / n₁. Au-delà de cet angle, la réflexion est totale.
+
+**Hypothèses** : La lumière est d’une seule couleur (jaune, 589 nm) : l’indice d’un milieu varie un peu avec la couleur. Les milieux sont transparents et homogènes, et leur surface de séparation est plane. La figure ne montre pas l’intensité des rayons : en réalité, une partie de la lumière est toujours réfléchie, même quand elle traverse la surface.
+
+**À essayer** (chaque question a son explication repliable, intitulée « Voir l’explication »)
+
+1. De l’air vers l’eau, augmentez l’angle d’incidence de 0° à 89°. Le rayon réfracté se rapproche-t-il ou s’éloigne-t-il de la normale ? — Explication : il se rapproche de la normale, car l’eau a un indice plus grand que l’air. Même à 89°, l’angle de réfraction reste sous 48,8° : sin i₂ ne peut pas dépasser 1,00 / 1,33.
+2. Inversez : de l’eau vers l’air. À partir de quel angle le rayon réfracté disparaît-il ? — Explication : entre 48° et 49°. L’angle limite vaut 48,8°, car sin i_lim = 1,00 / 1,33. Au-delà, la lumière reste piégée dans l’eau : c’est la réflexion totale.
+3. Comparez l’angle limite du diamant vers l’air avec celui de l’eau vers l’air. — Explication : 24,4° pour le diamant, contre 48,8° pour l’eau. Plus l’indice du milieu 1 est grand, plus l’angle limite est petit, et plus la lumière y reste facilement piégée. Les fibres optiques utilisent la réflexion totale pour guider la lumière.
+
+#### Réfraction — English
+
+- **Tab title**: Refraction of light — The Lab
+- **Description**: Interactive refraction simulation: Snell’s law, critical angle and total internal reflection, updated live.
+- **Page heading**: Refraction of light
+- **Intro**: In a fish tank, a fish can seem to be in two places at once: light changes direction when it passes from water into air. Set up the ray and watch it bend.
+- **Note**: Part of the TODO(Jospin): class curriculum in Cameroon. (hidden while the class is missing)
+- **Controls**: Material the light comes from · Material the light enters · Angle of incidence (°). Materials: Air (n = 1.00), Water (n = 1.33), Glass (n = 1.52), Diamond (n = 2.42). Same ranges, steps and starting values as the French version.
+- **Results** (heading “Results”): Angle of reflection · Angle of refraction · Critical angle
+- **Angle of refraction, with total internal reflection**: none: total internal reflection
+- **Critical angle, if n₁ ≤ n₂**: none: the light enters a material with an equal or higher index
+- **Figure legend**: Incident ray · Reflected ray · Refracted ray · Normal
+- **Text summary of the figure**: “Incident ray at {i₁}; refracted ray at {i₂}.” or “Incident ray at {i₁}; total internal reflection: no refracted ray.”
+
+**The laws**
+
+Angles are measured from the normal, the line perpendicular to the surface where the ray meets it.
+
+- Index of refraction of a material: n = c / v, where c is the speed of light in a vacuum and v its speed in the material.
+- Law of reflection: r = i₁
+- Law of refraction (Snell’s law): n₁ sin i₁ = n₂ sin i₂
+- With the current settings: sin i₂ = n₁ sin i₁ / n₂ = {s}
+- If this number is greater than 1, no angle i₂ fits: there is no refracted ray and all the light is reflected. This is total internal reflection.
+- Critical angle, when light passes into a material with a lower index (n₁ > n₂): sin i_lim = n₂ / n₁. Beyond this angle, the reflection is total.
+
+**Assumptions**: The light is a single colour (yellow, 589 nm): a material’s index varies slightly with colour. The materials are transparent and uniform, and the surface between them is flat. The figure doesn’t show how bright each ray is: in reality, some light is always reflected, even when it crosses the surface.
+
+**Try this** (each question has a collapsible explanation, labelled “Show the explanation”)
+
+1. From air into water, increase the angle of incidence from 0° to 89°. Does the refracted ray move towards the normal or away from it? — Explanation: towards it, because water has a higher index than air. Even at 89°, the angle of refraction stays below 48.8°: sin i₂ can’t exceed 1.00 / 1.33.
+2. Swap them: from water into air. At what angle does the refracted ray disappear? — Explanation: between 48° and 49°. The critical angle is 48.8°, since sin i_lim = 1.00 / 1.33. Beyond it, the light stays trapped in the water: this is total internal reflection.
+3. Compare the critical angle from diamond into air with the one from water into air. — Explanation: 24.4° for diamond, against 48.8° for water. The higher the index of the first material, the smaller the critical angle, and the more easily light stays trapped inside. Optical fibres use total internal reflection to guide light.
+
+#### Valeurs de contrôle de la réfraction (calculées le 25 novembre 2026)
+
+Avec les indices affichés (1,00 ; 1,33 ; 1,52 ; 2,42). Valeurs calculées par Claude en Python (bibliothèque `math`), à 4 décimales ; affichage à 3 chiffres significatifs.
+
+| Milieu 1 → milieu 2 | i₁ (°) | sin i₂ = n₁ sin i₁ / n₂ | i₂ (°) | Angle limite (°) |
+| --- | --- | --- | --- | --- |
+| Air → Eau | 0 | 0 | 0 | aucun |
+| Air → Eau | 40 | 0,4833 | 28,9011 | aucun |
+| Air → Eau | 89 | 0,7518 | 48,7435 | aucun |
+| Air → Verre | 30 | 0,3289 | 19,2049 | aucun |
+| Air → Diamant | 60 | 0,3579 | 20,9689 | aucun |
+| Eau → Air | 30 | 0,6650 | 41,6823 | 48,7535 |
+| Eau → Air | 48 | 0,9884 | 81,2580 | 48,7535 |
+| Eau → Air | 49 | 1,0038 | réflexion totale | 48,7535 |
+| Verre → Air | 41 | 0,9972 | 85,7188 | 41,1395 |
+| Verre → Air | 42 | 1,0171 | réflexion totale | 41,1395 |
+| Diamant → Air | 24 | 0,9843 | 79,8347 | 24,4075 |
+| Diamant → Air | 25 | 1,0227 | réflexion totale | 24,4075 |
+| Verre → Eau | 61 | 0,9996 | 88,3107 | 61,0450 |
+| Eau → Eau | 35 | 0,5736 | 35,0000 | aucun |
+
+Affichages attendus (français) : 28,9° ; 48,7° ; 41,7° ; 81,3° ; 48,8° (angle limite eau → air) ; 41,1° ; 24,4° ; 61,0° ; 88,3° ; 35,0°. Contrôle externe : OpenStax donne 48,6° pour l’angle limite eau → air avec n = 1,333 ; avec n = 1,33, on trouve 48,8°, ce qui est cohérent.
+
+#### Pour aller plus loin — réfraction
+
+- OpenStax, *University Physics Volume 3*, section 1.3 « Refraction » (en anglais) → `https://openstax.org/books/university-physics-volume-3/pages/1-3-refraction`
+- OpenStax, *University Physics Volume 3*, section 1.4 « Total Internal Reflection » (en anglais) → `https://openstax.org/books/university-physics-volume-3/pages/1-4-total-internal-reflection`
+- OpenStax, *University Physics Volume 3*, section 1.5 « Dispersion » (en anglais) → `https://openstax.org/books/university-physics-volume-3/pages/1-5-dispersion`
+
+English (same links):
+
+- OpenStax, *University Physics Volume 3*, section 1.3 “Refraction”
+- OpenStax, *University Physics Volume 3*, section 1.4 “Total Internal Reflection”
+- OpenStax, *University Physics Volume 3*, section 1.5 “Dispersion”
+
+**Affirmations et sources** (relecture, non affiché)
+
+| Affirmation de la page | Source |
+| --- | --- |
+| n = c / v ; indices de l’air, de l’eau, du verre crown et du diamant (589 nm) | OpenStax, *University Physics Volume 3*, section 1.1, tableau 1.1 (air 1,000293 ; eau 1,333 ; verre crown 1,52 ; diamant 2,419), arrondis par le site ; source citée par le site : sections 1.3 et 1.4 |
+| Loi de la réflexion r = i₁, angles mesurés par rapport à la normale | OpenStax, section 1.2 « The Law of Reflection » |
+| Loi de Snell-Descartes ; une partie de la lumière est toujours réfléchie ; le poisson de l’aquarium qui semble à deux endroits | OpenStax, section 1.3 |
+| Angle limite, réflexion totale seulement si n₁ > n₂ ; angle limite du diamant 24,4° ; fibres optiques | OpenStax, section 1.4 |
+| Indice variable avec la couleur | OpenStax, section 1.5 « Dispersion » (vérifiée le 25 novembre 2026) |
+| Valeurs numériques de la page | Calculées à partir des formules (valeurs de contrôle ci-dessus) |
+
+### E.3 Pensez à un nombre — /fr/informatique/pensez-a-un-nombre · /en/computing/think-of-a-number
+
+#### Nombre mystère : modèle et conventions
+
+- **Plages** : de 1 à N, avec N = 100, 1 000 ou 1 000 000 ; départ : 1 000.
+- **Stratégie de l’ordinateur** (recherche dichotomique) : il garde l’intervalle [a, b] des nombres encore possibles, d’abord [1, N]. Il propose g = ⌊(a + b) / 2⌋. Réponse « Plus grand » : a = g + 1 ; « Plus petit » : b = g − 1 ; « C’est ça ! » : fin.
+- **Contradiction** : si a > b après une réponse, aucun nombre ne convient ; la partie s’arrête avec un message.
+- **Nombre maximal de questions** : Q(N) = ⌊log₂ N⌋ + 1, soit 7 pour 100, 10 pour 1 000, 20 pour 1 000 000. Déduction vérifiée par calcul exhaustif (tous les nombres de 1 à N, pour chaque N).
+- **Annuler** : « Annuler la dernière réponse » rend l’état d’avant cette réponse (autant de fois qu’il y a de réponses).
+- **Affichage** : la question en cours ; le compteur « Question {k} sur {Q} au plus » ; une barre (SVG) qui montre l’intervalle [a, b] dans [1, N] ; le nombre de possibilités restantes b − a + 1 ; l’historique des questions et réponses, dans une liste ordonnée.
+- **Nombres** : séparateur de milliers (espace insécable en français, virgule en anglais).
+- **Accessibilité** : boutons natifs ; la nouvelle question est annoncée (`aria-live="polite"`), une fois par réponse ; aucun minuteur, aucune animation.
+- Aucun hasard : la même suite de réponses donne toujours les mêmes questions.
+
+#### Nombre mystère — français
+
+- **Titre de l’onglet** : Pensez à un nombre — Le Labo
+- **Description** : Jeu interactif : choisissez un nombre, l’ordinateur le trouve en quelques questions grâce à la recherche dichotomique.
+- **Titre de la page** : Pensez à un nombre
+- **Sous-titre** : La recherche dichotomique
+- **Introduction** : Choisissez un nombre dans votre tête, sans le dire. L’ordinateur va le trouver en posant très peu de questions. Son secret : couper en deux, à chaque fois, la liste des nombres encore possibles.
+- **Mention** : Niveau : TODO(Jospin): niveau concerné. (masquée tant que le niveau manque)
+
+**Le jeu**
+
+| Réglage | Étiquette | Valeurs | Valeur de départ |
+| --- | --- | --- | --- |
+| N | Choisissez un nombre entre 1 et… | 100 · 1 000 · 1 000 000 | 1 000 |
+
+- Consigne avant la partie : Choisissez un nombre entre 1 et {N}, gardez-le en tête, puis cliquez sur « J’ai choisi ».
+- Boutons : J’ai choisi · Plus grand · Plus petit · C’est ça ! · Annuler la dernière réponse · Rejouer
+- Question : Votre nombre est-il {g} ?
+- Compteur : Question {k} sur {Q} au plus
+- Possibilités : Il reste {r} nombres possibles, de {a} à {b}.
+- Une seule possibilité : Il ne reste qu’un nombre possible : {a}.
+- Historique (titre « Questions posées ») : {g} ? Plus grand · {g} ? Plus petit · {g} ? C’est ça !
+- Fin : Trouvé ! Votre nombre est {g}, découvert en {k} questions.
+- Fin en une question : Trouvé ! Votre nombre est {g}, découvert dès la première question.
+- Contradiction : Vos réponses se contredisent : aucun nombre de 1 à {N} ne convient. Annulez la dernière réponse ou rejouez.
+- Résumé textuel de la barre : Nombres encore possibles : de {a} à {b}, sur 1 à {N}.
+
+**Comment fait l’ordinateur ?**
+
+- Il propose toujours le nombre du milieu des nombres encore possibles. Votre réponse élimine d’un coup la moitié d’entre eux.
+- Avec 1 000 nombres, il en reste au plus 500 après la première question, puis 250, 125, 62, 31, 15, 7, 3, 1. Il lui faut donc au plus 10 questions.
+- En général, il faut au plus ⌊log₂ N⌋ + 1 questions pour N nombres : le nombre de fois qu’on peut couper N en deux, plus un. Pour un million de nombres, 20 questions suffisent, car 2²⁰ = 1 048 576.
+- Cette méthode s’appelle la recherche dichotomique. Elle sert partout où les données sont rangées dans l’ordre : un mot dans un dictionnaire, un nom dans une liste triée, une valeur dans une table.
+- Si l’ordinateur posait les nombres un par un (1, 2, 3…), il lui faudrait jusqu’à 1 000 questions pour 1 000 nombres.
+
+**Hypothèses** : Vous répondez honnêtement et ne changez pas de nombre en cours de partie. Les nombres possibles sont rangés dans l’ordre : c’est ce qui permet d’en éliminer la moitié à chaque réponse.
+
+**À essayer** (explication repliable « Voir l’explication »)
+
+1. Jouez avec 1 000 nombres en choisissant 1 000. Combien de questions faut-il ? — Explication : 10, le maximum : 500, 750, 875, 938, 969, 985, 993, 997, 999, puis 1 000.
+2. Passez à un million de nombres. Combien de questions au plus ? — Explication : 20, seulement deux fois plus que pour 1 000 nombres, alors qu’il y a mille fois plus de nombres. Chaque question supplémentaire fait à peu près doubler la quantité de nombres que l’on peut départager.
+3. Mentez exprès : avec 100 nombres, répondez « Plus grand » à 50, puis « Plus petit » à 75, puis « Plus grand » à toutes les questions suivantes. Que se passe-t-il ? — Explication : après 62, 68, 71, 73 et 74, il ne reste plus aucun nombre possible : aucun nombre ne peut vérifier toutes vos réponses, et l’ordinateur le détecte.
+
+#### Nombre mystère — English
+
+- **Tab title**: Think of a number — The Lab
+- **Description**: Interactive game: pick a number, and the computer finds it in just a few questions using binary search.
+- **Page heading**: Think of a number
+- **Subtitle**: Binary search
+- **Intro**: Think of a number, and keep it to yourself. The computer will find it with very few questions. Its secret: each time, it cuts the list of numbers that are still possible in half.
+- **Note**: Level: TODO(Jospin): level. (hidden while missing)
+- **Control**: Pick a number between 1 and… · 100 · 1,000 · 1,000,000 (starting value 1,000)
+- Before the game: Pick a number between 1 and {N}, keep it in mind, then click “I’ve picked”.
+- Buttons: I’ve picked · Higher · Lower · That’s it! · Undo last answer · Play again
+- Question: Is your number {g}?
+- Counter: Question {k} of {Q} at most
+- Possibilities: {r} numbers are still possible, from {a} to {b}.
+- One possibility left: Only one number is still possible: {a}.
+- History (heading “Questions asked”): {g}? Higher · {g}? Lower · {g}? That’s it!
+- End: Found it! Your number is {g}, found in {k} questions.
+- End after one question: Found it! Your number is {g}, found with the very first question.
+- Contradiction: Your answers contradict each other: no number from 1 to {N} fits them all. Undo your last answer or play again.
+- Text summary of the bar: Numbers still possible: from {a} to {b}, out of 1 to {N}.
+
+**How does the computer do it?**
+
+- It always guesses the number in the middle of the numbers that are still possible. Your answer rules out half of them at once.
+- With 1,000 numbers, at most 500 are left after the first question, then 250, 125, 62, 31, 15, 7, 3, 1. So it needs 10 questions at most.
+- In general, N numbers take at most ⌊log₂ N⌋ + 1 questions: the number of times N can be halved, plus one. For a million numbers, 20 questions are enough, because 2²⁰ = 1,048,576.
+- This method is called binary search. It works wherever data is kept in order: a word in a dictionary, a name in a sorted list, a value in a table.
+- If the computer guessed the numbers one by one (1, 2, 3…), it could take up to 1,000 questions for 1,000 numbers.
+
+**Assumptions**: You answer honestly and don’t change your number during the game. The possible numbers are in order: that is what lets each answer rule out half of them.
+
+**Try this** (collapsible “Show the explanation”)
+
+1. Play with 1,000 numbers and pick 1,000. How many questions does it take? — Explanation: 10, the maximum: 500, 750, 875, 938, 969, 985, 993, 997, 999, then 1,000.
+2. Switch to a million numbers. How many questions at most? — Explanation: 20, only twice as many as for 1,000 numbers, even though there are a thousand times more numbers. Each extra question roughly doubles how many numbers can be told apart.
+3. Lie on purpose: with 100 numbers, answer “Higher” to 50, then “Lower” to 75, then “Higher” to every question after that. What happens? — Explanation: after 62, 68, 71, 73 and 74, no number is left: none can match all your answers, and the computer notices.
+
+#### Valeurs de contrôle du nombre mystère (calculées le 25 novembre 2026)
+
+Calculées par Claude en Python, par simulation de toutes les parties honnêtes (tous les nombres de 1 à N).
+
+| N | Nombre choisi | Questions posées | Nombre de questions |
+| --- | --- | --- | --- |
+| 20 | 14 | 10, 15, 12, 13, 14 | 5 |
+| 100 | 37 | 50, 25, 37 | 3 |
+| 100 | 100 | 50, 75, 88, 94, 97, 99, 100 | 7 |
+| 100 | 1 | 50, 25, 12, 6, 3, 1 | 6 |
+| 1 000 | 1 | 500, 250, 125, 62, 31, 15, 7, 3, 1 | 9 |
+| 1 000 | 1 000 | 500, 750, 875, 938, 969, 985, 993, 997, 999, 1 000 | 10 |
+| 1 000 | 777 | 500, 750, 875, 812, 781, 765, 773, 777 | 8 |
+| 1 000 000 | 1 | 500 000, 250 000, 125 000, 62 500, 31 250, 15 625, 7 812, 3 906, 1 953, 976, 488, 244, 122, 61, 30, 15, 7, 3, 1 | 19 |
+| 1 000 000 | 123 456 | 500 000, 250 000, 125 000, 62 500, 93 750, 109 375, 117 187, 121 093, 123 046, 124 023, 123 534, 123 290, 123 412, 123 473, 123 442, 123 457, 123 449, 123 453, 123 455, 123 456 | 20 |
+
+Calcul exhaustif sur toutes les parties honnêtes : maximum 5 questions pour N = 20, 7 pour N = 100 (37 nombres l’atteignent), 10 pour N = 1 000 (489 nombres), 20 pour N = 1 000 000 (475 713 nombres) ; moyennes 3,7 ; 5,8 ; 8,987 ; 18,9514. Le maximum vaut toujours ⌊log₂ N⌋ + 1.
+
+Contradiction (N = 100), réponses « Plus grand » à 50, « Plus petit » à 75, puis « Plus grand » à chaque question : questions 50, 75, 62, 68, 71, 73, 74 ; intervalles [51, 100], [51, 74], [63, 74], [69, 74], [72, 74], [74, 74], puis a = 75 > b = 74 : contradiction après 7 réponses (calculé par programme).
+
+#### Pour aller plus loin — nombre mystère
+
+- Wikipédia, « Recherche dichotomique » → `https://fr.wikipedia.org/wiki/Recherche_dichotomique`
+
+English:
+
+- Wikipedia, “Binary search” → `https://en.wikipedia.org/wiki/Binary_search`
+
+**Affirmations et sources** (relecture, non affiché)
+
+| Affirmation de la page | Source |
+| --- | --- |
+| Principe : comparer au milieu, garder la moitié qui convient ; données triées | Wikipédia « Recherche dichotomique » et « Binary search » (sources encyclopédiques ; l’article français renvoie à Knuth, *The Art of Computer Programming*, vol. 3, section 6.2.1) |
+| Exemple 1 à 20, nombre 14 : 10, 15, 12, 13, 14 | Wikipédia « Recherche dichotomique » (même règle du milieu arrondi à l’entier inférieur que le site) |
+| Au plus ⌊log₂ N⌋ + 1 questions ; 10 pour 1 000, 20 pour un million | Déduction, vérifiée par calcul exhaustif (valeurs de contrôle) |
+| Recherche un par un : jusqu’à N questions | Déduction immédiate |
+
 ## Historique
 
 - Version 0.1 (23 novembre 2026) : décision du Labo ; publics ; adresses et table de correspondance ; expériences prévues ; stack statique sur Cloudflare Workers ; feuille de route L1 à L3 ; proposition pour la démo 3-SAT.
@@ -927,3 +1205,4 @@ Les liens DOI peuvent répondre 403 aux outils automatiques ; ils s’ouvrent no
 - Version 0.6 (25 novembre 2026) : clôture de L2 ; L2a (version `7ba02663`, sitemap envoyé) et L2b (version du portfolio `f10afe9f`) terminées ; redirections permanentes en 308 et non 301 (section 8) ; recette des anciennes adresses cochée (section 9). Version préparée mais jamais commitée : son contenu est repris dans la 0.7.
 - Version 0.7 (25 novembre 2026) : étape L3 ; L2 confirmée par Jospin (PageSpeed Insights, 308 dans le navigateur, essai sur téléphone) ; Informatique publiée (sections 2 et 5) ; annexe D : modèle, textes, valeurs de contrôle et sources de l’expérience 3-SAT, vérifiées le 25 novembre 2026 ; annexe A remplacée.
 - Version 0.8 (25 novembre 2026) : clôture de L3 (version `42c36b41`, contrôles de Jospin conformes) ; écarts acceptés lors de la réalisation (annexe D.2) ; objectifs de durée atteints.
+- Version 0.9 (25 novembre 2026) : étape L4, série « découverte » décidée par Jospin : la réfraction de la lumière et « Pensez à un nombre » (annexe E, sources vérifiées le 25 novembre 2026) ; description de la page Physique élargie (annexe C.1) ; l’IA explicable passe après L4 (sections 3 et 8).
