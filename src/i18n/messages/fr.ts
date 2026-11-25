@@ -1,7 +1,7 @@
 /**
  * Textes français : source de vérité de la structure des messages.
  * Le fichier anglais doit avoir exactement les mêmes clés (vérifié par TypeScript).
- * Textes des annexes B et C du cahier, mot pour mot (vérifié par texts.test.ts et demos.test.ts). Une phrase coupée par
+ * Textes des annexes B à E du cahier, mot pour mot (vérifié par texts.test.ts et demos.test.ts). Une phrase coupée par
  * une mise en forme ou un lien est découpée en morceaux, dans l'ordre (before, link…).
  */
 const fr = {
@@ -151,7 +151,7 @@ const fr = {
     intro:
       "Des expériences d’informatique à lancer vous-même, en commençant par les énigmes logiques 3-SAT\u00a0: où se trouvent les problèmes vraiment difficiles\u00a0?",
   },
-  // Expériences (annexes C.2 et C.3). Sources : ce qui est entre deux `*` s'écrit en italique.
+  // Expériences (annexes C à E). Sources : ce qui est entre deux `*` s'écrit en italique.
   demos: {
     projectile: {
       card: {
@@ -555,6 +555,190 @@ const fr = {
           text: "S. Cook, «\u00a0The P versus NP Problem\u00a0», Clay Mathematics Institute",
           href: "https://www.claymath.org/wp-content/uploads/2022/06/pvsnp.pdf",
           english: true,
+        },
+      ],
+    },
+    // Série « découverte » (annexe E) : ce qui est entre deux `$` est une formule (notation de MathText).
+    refraction: {
+      card: {
+        title: "La réfraction de la lumière",
+        text: "Changez l’angle d’un rayon et les milieux qu’il traverse\u00a0: regardez-le se briser, puis rester piégé.",
+      },
+      metaTitle: "La réfraction de la lumière — Le Labo",
+      metaDescription:
+        "Simulation interactive de la réfraction\u00a0: loi de Snell-Descartes, angle limite et réflexion totale, mis à jour en direct.",
+      title: "La réfraction de la lumière",
+      intro:
+        "Dans un aquarium, un poisson semble parfois se trouver à deux endroits à la fois\u00a0: la lumière change de direction quand elle passe de l’eau à l’air. Réglez le rayon et regardez-le se briser.",
+      controls: {
+        title: "Réglages",
+        from: "Milieu d’où vient la lumière",
+        to: "Milieu où entre la lumière",
+        angle: "Angle d’incidence (°)",
+        media: {
+          air: "Air (n = 1,00)",
+          water: "Eau (n = 1,33)",
+          glass: "Verre (n = 1,52)",
+          diamond: "Diamant (n = 2,42)",
+        },
+      },
+      results: {
+        title: "Résultats",
+        reflection: "Angle de réflexion",
+        refraction: "Angle de réfraction",
+        critical: "Angle limite",
+        total: "aucun\u00a0: réflexion totale",
+        noCritical: "aucun\u00a0: la lumière entre dans un milieu d’indice égal ou plus grand",
+      },
+      legend: {
+        incident: "Rayon incident",
+        reflected: "Rayon réfléchi",
+        refracted: "Rayon réfracté",
+        normal: "Normale",
+      },
+      summary: {
+        refracted: "Rayon incident à {i₁}\u00a0; rayon réfracté à {i₂}.",
+        total: "Rayon incident à {i₁}\u00a0; réflexion totale\u00a0: aucun rayon réfracté.",
+      },
+      laws: {
+        title: "Les lois",
+        intro:
+          "Les angles se mesurent par rapport à la normale, la droite perpendiculaire à la surface au point où arrive le rayon.",
+        items: [
+          "Indice de réfraction d’un milieu\u00a0: $*n* = *c* / *v*$, où $*c*$ est la vitesse de la lumière dans le vide et $*v*$ sa vitesse dans le milieu.",
+          "Loi de la réflexion\u00a0: $*r* = *i*_{1}$",
+          "Loi de la réfraction (loi de Snell-Descartes)\u00a0: $*n*_{1} sin *i*_{1} = *n*_{2} sin *i*_{2}$",
+          "Avec les valeurs réglées\u00a0: $sin *i*_{2} = *n*_{1} sin *i*_{1} / *n*_{2} = {s}$",
+          "Si ce nombre dépasse 1, aucun angle $*i*_{2}$ ne convient\u00a0: il n’y a pas de rayon réfracté, toute la lumière est réfléchie. C’est la réflexion totale.",
+          "Angle limite, quand la lumière passe dans un milieu d’indice plus petit ($*n*_{1} > *n*_{2}$)\u00a0: $sin *i*_{lim} = *n*_{2} / *n*_{1}$. Au-delà de cet angle, la réflexion est totale.",
+        ],
+      },
+      assumptions: {
+        title: "Hypothèses",
+        text: "La lumière est d’une seule couleur (jaune, 589\u00a0nm)\u00a0: l’indice d’un milieu varie un peu avec la couleur. Les milieux sont transparents et homogènes, et leur surface de séparation est plane. La figure ne montre pas l’intensité des rayons\u00a0: en réalité, une partie de la lumière est toujours réfléchie, même quand elle traverse la surface.",
+      },
+      tryThis: {
+        title: "À essayer",
+        show: "Voir l’explication",
+        items: {
+          closer: {
+            question:
+              "De l’air vers l’eau, augmentez l’angle d’incidence de 0° à 89°. Le rayon réfracté se rapproche-t-il ou s’éloigne-t-il de la normale\u00a0?",
+            answer:
+              "il se rapproche de la normale, car l’eau a un indice plus grand que l’air. Même à 89°, l’angle de réfraction reste sous 48,8°\u00a0: $sin *i*_{2}$ ne peut pas dépasser 1,00 / 1,33.",
+          },
+          trapped: {
+            question: "Inversez\u00a0: de l’eau vers l’air. À partir de quel angle le rayon réfracté disparaît-il\u00a0?",
+            answer:
+              "entre 48° et 49°. L’angle limite vaut 48,8°, car $sin *i*_{lim} = 1,00 / 1,33$. Au-delà, la lumière reste piégée dans l’eau\u00a0: c’est la réflexion totale.",
+          },
+          diamond: {
+            question: "Comparez l’angle limite du diamant vers l’air avec celui de l’eau vers l’air.",
+            answer:
+              "24,4° pour le diamant, contre 48,8° pour l’eau. Plus l’indice du milieu 1 est grand, plus l’angle limite est petit, et plus la lumière y reste facilement piégée. Les fibres optiques utilisent la réflexion totale pour guider la lumière.",
+          },
+        },
+      },
+      sources: [
+        {
+          text: "OpenStax, *University Physics Volume 3*, section 1.3 «\u00a0Refraction\u00a0»",
+          href: "https://openstax.org/books/university-physics-volume-3/pages/1-3-refraction",
+          english: true,
+        },
+        {
+          text: "OpenStax, *University Physics Volume 3*, section 1.4 «\u00a0Total Internal Reflection\u00a0»",
+          href: "https://openstax.org/books/university-physics-volume-3/pages/1-4-total-internal-reflection",
+          english: true,
+        },
+        {
+          text: "OpenStax, *University Physics Volume 3*, section 1.5 «\u00a0Dispersion\u00a0»",
+          href: "https://openstax.org/books/university-physics-volume-3/pages/1-5-dispersion",
+          english: true,
+        },
+      ],
+    },
+    "think-of-a-number": {
+      card: {
+        title: "Pensez à un nombre",
+        text: "Choisissez un nombre entre 1 et 1\u00a0000\u00a0: l’ordinateur le trouve en 10 questions au plus.",
+      },
+      metaTitle: "Pensez à un nombre — Le Labo",
+      metaDescription:
+        "Jeu interactif\u00a0: choisissez un nombre, l’ordinateur le trouve en quelques questions grâce à la recherche dichotomique.",
+      title: "Pensez à un nombre",
+      subtitle: "La recherche dichotomique",
+      intro:
+        "Choisissez un nombre dans votre tête, sans le dire. L’ordinateur va le trouver en posant très peu de questions. Son secret\u00a0: couper en deux, à chaque fois, la liste des nombres encore possibles.",
+      // L'annexe E.3 ne donne pas de titre anglais au jeu : il n'en a dans aucune langue.
+      controls: { range: "Choisissez un nombre entre 1 et…" },
+      instruction: "Choisissez un nombre entre 1 et {N}, gardez-le en tête, puis cliquez sur «\u00a0J’ai choisi\u00a0».",
+      buttons: {
+        ready: "J’ai choisi",
+        higher: "Plus grand",
+        lower: "Plus petit",
+        found: "C’est ça\u00a0!",
+        undo: "Annuler la dernière réponse",
+        replay: "Rejouer",
+      },
+      question: "Votre nombre est-il {g}\u00a0?",
+      counter: "Question {k} sur {Q} au plus",
+      possibilities: {
+        many: "Il reste {r} nombres possibles, de {a} à {b}.",
+        one: "Il ne reste qu’un nombre possible\u00a0: {a}.",
+      },
+      history: {
+        title: "Questions posées",
+        higher: "{g}\u00a0? Plus grand",
+        lower: "{g}\u00a0? Plus petit",
+        found: "{g}\u00a0? C’est ça\u00a0!",
+      },
+      end: {
+        many: "Trouvé\u00a0! Votre nombre est {g}, découvert en {k} questions.",
+        one: "Trouvé\u00a0! Votre nombre est {g}, découvert dès la première question.",
+      },
+      contradiction:
+        "Vos réponses se contredisent\u00a0: aucun nombre de 1 à {N} ne convient. Annulez la dernière réponse ou rejouez.",
+      bar: "Nombres encore possibles\u00a0: de {a} à {b}, sur 1 à {N}.",
+      how: {
+        title: "Comment fait l’ordinateur\u00a0?",
+        items: [
+          "Il propose toujours le nombre du milieu des nombres encore possibles. Votre réponse élimine d’un coup la moitié d’entre eux.",
+          "Avec 1\u00a0000 nombres, il en reste au plus 500 après la première question, puis 250, 125, 62, 31, 15, 7, 3, 1. Il lui faut donc au plus 10 questions.",
+          "En général, il faut au plus $⌊log_{2} *N*⌋ + 1$ questions pour $*N*$ nombres\u00a0: le nombre de fois qu’on peut couper $*N*$ en deux, plus un. Pour un million de nombres, 20 questions suffisent, car $2^{20} = 1\u00a0048\u00a0576$.",
+          "Cette méthode s’appelle la recherche dichotomique. Elle sert partout où les données sont rangées dans l’ordre\u00a0: un mot dans un dictionnaire, un nom dans une liste triée, une valeur dans une table.",
+          "Si l’ordinateur posait les nombres un par un (1, 2, 3…), il lui faudrait jusqu’à 1\u00a0000 questions pour 1\u00a0000 nombres.",
+        ],
+      },
+      assumptions: {
+        title: "Hypothèses",
+        text: "Vous répondez honnêtement et ne changez pas de nombre en cours de partie. Les nombres possibles sont rangés dans l’ordre\u00a0: c’est ce qui permet d’en éliminer la moitié à chaque réponse.",
+      },
+      tryThis: {
+        title: "À essayer",
+        show: "Voir l’explication",
+        items: {
+          thousand: {
+            question: "Jouez avec 1\u00a0000 nombres en choisissant 1\u00a0000. Combien de questions faut-il\u00a0?",
+            answer: "10, le maximum\u00a0: 500, 750, 875, 938, 969, 985, 993, 997, 999, puis 1\u00a0000.",
+          },
+          million: {
+            question: "Passez à un million de nombres. Combien de questions au plus\u00a0?",
+            answer:
+              "20, seulement deux fois plus que pour 1\u00a0000 nombres, alors qu’il y a mille fois plus de nombres. Chaque question supplémentaire fait à peu près doubler la quantité de nombres que l’on peut départager.",
+          },
+          lie: {
+            question:
+              "Mentez exprès\u00a0: avec 100 nombres, répondez «\u00a0Plus grand\u00a0» à 50, puis «\u00a0Plus petit\u00a0» à 75, puis «\u00a0Plus grand\u00a0» à toutes les questions suivantes. Que se passe-t-il\u00a0?",
+            answer:
+              "après 62, 68, 71, 73 et 74, il ne reste plus aucun nombre possible\u00a0: aucun nombre ne peut vérifier toutes vos réponses, et l’ordinateur le détecte.",
+          },
+        },
+      },
+      sources: [
+        {
+          text: "Wikipédia, «\u00a0Recherche dichotomique\u00a0»",
+          href: "https://fr.wikipedia.org/wiki/Recherche_dichotomique",
+          english: false,
         },
       ],
     },

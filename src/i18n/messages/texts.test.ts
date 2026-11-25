@@ -22,6 +22,7 @@ const privacyFr = readable(between("### B.3 Confidentialité", "Tab title: Priva
 const privacyEn = readable(between("Tab title: Privacy", "## Annexe C"));
 const menu = readable(between("### C.1 Menu", "### C.2"));
 const computingPages = readable(between("### D.1 Menu", "### D.2"));
+const discovery = readable(between("### E.1 Pages", "### E.2"));
 
 describe.each([
   ["fr", fr, homeFr, privacyFr],
@@ -35,13 +36,26 @@ describe.each([
   const { experiment, computing, physics } = messages;
   const { computing: computingEntry, ...nav } = messages.nav;
   const { computing: computingSection, ...homeTexts } = messages.home;
-  const { "three-sat": threeSat, ...physicsDemos } = messages.demos;
+  const { "three-sat": threeSat, refraction, "think-of-a-number": number, ...mechanics } = messages.demos;
   it.each(strings({ nav, physics, experiment }))("menu et page Physique : %s", (_path, value) => {
     expect(menu).toContain(plain(value).trim());
   });
 
-  it.each(strings(Object.values(physicsDemos).map((demo) => demo.card)))("carte : %s", (_path, value) => {
+  it.each(strings(Object.values(mechanics).map((demo) => demo.card)))("carte : %s", (_path, value) => {
     expect(home).toContain(plain(value).trim());
+  });
+
+  it.each(strings({ refraction: refraction.card, number: number.card, intro: physics.intro }))(
+    "série « découverte » (E.1) : %s",
+    (_path, value) => {
+      expect(discovery).toContain(plain(value));
+    },
+  );
+
+  it("fil d’Ariane de la série « découverte » (E.1)", () => {
+    const trail = (category: string, title: string) => plain([messages.site.name, category, title].join(" › "));
+    expect(discovery).toContain(trail(physics.title, refraction.title));
+    expect(discovery).toContain(trail(computing.title, number.title));
   });
 
   it.each(strings(homeTexts))("accueil : %s", (_path, value) => {

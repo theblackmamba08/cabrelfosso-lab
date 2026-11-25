@@ -35,6 +35,10 @@ const pages = [
   ["/en/computing", "en", "Computing"],
   ["/fr/informatique/transition-de-phase-3-sat", "fr", "La transition de phase de 3-SAT"],
   ["/en/computing/3-sat-phase-transition", "en", "The 3-SAT phase transition"],
+  ["/fr/physique/refraction", "fr", "La réfraction de la lumière"],
+  ["/en/physics/refraction", "en", "Refraction of light"],
+  ["/fr/informatique/pensez-a-un-nombre", "fr", "Pensez à un nombre"],
+  ["/en/computing/think-of-a-number", "en", "Think of a number"],
 ] as const;
 
 describe("racine", () => {
@@ -149,6 +153,9 @@ describe("adresses inconnues ou non publiées", () => {
     "/en/computing/transition-de-phase-3-sat",
     "/fr/informatique/3-sat-phase-transition",
     "/fr/informatique/projectile",
+    "/en/computing/pensez-a-un-nombre",
+    "/fr/informatique/think-of-a-number",
+    "/fr/informatique/refraction",
     "/en/physics/pendule-de-newton",
     "/fr/physique/newtons-cradle",
     "/fr/physique/inconnu",

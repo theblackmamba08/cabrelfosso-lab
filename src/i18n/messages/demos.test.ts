@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { plainMath } from "@/demos/projectile/equations";
+import { plainMath } from "@/demos/projectile/math";
 import { gravities } from "@/demos/projectile/physics";
 import { between, plain } from "@/test/cahier";
 import en from "./en";
@@ -37,6 +37,16 @@ const cradleSources = between("#### Pour aller plus loin — pendule", "## Annex
 const threeSatFr = between("#### 3-SAT — français", "#### 3-SAT — English");
 const threeSatEn = between("#### 3-SAT — English", "#### Valeurs de contrôle de 3-SAT");
 const threeSatSources = between("#### Pour aller plus loin — 3-SAT", "**Affirmations et sources** (relecture");
+
+const refractionFr = between("#### Réfraction — français", "#### Réfraction — English");
+const refractionEn = between("#### Réfraction — English", "#### Valeurs de contrôle de la réfraction");
+const refractionSources = between("#### Pour aller plus loin — réfraction", "**Affirmations et sources** (relecture");
+const numberFr = between("#### Nombre mystère — français", "#### Nombre mystère — English");
+const numberEn = between("#### Nombre mystère — English", "#### Valeurs de contrôle du nombre mystère");
+const numberSources = between("#### Pour aller plus loin — nombre mystère", "**Affirmations et sources** (relecture");
+
+/** Texte simple : un dollar entoure une formule, écrite dans la notation de MathText. */
+const simple = (value: string) => plain(plainMath(value.replaceAll("$", "")));
 
 /** Textes propres à l'annexe C : les cartes (annexe B.2) et les sources ont leurs tests. */
 const own = ({ card, sources, ...texts }: { card: object; sources: object }) => {
@@ -90,6 +100,34 @@ describe.each([
   });
 });
 
+describe.each([
+  ["réfraction, français", fr.demos.refraction, refractionFr],
+  ["réfraction, anglais", en.demos.refraction, refractionEn],
+  ["nombre mystère, français", fr.demos["think-of-a-number"], numberFr],
+  ["nombre mystère, anglais", en.demos["think-of-a-number"], numberEn],
+] as const)("%s : mot pour mot de l'annexe E", (_name, demo, annexe) => {
+  it.each(own(demo))("%s", (_path, value) => {
+    expect(annexe).toContain(simple(value));
+  });
+
+  // Lignes entières : un texte tronqué dans le code ne passe pas.
+  it("les lois ou l'explication, les hypothèses et les questions sont entières", () => {
+    const lines = annexe.split("\n").map((line) => line.trim().replace(/^(- |\d\. )/, ""));
+    const french = annexe === refractionFr || annexe === numberFr;
+    const [assumptions, explanation] = french ? ["**Hypothèses** : ", "Explication : "] : ["**Assumptions**: ", "Explanation: "];
+    const { items } = "laws" in demo ? demo.laws : demo.how;
+    expect(items).toHaveLength("laws" in demo ? 6 : 5);
+    for (const item of items) expect(lines).toContain(simple(item));
+    if ("laws" in demo) expect(lines).toContain(simple(demo.laws.intro));
+    expect(lines).toContain(assumptions + simple(demo.assumptions.text));
+    const questions = Object.values(demo.tryThis.items);
+    expect(questions).toHaveLength(3);
+    for (const { question, answer } of questions) {
+      expect(lines).toContain(`${simple(question)} — ${explanation}${simple(answer)}`);
+    }
+  });
+});
+
 describe("pendule : rien ne manque", () => {
   it.each([
     ["français", fr, "Ec"],
@@ -119,25 +157,30 @@ describe("sources « Pour aller plus loin »", () => {
     ...fr.demos.projectile.sources.map((source) => [source.text, source, projectileSources] as const),
     ...fr.demos["newtons-cradle"].sources.map((source) => [source.text, source, cradleSources] as const),
     ...fr.demos["three-sat"].sources.map((source) => [source.text, source, threeSatSources] as const),
+    ...fr.demos.refraction.sources.map((source) => [source.text, source, refractionSources] as const),
+    ...fr.demos["think-of-a-number"].sources.map((source) => [source.text, source, numberSources] as const),
   ])("français, mot pour mot : %s", (_text, source, annexe) => {
     const mention = source.english ? ` ${inEnglish}` : "";
     expect(annexe).toContain(`${plain(source.text)}${mention} → \`${source.href}\``);
   });
 
-  it("il y en a une pour le projectile et cinq pour le pendule, dans les deux langues", () => {
+  it("il y en a une pour le projectile, cinq pour le pendule, trois pour la réfraction et une pour le nombre mystère, dans les deux langues", () => {
     for (const messages of [fr, en]) {
       expect(messages.demos.projectile.sources).toHaveLength(1);
       expect(messages.demos["newtons-cradle"].sources).toHaveLength(5);
+      expect(messages.demos.refraction.sources).toHaveLength(3);
+      expect(messages.demos["think-of-a-number"].sources).toHaveLength(1);
     }
   });
 
-  it("anglais : mêmes liens, sauf la page Wikipédia anglaise ; aucune mention « (en anglais) »", () => {
+  it("anglais : mêmes liens, sauf les pages Wikipédia anglaises ; aucune mention « (en anglais) »", () => {
     const links = (messages: typeof fr) => Object.values(messages.demos).flatMap((demo) => demo.sources.map((s) => s.href));
-    expect(links(en)).toEqual(
-      links(fr).map((href) =>
-        href.includes("wikipedia") ? "https://en.wikipedia.org/wiki/Coefficient_of_restitution" : href,
-      ),
-    );
+    const english: Record<string, string> = {
+      "https://fr.wikipedia.org/wiki/Coefficient_de_restitution": "https://en.wikipedia.org/wiki/Coefficient_of_restitution",
+      "https://fr.wikipedia.org/wiki/Recherche_dichotomique": "https://en.wikipedia.org/wiki/Binary_search",
+    };
+    expect(links(en)).toEqual(links(fr).map((href) => english[href] ?? href));
+    expect(refractionSources).toContain("English (same links):");
     expect(cradleSources).toContain("https://en.wikipedia.org/wiki/Coefficient_of_restitution");
     expect(threeSatSources).toContain("English (same links):");
     expect(JSON.stringify(en.demos)).not.toContain("en anglais");
@@ -158,6 +201,13 @@ describe("sources « Pour aller plus loin »", () => {
     ...en.demos["three-sat"].sources.map(
       ({ text }) =>
         [text, threeSatSources.slice(threeSatSources.indexOf("English (same links):")), `- ${plain(text)}`] as const,
+    ),
+    ...en.demos.refraction.sources.map(
+      ({ text }) =>
+        [text, refractionSources.slice(refractionSources.indexOf("English (same links):")), `- ${plain(text)}`] as const,
+    ),
+    ...en.demos["think-of-a-number"].sources.map(
+      ({ text, href }) => [text, numberSources, `- ${plain(text)} → \`${href}\``] as const,
     ),
   ])("anglais, mot pour mot : %s", (_text, annexe, line) => {
     expect(annexe.split("\n")).toContain(line);

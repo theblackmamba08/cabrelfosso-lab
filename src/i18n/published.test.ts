@@ -2,9 +2,9 @@ import { describe, expect, it } from "vitest";
 import { demos } from "../demos/registry";
 import { experimentParams, findPage, publishedPages, publishedPaths, sectionParams } from "./published";
 
-const [projectile, cradle, threeSat] = demos;
+const [projectile, cradle, threeSat, refraction, number] = demos;
 
-describe("pages publiées à l’étape L3", () => {
+describe("pages publiées à l’étape L4", () => {
   it("sont l’accueil, la Confidentialité, les catégories et leurs expériences", () => {
     expect(publishedPages).toEqual([
       { key: "home" },
@@ -13,11 +13,13 @@ describe("pages publiées à l’étape L3", () => {
       { key: "computing" },
       { key: "physics", demo: projectile },
       { key: "physics", demo: cradle },
+      { key: "physics", demo: refraction },
       { key: "computing", demo: threeSat },
+      { key: "computing", demo: number },
     ]);
   });
 
-  it("ont quatorze adresses", () => {
+  it("ont dix-huit adresses", () => {
     expect(publishedPaths()).toEqual([
       "/fr",
       "/en",
@@ -31,8 +33,12 @@ describe("pages publiées à l’étape L3", () => {
       "/en/physics/projectile",
       "/fr/physique/pendule-de-newton",
       "/en/physics/newtons-cradle",
+      "/fr/physique/refraction",
+      "/en/physics/refraction",
       "/fr/informatique/transition-de-phase-3-sat",
       "/en/computing/3-sat-phase-transition",
+      "/fr/informatique/pensez-a-un-nombre",
+      "/en/computing/think-of-a-number",
     ]);
   });
 });
@@ -51,12 +57,16 @@ describe("paramètres statiques", () => {
     expect(experimentParams("fr")).toEqual([
       { section: "physique", experiment: "projectile" },
       { section: "physique", experiment: "pendule-de-newton" },
+      { section: "physique", experiment: "refraction" },
       { section: "informatique", experiment: "transition-de-phase-3-sat" },
+      { section: "informatique", experiment: "pensez-a-un-nombre" },
     ]);
     expect(experimentParams("en")).toEqual([
       { section: "physics", experiment: "projectile" },
       { section: "physics", experiment: "newtons-cradle" },
+      { section: "physics", experiment: "refraction" },
       { section: "computing", experiment: "3-sat-phase-transition" },
+      { section: "computing", experiment: "think-of-a-number" },
     ]);
   });
 });
