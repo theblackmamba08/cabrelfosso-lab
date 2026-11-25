@@ -1,6 +1,6 @@
 # Cahier des charges — le Labo de Cabrel FOSSO
 
-Version 0.7, du 25 novembre 2026 : étape L3, la transition de phase de 3-SAT (annexe D, qui remplace l’annexe A) ; reprend la clôture de L2 de la version 0.6, jamais commitée (sections 8 et 9).
+Version 0.8, du 25 novembre 2026 : clôture de L3 (sections 8 et 9) ; écarts acceptés lors de la réalisation de l’expérience 3-SAT (annexe D.2).
 
 Rédigée par Claude dans le projet claude.ai « Labo », à partir de la version 0.1 (projet « Portfolio », 23 novembre 2026) et des réponses de Jospin du 24 novembre 2026. Les marqueurs TODO(Jospin) signalent une information encore manquante. Ce fichier est copié dans le dépôt `cabrelfosso-lab` sous `docs/cahier-des-charges.md` ; c’est cette copie qui fait foi.
 
@@ -178,12 +178,12 @@ Le même que pour le portfolio (section 13 de son cahier) :
 | L1. Socle (terminée le 24 novembre 2026 : version `1e6be4ff`, PageSpeed Insights mobile 100 dans les quatre catégories sur `/fr` et `/en`) | Projet Next.js statique, bilinguisme, design system recopié, en-tête, pied de page, thème, accueil du Labo (texte d’accueil, annexe B.2), Confidentialité (annexe B.3), 404 bilingue, sitemap, robots, `_headers`, Worker de la racine, Web Analytics, CI, hook, licences ; mise en ligne sur `lab.cabrelfosso.com`. Le sitemap n’est **pas** envoyé à la Search Console à cette étape |
 | L2a. Déménagement, côté Labo (terminée le 24 novembre 2026 : version `7ba02663` ; sitemap envoyé dans la propriété « domaine » `cabrelfosso.com` de la Search Console, 10 pages découvertes) | Projectile et pendule de Newton (code, tests, textes, sources) ; page Physique ; menu et fil d’Ariane ; accueil avec la section « Physique », sans le bloc provisoire ; mise en ligne ; sitemap envoyé à la Search Console |
 | L2b. Déménagement, côté portfolio (terminée le 24 novembre 2026 : version du portfolio `f10afe9f` ; six redirections 308 mesurées par `curl` et par les tests `smoke` du portfolio) | Dans le dépôt du portfolio : redirections permanentes (308, que Google traite comme une 301) selon la table de la section 2, liens vers le Labo, lien du bandeau d’actualité, retrait du code des démos (section 15 du cahier du portfolio) |
-| L3. Transition de phase de 3-SAT | Annexe D : page Informatique, expérience « Où se cachent les problèmes difficiles ? » (générateur, solveur DPLL, courbes, mode pas à pas, textes, sources), menu, accueil avec la section « Informatique » ; mise en ligne |
+| L3. Transition de phase de 3-SAT (terminée le 25 novembre 2026 : version `42c36b41` ; contrôles de Jospin conformes : PageSpeed Insights mobile, durées de calcul sur téléphone, affichage de ∨ et ∧, sitemap de 14 adresses renvoyé à la Search Console) | Annexe D : page Informatique, expérience « Où se cachent les problèmes difficiles ? » (générateur, solveur DPLL, courbes, mode pas à pas, textes, sources), menu, accueil avec la section « Informatique » ; mise en ligne |
 | Ensuite | IA explicable, puis les autres expériences de la section 3 |
 
 ## 9. Checklist de recette
 
-- [x] Lighthouse mobile ≥ 95 dans les 4 catégories, sur l’accueil et sur une expérience (PageSpeed Insights, vérifié par Jospin le 25 novembre 2026 sur les deux expériences de physique).
+- [x] Lighthouse mobile ≥ 95 dans les 4 catégories, sur l’accueil et sur une expérience (PageSpeed Insights, vérifié par Jospin le 25 novembre 2026 sur les deux expériences de physique, puis sur la page 3-SAT et la page Informatique).
 - [ ] Navigation complète au clavier, focus visible.
 - [ ] Aucun lien mort.
 - [ ] Aperçu correct au partage, en FR et en EN.
@@ -626,7 +626,7 @@ Pas de règle du littéral pur, pas d’apprentissage de clauses : le solveur s�
 - Rien n’est calculé au chargement de la page pour les courbes : le calcul démarre au bouton « Lancer », dans un Web Worker.
 - Le calcul avance valeur de α par valeur de α ; la courbe se dessine au fur et à mesure. « Pause » prend effet à la fin de la valeur de α en cours ; « Arrêter » interrompt tout de suite (la courbe partielle est retirée). Changer un réglage pendant un calcul est impossible (réglages désactivés).
 - Annonce aux lecteurs d’écran (`aria-live="polite"`) seulement à la fin ou à l’arrêt du calcul.
-- Objectifs, mesurés sur le téléphone de Jospin : calcul par défaut (n = 40, 20 énigmes) en 3 s au plus ; n = 50 avec 100 énigmes en 30 s au plus.
+- Objectifs, mesurés sur le téléphone de Jospin : calcul par défaut (n = 40, 20 énigmes) en 3 s au plus ; n = 50 avec 100 énigmes en 30 s au plus. Atteints (vérifié par Jospin le 25 novembre 2026).
 
 **Mode pas à pas**
 
@@ -635,6 +635,16 @@ Pas de règle du littéral pur, pas d’apprentissage de clauses : le solveur s�
 - Une étape = un événement de la trace du solveur : choix, propagation, conflit, retour en arrière, puis solution ou « aucune solution ». Aucune lecture automatique.
 - Chaque clause affiche son numéro, ses littéraux et son état (texte et icône, pas la couleur seule) : satisfaite, fausse, unitaire, en attente.
 - Les indices (x₁…x₆) sont des indices HTML ; chaque clause a un nom accessible en mots (« x₁ ou non x₃ ou x₅ »).
+
+**Écarts acceptés lors de la réalisation (L3, 25 novembre 2026)**
+
+- Graine : champ texte avec clavier numérique (un champ numérique ne laisse pas traiter « abc ») ; le message d’erreur s’affiche dès la saisie.
+- Boutons indisponibles : `aria-disabled` plutôt que `disabled`, pour garder le focus ; « Effacer les courbes » est indisponible pendant un calcul.
+- « Arrêter » pendant le recalcul d’un n déjà tracé : l’ancienne courbe de ce n réapparaît (rien n’est perdu).
+- Erreur du Web Worker : le message « Calcul arrêté. » s’affiche (aucun autre texte n’existe dans le cahier).
+- Variable libre dans le message de solution : « x₂ libre (n’importe quelle valeur convient) », sans signe « = ».
+- ∨ et ∧ ne sont pas dans les polices hébergées : ils viennent d’une police de repli du système, comme √ (section 4.1). Affichage vérifié sur le téléphone de Jospin le 25 novembre 2026.
+- Turbopack publie aussi une copie brute, non utilisée, de `curves.worker.ts` dans `out/_next/static/media/` ; le Worker réel est un fichier JavaScript compilé. `tsconfig.json` exclut `out`.
 
 ### D.3 Où se cachent les problèmes difficiles ? — /fr/informatique/transition-de-phase-3-sat · /en/computing/3-sat-phase-transition
 
@@ -916,3 +926,4 @@ Les liens DOI peuvent répondre 403 aux outils automatiques ; ils s’ouvrent no
 - Version 0.5 (24 novembre 2026) : relecture de L2a ; ordre des chocs du pendule « dans le sens du mouvement », comme le code du portfolio (section 4.1) ; « Cabrel FOSSO » masqué visuellement sous 640 px (section 5) ; textes anglais des sources, validés (annexe C).
 - Version 0.6 (25 novembre 2026) : clôture de L2 ; L2a (version `7ba02663`, sitemap envoyé) et L2b (version du portfolio `f10afe9f`) terminées ; redirections permanentes en 308 et non 301 (section 8) ; recette des anciennes adresses cochée (section 9). Version préparée mais jamais commitée : son contenu est repris dans la 0.7.
 - Version 0.7 (25 novembre 2026) : étape L3 ; L2 confirmée par Jospin (PageSpeed Insights, 308 dans le navigateur, essai sur téléphone) ; Informatique publiée (sections 2 et 5) ; annexe D : modèle, textes, valeurs de contrôle et sources de l’expérience 3-SAT, vérifiées le 25 novembre 2026 ; annexe A remplacée.
+- Version 0.8 (25 novembre 2026) : clôture de L3 (version `42c36b41`, contrôles de Jospin conformes) ; écarts acceptés lors de la réalisation (annexe D.2) ; objectifs de durée atteints.
