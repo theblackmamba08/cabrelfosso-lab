@@ -22,7 +22,11 @@ describe("DemoFigure (cartes des expériences)", () => {
     const [projectile, cradle] = ["projectile", "newtons-cradle"].map((id) =>
       renderToStaticMarkup(<DemoFigure id={id as "projectile" | "newtons-cradle"} />),
     );
-    expect(projectile).not.toBe(cradle);
+    const threeSat = renderToStaticMarkup(<DemoFigure id="three-sat" />);
+    expect(new Set([projectile, cradle, threeSat]).size).toBe(3);
+    // 3-SAT : trois pastilles reliées.
+    expect(threeSat.match(/<circle /g)).toHaveLength(3);
+    expect(threeSat.match(/<line /g)).toHaveLength(3);
     // Le pendule : cinq billes, cinq fils.
     expect(cradle.match(/<circle /g)).toHaveLength(5);
     expect(cradle.match(/<line /g)!.length).toBeGreaterThanOrEqual(5);

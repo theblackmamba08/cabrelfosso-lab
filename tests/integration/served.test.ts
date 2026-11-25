@@ -1,5 +1,5 @@
 /** Site servi par `wrangler dev` : le vrai Worker et les fichiers statiques. */
-import { readFileSync } from "node:fs";
+import { readdirSync, readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
 import { webAnalyticsToken } from "../../src/lib/analytics";
 import { securityHeaders } from "../../src/lib/security-headers";
@@ -31,6 +31,10 @@ const pages = [
   ["/en/physics/projectile", "en", "Projectile motion"],
   ["/fr/physique/pendule-de-newton", "fr", "Le pendule de Newton"],
   ["/en/physics/newtons-cradle", "en", "Newton’s cradle"],
+  ["/fr/informatique", "fr", "Informatique"],
+  ["/en/computing", "en", "Computing"],
+  ["/fr/informatique/transition-de-phase-3-sat", "fr", "La transition de phase de 3-SAT"],
+  ["/en/computing/3-sat-phase-transition", "en", "The 3-SAT phase transition"],
 ] as const;
 
 describe("racine", () => {
@@ -125,6 +129,8 @@ it("le sélecteur de langue mène à la même page dans l’autre langue", async
 it("le sélecteur de langue mène à la même expérience dans l’autre langue", async () => {
   const html = await (await request("/fr/physique/pendule-de-newton")).text();
   expect(html).toMatch(/<a [^>]*href="\/en\/physics\/newtons-cradle"[^>]*hrefLang="en"/);
+  const threeSat = await (await request("/fr/informatique/transition-de-phase-3-sat")).text();
+  expect(threeSat).toMatch(/<a [^>]*href="\/en\/computing\/3-sat-phase-transition"[^>]*hrefLang="en"/);
 });
 
 it("le menu signale la page Physique, et elle seule (aria-current)", async () => {
@@ -138,8 +144,11 @@ it("le menu signale la page Physique, et elle seule (aria-current)", async () =>
 describe("adresses inconnues ou non publiées", () => {
   it.each([
     "/n-importe-quoi",
-    "/fr/informatique",
-    "/en/computing",
+    "/en/informatique",
+    "/fr/computing",
+    "/en/computing/transition-de-phase-3-sat",
+    "/fr/informatique/3-sat-phase-transition",
+    "/fr/informatique/projectile",
     "/en/physics/pendule-de-newton",
     "/fr/physique/newtons-cradle",
     "/fr/physique/inconnu",
@@ -148,7 +157,7 @@ describe("adresses inconnues ou non publiées", () => {
     "/fr/privacy",
     "/de",
     "/fr/confidentialite/x",
-    "/og/fr/informatique.png",
+    "/og/fr/informatique/inconnu.png",
   ])("%s : 404 bilingue", async (path) => {
     const response = await request(path);
     expect(response.status).toBe(404);
@@ -191,6 +200,16 @@ describe("autres fichiers", () => {
     expect(response.status).toBe(200);
     expectSecurity(response);
     expect(response.headers.get("cache-control")).toBe("public, max-age=31536000, immutable");
+  });
+
+  it("Web Worker de 3-SAT : servi par le site, en JavaScript, avec les en-têtes de sécurité", async () => {
+    const chunks = new URL("../../out/_next/static/chunks/", import.meta.url);
+    const workers = readdirSync(chunks).filter((name) => name.startsWith("turbopack-worker-"));
+    expect(workers).toHaveLength(1);
+    const response = await request(`/_next/static/chunks/${workers[0]}`);
+    expect(response.status).toBe(200);
+    expect(response.headers.get("content-type")).toMatch(/javascript/);
+    expectSecurity(response);
   });
 
   it("_headers n’est pas servi", async () => {

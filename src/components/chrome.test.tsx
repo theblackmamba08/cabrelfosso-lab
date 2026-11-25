@@ -49,26 +49,32 @@ describe.each(["fr", "en"] as const)("en-tête (%s)", (locale) => {
 });
 
 describe.each([
-  ["fr", "/fr/physique", "/fr/physique/pendule-de-newton"],
-  ["en", "/en/physics", "/en/physics/newtons-cradle"],
-] as const)("menu (%s)", (locale, category, experiment) => {
+  ["fr", 0, "/fr/physique", "/fr/physique/pendule-de-newton"],
+  ["en", 0, "/en/physics", "/en/physics/newtons-cradle"],
+  ["fr", 1, "/fr/informatique", "/fr/informatique/transition-de-phase-3-sat"],
+  ["en", 1, "/en/computing", "/en/computing/3-sat-phase-transition"],
+] as const)("menu (%s, entrée %i)", (locale, index, category, experiment) => {
   const t = messages[locale];
   const entry = (path: string) => {
     pathname.current = path;
     const html = renderToStaticMarkup(<SiteHeader locale={locale} t={t} />);
     pathname.current = "/fr";
     const nav = html.match(new RegExp(`<nav aria-label="${t.nav.label}"[^>]*>(.*?)</nav>`))?.[1] ?? "";
-    expect(text(nav)).toBe(t.nav.physics);
-    const link = nav.match(/<a [^>]*>/)?.[0] ?? "";
+    expect([...nav.matchAll(/<a [^>]*>(.*?)<\/a>/g)].map((m) => m[1])).toEqual([t.nav.physics, t.nav.computing]);
+    const all = nav.match(/<a [^>]*>/g) ?? [];
+    const link = all[index] ?? "";
+    const other = all[1 - index];
+    expect(other).not.toContain('aria-current');
+    expect(other).not.toContain("bg-accent-soft text-ink\"");
     expect(link).toContain(`href="${category}"`);
     return { current: link.includes('aria-current="page"'), active: link.includes("bg-accent-soft text-ink") };
   };
 
-  it("a une entrée, la Physique, sans style de page courante sur l’accueil", () => {
+  it("est un lien, sans style de page courante sur l’accueil", () => {
     expect(entry(`/${locale}`)).toEqual({ current: false, active: false });
   });
 
-  it("est la page courante sur la page Physique", () => {
+  it("est la page courante sur la page de sa catégorie", () => {
     expect(entry(category)).toEqual({ current: true, active: true });
   });
 

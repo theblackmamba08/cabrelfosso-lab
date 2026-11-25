@@ -40,6 +40,7 @@ describe("expériences", () => {
   it("appartiennent à leur catégorie (menu)", () => {
     expect(routeKeyFromPath("/fr/physique", "fr")).toBe("physics");
     expect(routeKeyFromPath("/en/physics/newtons-cradle", "en")).toBe("physics");
+    expect(routeKeyFromPath("/fr/informatique/transition-de-phase-3-sat", "fr")).toBe("computing");
     expect(routeKeyFromPath("/fr/physique/inconnu", "fr")).toBe("home");
   });
 
@@ -48,6 +49,10 @@ describe("expériences", () => {
     expect(pathInLocale("/en/physics/newtons-cradle", "en", "fr")).toBe("/fr/physique/pendule-de-newton");
     expect(pathInLocale("/fr/physique/projectile", "fr", "en")).toBe("/en/physics/projectile");
     expect(pathInLocale("/fr/physique", "fr", "en")).toBe("/en/physics");
+    expect(pathInLocale("/fr/informatique/transition-de-phase-3-sat", "fr", "en")).toBe("/en/computing/3-sat-phase-transition");
+    expect(pathInLocale("/en/computing/3-sat-phase-transition", "en", "fr")).toBe("/fr/informatique/transition-de-phase-3-sat");
+    expect(pathInLocale("/fr/informatique", "fr", "en")).toBe("/en/computing");
+    expect(pathInLocale("/en/computing", "en", "fr")).toBe("/fr/informatique");
     expect(pathInLocale("/en/physics/pendule-de-newton", "en", "fr")).toBe("/fr");
     expect(pathInLocale("/fr/informatique/projectile", "fr", "en")).toBe("/en");
   });

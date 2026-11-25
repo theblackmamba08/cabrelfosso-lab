@@ -21,6 +21,7 @@ const homeEn = readable(between("Tab title: The Lab", "### B.3 Confidentialité"
 const privacyFr = readable(between("### B.3 Confidentialité", "Tab title: Privacy"));
 const privacyEn = readable(between("Tab title: Privacy", "## Annexe C"));
 const menu = readable(between("### C.1 Menu", "### C.2"));
+const computingPages = readable(between("### D.1 Menu", "### D.2"));
 
 describe.each([
   ["fr", fr, homeFr, privacyFr],
@@ -31,17 +32,24 @@ describe.each([
     expect(common).toContain(plain(value).trim());
   });
 
-  const { nav, physics, experiment } = messages;
+  const { experiment, computing, physics } = messages;
+  const { computing: computingEntry, ...nav } = messages.nav;
+  const { computing: computingSection, ...homeTexts } = messages.home;
+  const { "three-sat": threeSat, ...physicsDemos } = messages.demos;
   it.each(strings({ nav, physics, experiment }))("menu et page Physique : %s", (_path, value) => {
     expect(menu).toContain(plain(value).trim());
   });
 
-  it.each(strings(Object.values(messages.demos).map((demo) => demo.card)))("carte : %s", (_path, value) => {
+  it.each(strings(Object.values(physicsDemos).map((demo) => demo.card)))("carte : %s", (_path, value) => {
     expect(home).toContain(plain(value).trim());
   });
 
-  it.each(strings(messages.home))("accueil : %s", (_path, value) => {
+  it.each(strings(homeTexts))("accueil : %s", (_path, value) => {
     expect(home).toContain(plain(value).trim());
+  });
+
+  it.each(strings({ computingEntry, computing, computingSection, card: threeSat.card }))("informatique (D.1) : %s", (_path, value) => {
+    expect(computingPages).toContain(plain(value).trim());
   });
 
   it.each(strings(messages.privacy))("confidentialité : %s", (_path, value) => {

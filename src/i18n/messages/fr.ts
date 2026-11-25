@@ -43,6 +43,10 @@ const fr = {
       open: "Ouvrir l’expérience",
       all: "Toutes les expériences de physique",
     },
+    computing: {
+      title: "Informatique",
+      all: "Toutes les expériences d’informatique",
+    },
     how: {
       title: "Comment ça marche",
       steps: {
@@ -123,6 +127,7 @@ const fr = {
   nav: {
     label: "Menu principal",
     physics: "Physique",
+    computing: "Informatique",
     breadcrumb: "Fil d’Ariane",
   },
   experiment: {
@@ -137,6 +142,14 @@ const fr = {
     title: "Physique",
     intro:
       "Des expériences de mécanique à régler vous-même : la trajectoire d’un projectile, les chocs du pendule de Newton.",
+  },
+  computing: {
+    metaTitle: "Informatique — Le Labo",
+    metaDescription:
+      "Des expériences d’informatique à lancer vous-même, en commençant par les énigmes logiques 3-SAT\u00a0: où se trouvent les problèmes vraiment difficiles\u00a0?",
+    title: "Informatique",
+    intro:
+      "Des expériences d’informatique à lancer vous-même, en commençant par les énigmes logiques 3-SAT\u00a0: où se trouvent les problèmes vraiment difficiles\u00a0?",
   },
   // Expériences (annexes C.2 et C.3). Sources : ce qui est entre deux `*` s'écrit en italique.
   demos: {
@@ -359,6 +372,188 @@ const fr = {
         {
           text: "S. Hutzler, G. Delaney, D. Weaire et F. MacLeod, « Rocking Newton’s cradle », *American Journal of Physics*, vol. 72, n° 12, p. 1508-1516, 2004",
           href: "https://doi.org/10.1119/1.1783898",
+          english: true,
+        },
+      ],
+    },
+    "three-sat": {
+      card: {
+        title: "Où se cachent les problèmes difficiles\u00a0?",
+        text: "Des énigmes logiques tirées au hasard\u00a0: réglez leur nombre de contraintes et voyez où le solveur peine.",
+      },
+      metaTitle: "Où se cachent les problèmes difficiles\u00a0? — Le Labo",
+      metaDescription:
+        "Expérience interactive sur la transition de phase de 3-SAT\u00a0: part des énigmes logiques qui ont une solution et effort d’un solveur DPLL, calculés dans votre navigateur.",
+      title: "Où se cachent les problèmes difficiles\u00a0?",
+      subtitle: "La transition de phase de 3-SAT",
+      intro:
+        "L’ordinateur fabrique au hasard des énigmes logiques. Avec peu de contraintes, presque toutes ont une solution\u00a0; avec beaucoup, presque aucune. Entre les deux se trouve une zone étroite où le solveur peine le plus. Réglez, lancez, et voyez où elle se trouve.",
+      controls: {
+        title: "L’expérience",
+        variables: "Nombre de variables (n)",
+        puzzles: "Énigmes par valeur de α",
+        seed: "Graine du hasard",
+        seedHelp: "Même graine, mêmes énigmes\u00a0: vous pouvez refaire exactement le même calcul.",
+        seedError: "Entrez un nombre entier de 1 à 999\u00a0999.",
+      },
+      buttons: {
+        run: "Lancer",
+        pause: "Pause",
+        resume: "Reprendre",
+        stop: "Arrêter",
+        clear: "Effacer les courbes",
+      },
+      status: {
+        progress: "Calcul pour n = {n}\u00a0: α = {α} ({i} / 26)",
+        done: "Calcul terminé pour n = {n}\u00a0: {total} énigmes résolues.",
+        stopped: "Calcul arrêté.",
+        empty: "Choisissez n, puis lancez le calcul.",
+      },
+      charts: {
+        share: "Énigmes qui ont une solution (%)",
+        choices: "Nombre de choix du solveur (médiane, échelle logarithmique)",
+        axis: "α = clauses / variables",
+        curve: "n = {n}",
+        prediction: "4,27\u00a0: prédiction pour n très grand",
+      },
+      summaries: {
+        crossing:
+          "n = {n}\u00a0: la part des énigmes qui ont une solution passe sous 50\u00a0% entre α = {a} et α = {b}\u00a0; le solveur fait le plus de choix à α = {c} (médiane {d}).",
+        above:
+          "n = {n}\u00a0: la part des énigmes qui ont une solution reste d’au moins 50\u00a0% sur toute la plage\u00a0; le solveur fait le plus de choix à α = {c} (médiane {d}).",
+        below:
+          "n = {n}\u00a0: la part des énigmes qui ont une solution est sous 50\u00a0% dès α = {a}\u00a0; le solveur fait le plus de choix à α = {c} (médiane {d}).",
+      },
+      table: {
+        show: "Voir les valeurs",
+        alpha: "α",
+        share: "n = {n}\u00a0: ont une solution (%)",
+        choices: "n = {n}\u00a0: choix (médiane)",
+      },
+      steps: {
+        title: "Pas à pas\u00a0: le solveur sur une petite énigme",
+        intro:
+          "Une énigme de 6 variables (x₁ à x₆) et 24 clauses, tirée de la même graine. La première énigme proposée est celle où le solveur doit revenir en arrière au moins une fois. Suivez chaque décision du solveur.",
+        number: "Énigme n°\u00a0{numéro}",
+        buttons: {
+          next: "Étape suivante",
+          restart: "Recommencer",
+          another: "Autre énigme",
+        },
+        counter: "Choix\u00a0: {k}",
+        states: {
+          satisfied: "satisfaite",
+          false: "fausse",
+          unit: "unitaire (un seul littéral encore possible)",
+          pending: "en attente",
+        },
+        words: { or: "ou", not: "non" },
+        messages: {
+          choiceTrue: "Choix\u00a0: x{i} = vrai.",
+          choiceFalse: "Choix\u00a0: x{i} = faux (on essaie l’autre valeur).",
+          propagation: "Propagation\u00a0: la clause {c} n’a plus qu’un littéral possible, donc x{i} = {valeur}.",
+          conflict: "Conflit\u00a0: la clause {c} est fausse.",
+          backtrack: "Retour en arrière\u00a0: on annule le choix de x{i} et tout ce qui l’a suivi.",
+          solution: "Solution trouvée après {k} choix\u00a0: {affectation}.",
+          none: "Aucune solution\u00a0: toutes les possibilités ont été éliminées, après {k} choix.",
+        },
+        values: { true: "vrai", false: "faux", free: "libre (n’importe quelle valeur convient)" },
+      },
+      // Ce qui est entre deux `**` s'écrit en gras ; les indices Unicode deviennent des indices HTML.
+      problem: {
+        title: "Le problème et l’algorithme",
+        paragraphs: [
+          "**Le problème 3-SAT**\u00a0: Une variable booléenne vaut vrai ou faux. Un littéral est une variable (x) ou sa négation (non x, notée ¬x). Une clause relie trois littéraux par «\u00a0ou\u00a0»\u00a0: elle est vraie si au moins un des trois est vrai. Elle n’interdit donc qu’une seule des 8 combinaisons de ses trois variables. Une énigme (formule 3-SAT) demande de rendre vraies toutes ses clauses à la fois. Elle est satisfiable s’il existe une telle affectation, insatisfiable sinon.",
+          "**Exemple**\u00a0: (x₁ ∨ ¬x₂ ∨ x₃) ∧ (¬x₁ ∨ x₂ ∨ x₃). Avec x₃ = vrai, les deux clauses sont vraies\u00a0: l’énigme est satisfiable.",
+          "**Le réglage α** est le nombre de clauses par variable\u00a0: avec n = 40 et α = 4,2, l’énigme compte 168 clauses.",
+          "**Comment les énigmes sont tirées**\u00a0: chaque clause prend trois variables différentes au hasard, et chacune est niée avec une chance sur deux. Les clauses sont tirées indépendamment les unes des autres, comme dans l’expérience de Mitchell, Selman et Levesque (1992).",
+        ],
+        solver: "**Le solveur (algorithme DPLL)**, du nom de Davis, Putnam, Logemann et Loveland, dans une version simple\u00a0:",
+        solverSteps: [
+          "Propagation\u00a0: si une clause n’a plus qu’un littéral possible, ce littéral doit être vrai.",
+          "Si une clause est fausse\u00a0: conflit\u00a0; on revient au dernier choix et on essaie l’autre valeur.",
+          "Si toutes les clauses sont vraies\u00a0: solution trouvée.",
+          "Sinon, choix\u00a0: on prend la plus petite variable libre d’une clause pas encore vraie, et on essaie d’abord «\u00a0vrai\u00a0», puis «\u00a0faux\u00a0».",
+        ],
+        after: [
+          "S’il a essayé les deux valeurs de chaque choix sans succès, le solveur a prouvé que l’énigme n’a pas de solution.",
+          "**Ce que l’on mesure**\u00a0: le nombre de choix (étape 4), pour chaque énigme. La médiane est la valeur du milieu\u00a0: la moitié des énigmes demandent moins de choix, l’autre moitié plus. Sur le second graphique, chaque graduation multiplie le nombre de choix par 10 (échelle logarithmique).",
+        ],
+      },
+      threshold: {
+        title: "Que sait-on du seuil\u00a0?",
+        items: [
+          "En 1992, Mitchell, Selman et Levesque observent que les énigmes les plus difficiles pour ce type de solveur se trouvent là où la moitié a une solution\u00a0: vers α = 4,3 pour 50 variables, et vers 4,55 pour 20 variables.",
+          "Des physiciens ont calculé une valeur voisine de 4,27 pour n très grand, en 2002, par une méthode issue de l’étude des verres de spin (la méthode de la cavité). C’est un calcul, pas une démonstration.",
+          "Les mathématiciens ont démontré qu’en dessous de 3,52, presque toutes les énigmes ont une solution, et qu’au-dessus de 4,49, presque aucune, quand n devient très grand. Pour 3-SAT, on n’a pas démontré qu’il existe une valeur précise du seuil. On l’a démontré en 2022 pour des clauses beaucoup plus longues.",
+        ],
+      },
+      complexity: {
+        title: "P, NP et cette expérience",
+        items: [
+          "**P**\u00a0: les problèmes qu’un algorithme résout en un nombre d’étapes borné par un polynôme de la taille de l’énoncé (par exemple n² ou n³)\u00a0; on dit «\u00a0en temps polynomial\u00a0».",
+          "**NP**\u00a0: les problèmes dont une solution proposée se vérifie en temps polynomial. Pour 3-SAT, vérifier une affectation est facile\u00a0: on relit chaque clause.",
+          "**NP-complet**\u00a0: un problème de NP auquel tous les problèmes de NP se ramènent en temps polynomial. Stephen Cook a démontré en 1971 que SAT est NP-complet\u00a0; 3-SAT l’est aussi.",
+          "La question «\u00a0P = NP\u00a0?\u00a0» demande si tout problème dont la solution se vérifie vite peut aussi se résoudre vite. Elle n’est pas résolue.",
+          "La NP-complétude parle du pire cas. Une énigme tirée au hasard n’est pas forcément difficile\u00a0: cette expérience regarde les cas typiques.",
+          "Cette expérience n’apporte pas de réponse à la question P = NP. Elle montre où se trouvent, en pratique, les énigmes difficiles pour un solveur.",
+        ],
+      },
+      assumptions: {
+        title: "Hypothèses",
+        text: "Les énigmes sont aléatoires\u00a0: les résultats ne disent rien directement des énigmes tirées de problèmes réels. Les tailles sont petites (50 variables au plus)\u00a0: le passage à 50\u00a0% se fait au-dessus de 4,27, et il se rapproche de cette valeur quand n augmente. Le nombre de choix dépend du solveur\u00a0: un autre algorithme donnerait d’autres nombres, et des travaux ont montré que la difficulté dépend aussi du solveur choisi.",
+      },
+      tryThis: {
+        title: "À essayer",
+        show: "Voir l’explication",
+        items: {
+          size: {
+            question:
+              "Lancez le calcul pour n = 20, puis pour n = 50, sans effacer. Que devient la courbe des énigmes qui ont une solution\u00a0?",
+            answer:
+              "pour n = 50, elle descend plus brutalement, et elle passe sous 50\u00a0% plus près de 4,27. Plus l’énigme est grande, plus la transition est nette\u00a0: c’est l’effet de taille finie.",
+          },
+          peak: {
+            question: "Où se trouve le pic du nombre de choix par rapport au passage à 50\u00a0%\u00a0?",
+            answer:
+              "presque au même endroit. À gauche, les solutions sont nombreuses et les premiers choix réussissent. À droite, les contraintes sont si nombreuses que les conflits arrivent vite, et le solveur prouve rapidement qu’il n’y a pas de solution. Au milieu, il doit explorer beaucoup de pistes avant de conclure.",
+          },
+          seed: {
+            question: "Pour n = 20, recommencez avec une autre graine. Pourquoi la courbe change-t-elle\u00a0?",
+            answer:
+              "20 énigmes par valeur de α forment un petit échantillon\u00a0; le hasard des tirages se voit. Avec 100 énigmes, la courbe devient plus régulière.",
+          },
+        },
+      },
+      sources: [
+        {
+          text: "D. Mitchell, B. Selman et H. Levesque, «\u00a0Hard and Easy Distributions of SAT Problems\u00a0», *AAAI-92*, p. 459-465, 1992",
+          href: "https://cdn.aaai.org/AAAI/1992/AAAI92-071.pdf",
+          english: true,
+        },
+        {
+          text: "M. Mézard, G. Parisi et R. Zecchina, «\u00a0Analytic and Algorithmic Solution of Random Satisfiability Problems\u00a0», *Science*, vol. 297, p. 812-815, 2002",
+          href: "https://doi.org/10.1126/science.1073287",
+          english: true,
+        },
+        {
+          text: "M. Mézard et R. Zecchina, «\u00a0The random K-satisfiability problem: from an analytic solution to an efficient algorithm\u00a0», *Physical Review E*, vol. 66, 056126, 2002",
+          href: "https://arxiv.org/abs/cond-mat/0207194",
+          english: true,
+        },
+        {
+          text: "J. Ding, A. Sly et N. Sun, «\u00a0Proof of the satisfiability conjecture for large k\u00a0», *Annals of Mathematics*, vol. 196, p. 1-388, 2022",
+          href: "https://doi.org/10.4007/annals.2022.196.1.1",
+          english: true,
+        },
+        {
+          text: "M. Davis, G. Logemann et D. Loveland, «\u00a0A machine program for theorem-proving\u00a0», *Communications of the ACM*, vol. 5, p. 394-397, 1962",
+          href: "https://doi.org/10.1145/368273.368557",
+          english: true,
+        },
+        {
+          text: "S. Cook, «\u00a0The P versus NP Problem\u00a0», Clay Mathematics Institute",
+          href: "https://www.claymath.org/wp-content/uploads/2022/06/pvsnp.pdf",
           english: true,
         },
       ],

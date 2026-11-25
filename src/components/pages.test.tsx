@@ -3,10 +3,13 @@ import { describe, expect, it } from "vitest";
 import en from "@/i18n/messages/en";
 import fr from "@/i18n/messages/fr";
 import { demos } from "@/demos/registry";
+import { demosOf } from "@/demos/registry";
+import { publishedCategories } from "@/i18n/published";
+import { localizedPath } from "@/i18n/routes";
+import { CategoryPage } from "./category-page";
 import { ExperimentCards } from "./experiment-cards";
 import { ExperimentPage } from "./experiment-page";
 import { HomePage } from "./home-page";
-import { PhysicsPage } from "./physics-page";
 import { PrivacyPage } from "./privacy-page";
 
 const messages = { fr, en };
@@ -14,13 +17,17 @@ const messages = { fr, en };
 /** Balises retirées, entités utiles décodées. */
 const text = (html: string) => html.replace(/<[^>]+>/g, "").replace(/&amp;/g, "&");
 
-/** Liens attendus des cartes d'expérience. */
-const experimentLinks = (locale: "fr" | "en") => {
+/** Liens attendus des cartes d'expérience, par catégorie. */
+const experimentLinks = (locale: "fr" | "en", category: "physics" | "computing" = "physics") => {
   const open = messages[locale].home.physics.open;
-  return locale === "fr"
-    ? [["/fr/physique/projectile", open], ["/fr/physique/pendule-de-newton", open]]
-    : [["/en/physics/projectile", open], ["/en/physics/newtons-cradle", open]];
+  const paths = {
+    physics: { fr: ["/fr/physique/projectile", "/fr/physique/pendule-de-newton"], en: ["/en/physics/projectile", "/en/physics/newtons-cradle"] },
+    computing: { fr: ["/fr/informatique/transition-de-phase-3-sat"], en: ["/en/computing/3-sat-phase-transition"] },
+  };
+  return paths[category][locale].map((path) => [path, open]);
 };
+
+const cases = (["fr", "en"] as const).flatMap((locale) => publishedCategories.map((category) => ({ locale, category })));
 
 const links = (html: string) => [...html.matchAll(/<a [^>]*href="([^"]+)"[^>]*>(.*?)<\/a>/g)].map((m) => [m[1], text(m[2])]);
 
@@ -43,24 +50,27 @@ describe("cartes d’expérience", () => {
   });
 });
 
-describe.each(["fr", "en"] as const)("page Physique (%s)", (locale) => {
+describe.each(cases)("page de catégorie $category ($locale)", ({ locale, category }) => {
   const t = messages[locale];
-  const html = renderToStaticMarkup(<PhysicsPage locale={locale} t={t} />);
+  const html = renderToStaticMarkup(<CategoryPage category={category} locale={locale} t={t} />);
+  const demosHere = demosOf(category);
 
   it("a son titre, son introduction et une carte (h2) par expérience publiée", () => {
-    expect(html).toContain(`>${t.physics.title}</h1>`);
-    expect(text(html)).toContain(t.physics.intro);
-    expect([...html.matchAll(/<h2[^>]*>(.*?)<\/h2>/g)].map((m) => m[1])).toEqual([
-      t.demos.projectile.card.title,
-      t.demos["newtons-cradle"].card.title,
-    ]);
-    for (const { card } of Object.values(t.demos)) expect(text(html)).toContain(card.text);
-    expect(links(html).slice(1)).toEqual(experimentLinks(locale));
+    expect(html).toContain(`>${t[category].title}</h1>`);
+    expect(text(html)).toContain(t[category].intro);
+    expect([...html.matchAll(/<h2[^>]*>(.*?)<\/h2>/g)].map((m) => m[1])).toEqual(
+      demosHere.map((demo) => t.demos[demo.id].card.title),
+    );
+    for (const demo of demosHere) {
+      expect(text(html)).toContain(t.demos[demo.id].card.text);
+      expect(html).toContain(`data-demo-figure="${demo.id}"`);
+    }
+    expect(links(html).slice(1)).toEqual(experimentLinks(locale, category));
   });
 
-  it("a le fil d’Ariane « Le Labo › Physique », égal aux données structurées", () => {
+  it("a son fil d’Ariane, égal aux données structurées", () => {
     const { nav, visible, structured } = breadcrumbs(html);
-    expect(visible).toEqual([t.site.name, t.physics.title]);
+    expect(visible).toEqual([t.site.name, t[category].title]);
     expect(structured.map((step) => step.name)).toEqual(visible);
     expect(html).toContain(`aria-label="${t.nav.breadcrumb}"`);
     expect(nav.match(/aria-current="page"/g)).toHaveLength(1);
@@ -79,6 +89,14 @@ describe.each(["fr", "en"] as const)("pages d’expérience (%s)", (locale) => {
       `>${texts.title}</h1>`,
       texts.intro,
       ...("laws" in texts ? [texts.laws.title] : []),
+      ...("subtitle" in texts
+        ? [
+            // L'expérience et le pas à pas, en import dynamique : ordre vérifié sur out/.
+            texts.problem.title + "</h2>",
+            texts.threshold.title + "</h2>",
+            texts.complexity.title + "</h2>",
+          ]
+        : []),
       texts.assumptions.text.slice(0, 40),
       texts.tryThis.title + "</h2>",
       t.experiment.sources + "</h2>",
@@ -92,7 +110,8 @@ describe.each(["fr", "en"] as const)("pages d’expérience (%s)", (locale) => {
     const { visible, structured } = breadcrumbs(
       renderToStaticMarkup(<ExperimentPage locale={locale} t={t} demo={demo} />),
     );
-    expect(visible).toEqual([t.site.name, t.physics.title, t.demos[demo.id].title]);
+    expect(visible).toEqual([t.site.name, t[demo.category].title, t.demos[demo.id].title]);
+    expect(structured[1].item.endsWith(localizedPath(demo.category, locale))).toBe(true);
     expect(structured.map((step) => step.name)).toEqual(visible);
     expect(structured[2].item.endsWith(`/${demo.slugs[locale]}`)).toBe(true);
   });
@@ -105,15 +124,45 @@ describe.each(["fr", "en"] as const)("pages d’expérience (%s)", (locale) => {
     }
     const mentions = text(html).split("(en anglais)").length - 1;
     expect(mentions).toBe(locale === "fr" ? sources.filter((s) => s.english).length : 0);
-    expect(html).toContain("<i>University Physics Volume 1</i>");
+    expect(html).toContain(demo.id === "three-sat" ? "<i>Annals of Mathematics</i>" : "<i>University Physics Volume 1</i>");
   });
 
   it.each(demos)("$id : explications repliables, aucune mention de programme", (demo) => {
     const html = renderToStaticMarkup(<ExperimentPage locale={locale} t={t} demo={demo} />);
-    expect(html.match(/<details/g)).toHaveLength(3);
+    const explanations = html.slice(html.indexOf(`id="a-essayer"`));
+    expect(explanations.match(/<details/g)).toHaveLength(3);
     expect(html).not.toMatch(/<details[^>]* open/);
-    expect(html).not.toMatch(/TODO|Au programme|curriculum/);
+    expect(html).not.toMatch(/TODO|Au programme|curriculum|Niveau|Level:/);
     expect(links(html)).toContainEqual([`https://cabrelfosso.com/${locale}`, t.experiment.portfolio]);
+  });
+});
+
+describe.each(["fr", "en"] as const)("page 3-SAT (%s)", (locale) => {
+  const t = messages[locale];
+  const texts = t.demos["three-sat"];
+  const html = renderToStaticMarkup(<ExperimentPage locale={locale} t={t} demo={demos[2]} />);
+
+  it("a son sous-titre entre le titre et l’introduction", () => {
+    const [title, subtitle, intro] = [`>${texts.title}</h1>`, `>${texts.subtitle}</p>`, texts.intro].map((s) => html.indexOf(s));
+    expect(title).toBeGreaterThan(0);
+    expect(subtitle).toBeGreaterThan(title);
+    expect(intro).toBeGreaterThan(subtitle);
+  });
+
+  it("dit que l’expérience ne répond pas à P = NP", () => {
+    expect(text(html)).toContain(
+      locale === "fr"
+        ? "Cette expérience n’apporte pas de réponse à la question P = NP."
+        : "This experiment does not answer the P = NP question.",
+    );
+  });
+
+  it("met en forme le gras, les indices et les étapes numérotées", () => {
+    expect(html).toContain("<strong>");
+    expect(html).toContain("x<sub>1</sub>");
+    expect(html).not.toContain("**");
+    expect(text(html)).not.toMatch(/[₀-₉]/);
+    expect(html.match(/<ol[^>]*data-solver-steps[^>]*>(.*?)<\/ol>/)?.[1].match(/<li/g)).toHaveLength(4);
   });
 });
 
@@ -129,12 +178,14 @@ describe.each(["fr", "en"] as const)("accueil (%s)", (locale) => {
     expect(h1?.[2]).toContain(`<span class="text-highlight">${t.title.highlight}</span>`);
   });
 
-  it("a ses sections, dans l’ordre : la Physique d’abord, sans bloc provisoire", () => {
+  it("a ses sections, dans l’ordre : la Physique, puis l’Informatique", () => {
     const headings = [...html.matchAll(/<(h2|h3)[^>]*>(.*?)<\/\1>/g)].map((m) => `${m[1]} ${m[2]}`);
     expect(headings).toEqual([
       `h2 ${t.physics.title}`,
       `h3 ${messages[locale].demos.projectile.card.title}`,
       `h3 ${messages[locale].demos["newtons-cradle"].card.title}`,
+      `h2 ${t.computing.title}`,
+      `h3 ${messages[locale].demos["three-sat"].card.title}`,
       `h2 ${t.how.title}`,
       `h3 ${t.how.steps.adjust.title}`,
       `h3 ${t.how.steps.observe.title}`,
@@ -150,11 +201,13 @@ describe.each(["fr", "en"] as const)("accueil (%s)", (locale) => {
     }
   });
 
-  it("mène aux expériences, à la page Physique et au portfolio, dans la langue de la page", () => {
+  it("mène aux expériences, aux pages de catégorie et au portfolio, dans la langue de la page", () => {
     const links = [...html.matchAll(/<a [^>]*href="([^"]+)"[^>]*>(.*?)<\/a>/g)].map((m) => [m[1], m[2]]);
     expect(links).toEqual([
       ...experimentLinks(locale),
       [locale === "fr" ? "/fr/physique" : "/en/physics", t.physics.all],
+      ...experimentLinks(locale, "computing"),
+      [locale === "fr" ? "/fr/informatique" : "/en/computing", t.computing.all],
       [`https://cabrelfosso.com/${locale}`, t.signature.link],
     ]);
   });

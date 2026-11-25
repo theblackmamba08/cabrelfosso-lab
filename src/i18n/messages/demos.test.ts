@@ -32,7 +32,11 @@ const cradleEn =
   between("#### Newton's cradle — English", "#### Valeurs de contrôle du pendule") +
   // « Same formulas as the French version » : les formules anglaises sont celles-ci.
   between("**Les lois**", "**Hypothèses** : Les billes");
-const cradleSources = between("#### Pour aller plus loin — pendule", "## Historique");
+const cradleSources = between("#### Pour aller plus loin — pendule", "## Annexe D");
+
+const threeSatFr = between("#### 3-SAT — français", "#### 3-SAT — English");
+const threeSatEn = between("#### 3-SAT — English", "#### Valeurs de contrôle de 3-SAT");
+const threeSatSources = between("#### Pour aller plus loin — 3-SAT", "**Affirmations et sources** (relecture");
 
 /** Textes propres à l'annexe C : les cartes (annexe B.2) et les sources ont leurs tests. */
 const own = ({ card, sources, ...texts }: { card: object; sources: object }) => {
@@ -49,6 +53,40 @@ describe.each([
   it.each(own(demo))("%s", (_path, value) => {
     const text = plain(value);
     expect(annexe).toContain(asWritten(decimal === "," ? withCahierFields(text) : text, decimal));
+  });
+});
+
+describe.each([
+  ["français", fr.demos["three-sat"], threeSatFr],
+  ["anglais", en.demos["three-sat"], threeSatEn],
+] as const)("3-SAT, %s : mot pour mot de l'annexe D", (_langue, demo, annexe) => {
+  it.each(own(demo))("%s", (_path, value) => {
+    expect(annexe).toContain(plain(value));
+  });
+
+  it("rien ne manque", () => {
+    const { problem, threshold, complexity, tryThis, steps, sources } = demo;
+    expect([problem.paragraphs, problem.solverSteps, problem.after].map((list) => list.length)).toEqual([4, 4, 2]);
+    expect([threshold.items, complexity.items].map((list) => list.length)).toEqual([3, 6]);
+    expect(Object.keys(tryThis.items)).toHaveLength(3);
+    expect(Object.keys(steps.messages)).toHaveLength(7);
+    expect(sources).toHaveLength(6);
+  });
+
+  // Lignes entières : un paragraphe tronqué dans le code ne passe pas.
+  it("les paragraphes et les listes sont entiers", () => {
+    const lines = annexe.split("\n").map((line) => line.trim().replace(/^(- |\d\. )/, ""));
+    const { problem, threshold, complexity } = demo;
+    for (const text of [
+      ...problem.paragraphs,
+      problem.solver,
+      ...problem.solverSteps,
+      ...problem.after,
+      ...threshold.items,
+      ...complexity.items,
+    ]) {
+      expect(lines).toContain(plain(text));
+    }
   });
 });
 
@@ -80,6 +118,7 @@ describe("sources « Pour aller plus loin »", () => {
   it.each([
     ...fr.demos.projectile.sources.map((source) => [source.text, source, projectileSources] as const),
     ...fr.demos["newtons-cradle"].sources.map((source) => [source.text, source, cradleSources] as const),
+    ...fr.demos["three-sat"].sources.map((source) => [source.text, source, threeSatSources] as const),
   ])("français, mot pour mot : %s", (_text, source, annexe) => {
     const mention = source.english ? ` ${inEnglish}` : "";
     expect(annexe).toContain(`${plain(source.text)}${mention} → \`${source.href}\``);
@@ -100,6 +139,7 @@ describe("sources « Pour aller plus loin »", () => {
       ),
     );
     expect(cradleSources).toContain("https://en.wikipedia.org/wiki/Coefficient_of_restitution");
+    expect(threeSatSources).toContain("English (same links):");
     expect(JSON.stringify(en.demos)).not.toContain("en anglais");
     expect(en.experiment.inEnglish).toBe("");
   });
@@ -114,6 +154,10 @@ describe("sources « Pour aller plus loin »", () => {
           cradleSources.slice(cradleSources.indexOf("English (same links, except Wikipedia):")),
           `- ${plain(text)}${href.includes("wikipedia") ? ` → \`${href}\`` : ""}`,
         ] as const,
+    ),
+    ...en.demos["three-sat"].sources.map(
+      ({ text }) =>
+        [text, threeSatSources.slice(threeSatSources.indexOf("English (same links):")), `- ${plain(text)}`] as const,
     ),
   ])("anglais, mot pour mot : %s", (_text, annexe, line) => {
     expect(annexe.split("\n")).toContain(line);
