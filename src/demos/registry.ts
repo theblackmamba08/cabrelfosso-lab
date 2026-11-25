@@ -1,7 +1,9 @@
 import type { Locale } from "../i18n/config";
 
 /** Catégories d'expériences (cahier, section 2) : aussi des pages de `src/i18n/routes.ts`. */
-export type Category = "physics" | "computing";
+export const categories = ["physics", "computing"] as const;
+
+export type Category = (typeof categories)[number];
 
 type DemoEntry = { id: string; category: Category; slugs: Record<Locale, string>; published: boolean };
 
@@ -17,6 +19,12 @@ export const demos = [
     id: "newtons-cradle",
     category: "physics",
     slugs: { fr: "pendule-de-newton", en: "newtons-cradle" },
+    published: true,
+  },
+  {
+    id: "three-sat",
+    category: "computing",
+    slugs: { fr: "transition-de-phase-3-sat", en: "3-sat-phase-transition" },
     published: true,
   },
 ] as const satisfies readonly DemoEntry[];

@@ -3,20 +3,26 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import type { Locale } from "@/i18n/config";
+import { publishedCategories, type PublishedCategory } from "@/i18n/published";
 import { localizedPath, routeKeyFromPath } from "@/i18n/routes";
 
 /**
  * Menu (cahier, section 5) : une entrée par catégorie publiée. Elle garde le style de page courante
  * sur ses expériences, mais `aria-current` ne vaut que pour la page de catégorie elle-même.
  */
-export function MainNav({ locale, labels }: { locale: Locale; labels: { label: string; physics: string } }) {
+export function MainNav({
+  locale,
+  labels,
+}: {
+  locale: Locale;
+  labels: { label: string } & Record<PublishedCategory, string>;
+}) {
   const pathname = usePathname();
-  const items = [{ key: "physics", label: labels.physics }] as const;
 
   return (
     <nav aria-label={labels.label}>
       <ul className="flex flex-wrap gap-1">
-        {items.map(({ key, label }) => {
+        {publishedCategories.map((key) => {
           const href = localizedPath(key, locale);
           const active = routeKeyFromPath(pathname, locale) === key;
           return (
@@ -28,7 +34,7 @@ export function MainNav({ locale, labels }: { locale: Locale; labels: { label: s
                   active ? "bg-accent-soft text-ink" : "text-ink-muted hover:bg-accent-soft hover:text-ink"
                 }`}
               >
-                {label}
+                {labels[key]}
               </Link>
             </li>
           );

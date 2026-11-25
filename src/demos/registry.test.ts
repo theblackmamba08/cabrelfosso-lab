@@ -3,14 +3,15 @@ import { locales } from "@/i18n/config";
 import { demos, demosOf, findPublishedDemo, publishedDemos } from "./registry";
 
 describe("registre des démos", () => {
-  it("publie le projectile et le pendule de Newton", () => {
-    expect(publishedDemos.map((demo) => demo.id)).toEqual(["projectile", "newtons-cradle"]);
+  it("publie le projectile, le pendule de Newton et 3-SAT", () => {
+    expect(publishedDemos.map((demo) => demo.id)).toEqual(["projectile", "newtons-cradle", "three-sat"]);
   });
 
   it("reprend les noms d'URL de la section 2 du cahier", () => {
     expect(demos.map((demo) => demo.slugs)).toEqual([
       { fr: "projectile", en: "projectile" },
       { fr: "pendule-de-newton", en: "newtons-cradle" },
+      { fr: "transition-de-phase-3-sat", en: "3-sat-phase-transition" },
     ]);
   });
 
@@ -27,8 +28,8 @@ describe("demosOf (expériences publiées d'une catégorie)", () => {
     expect(demosOf("physics").map((demo) => demo.id)).toEqual(["projectile", "newtons-cradle"]);
   });
 
-  it("n'a encore rien en informatique", () => {
-    expect(demosOf("computing")).toEqual([]);
+  it("donne l'expérience d'informatique", () => {
+    expect(demosOf("computing").map((demo) => demo.id)).toEqual(["three-sat"]);
   });
 
   it("ignore une expérience non publiée ou d'une autre catégorie", () => {
@@ -44,6 +45,8 @@ describe("findPublishedDemo", () => {
     expect(findPublishedDemo("en", "projectile")?.id).toBe("projectile");
     expect(findPublishedDemo("fr", "pendule-de-newton")?.id).toBe("newtons-cradle");
     expect(findPublishedDemo("en", "newtons-cradle")?.id).toBe("newtons-cradle");
+    expect(findPublishedDemo("fr", "transition-de-phase-3-sat")?.id).toBe("three-sat");
+    expect(findPublishedDemo("en", "3-sat-phase-transition")?.id).toBe("three-sat");
   });
 
   it("ignore le nom d'une démo dans l'autre langue", () => {

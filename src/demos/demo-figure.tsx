@@ -16,7 +16,7 @@ export function DemoFigure({ id }: { id: PublishedDemo["id"] }) {
       fill="none"
       strokeLinecap="round"
     >
-      {id === "projectile" ? <Projectile /> : <Cradle />}
+      {id === "projectile" ? <Projectile /> : id === "newtons-cradle" ? <Cradle /> : <ThreeSat />}
     </svg>
   );
 }
@@ -39,6 +39,45 @@ function Projectile() {
       <circle cx="120" cy="44" r="3.5" fill="var(--accent)" opacity="0.6" />
       <circle cx="168" cy="59" r="5.5" fill="var(--accent)" />
       <circle cx="216" cy="104" r="3" fill="var(--ink-muted)" />
+    </>
+  );
+}
+
+/** 3-SAT : une clause, trois pastilles reliées ; une seule est pleine, et elle suffit. */
+function ThreeSat() {
+  const spots = [
+    { x: 60, y: 84 },
+    { x: 120, y: 34 },
+    { x: 180, y: 84 },
+  ];
+  return (
+    <>
+      {spots.map((from, i) => {
+        const to = spots[(i + 1) % 3];
+        return (
+          <line
+            key={from.x}
+            x1={from.x}
+            y1={from.y}
+            x2={to.x}
+            y2={to.y}
+            stroke="var(--line)"
+            strokeWidth="2"
+            strokeDasharray={i === 2 ? "3 5" : undefined}
+          />
+        );
+      })}
+      {spots.map(({ x, y }, i) => (
+        <circle
+          key={x}
+          cx={x}
+          cy={y}
+          r="16"
+          fill={i === 1 ? "var(--accent)" : "var(--accent-soft)"}
+          stroke="var(--accent)"
+          strokeWidth="2"
+        />
+      ))}
     </>
   );
 }

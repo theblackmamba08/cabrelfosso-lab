@@ -1,4 +1,4 @@
-import { demosOf, type Category, type PublishedDemo } from "../demos/registry";
+import { categories, demosOf, type Category, type PublishedDemo } from "../demos/registry";
 import { locales, type Locale } from "./config";
 import { localizedPath, routes, type RouteKey } from "./routes";
 
@@ -7,7 +7,7 @@ import { localizedPath, routes, type RouteKey } from "./routes";
  * sitemap et dans les images de partage. Une catégorie entre ici avec sa première expérience ; ses
  * expériences viennent du registre (`src/demos/registry.ts`).
  */
-const publishedKeys = ["home", "privacy", "physics"] as const satisfies readonly RouteKey[];
+const publishedKeys = ["home", "privacy", "physics", "computing"] as const satisfies readonly RouteKey[];
 
 export type PublishedKey = (typeof publishedKeys)[number];
 export type PublishedCategory = Extract<PublishedKey, Category>;
@@ -15,7 +15,10 @@ export type PublishedCategory = Extract<PublishedKey, Category>;
 /** Page publiée : une page de `routes.ts`, ou une expérience de sa catégorie. */
 export type PublishedPage = { key: PublishedKey; demo?: undefined } | { key: PublishedCategory; demo: PublishedDemo };
 
-const publishedCategories = publishedKeys.filter((key): key is PublishedCategory => key === "physics");
+/** Catégories publiées, dans l'ordre du menu. */
+export const publishedCategories = publishedKeys.filter((key): key is PublishedCategory =>
+  (categories as readonly string[]).includes(key),
+);
 
 export const publishedPages: readonly PublishedPage[] = [
   ...publishedKeys.map((key) => ({ key })),

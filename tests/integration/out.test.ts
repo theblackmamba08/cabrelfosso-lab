@@ -1,6 +1,8 @@
 /** Résultat de la construction (out/), avant toute mise en ligne. */
 import { existsSync, readdirSync, readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
+import en from "../../src/i18n/messages/en";
+import fr from "../../src/i18n/messages/fr";
 import { publishedPaths } from "../../src/i18n/published";
 import { webAnalyticsToken } from "../../src/lib/analytics";
 
@@ -14,6 +16,8 @@ const experiments = [
   "en/physics/projectile.html",
   "fr/physique/pendule-de-newton.html",
   "en/physics/newtons-cradle.html",
+  "fr/informatique/transition-de-phase-3-sat.html",
+  "en/computing/3-sat-phase-transition.html",
 ];
 
 describe("pages exportées", () => {
@@ -24,6 +28,8 @@ describe("pages exportées", () => {
     "en/privacy.html",
     "fr/physique.html",
     "en/physics.html",
+    "fr/informatique.html",
+    "en/computing.html",
     ...experiments,
     "404.html",
   ])("%s existe", (path) => {
@@ -37,8 +43,11 @@ describe("pages exportées", () => {
     "fr/physique/newtons-cradle.html",
     "en/physique.html",
     "fr/physics.html",
-    "fr/informatique.html",
-    "en/computing.html",
+    "en/informatique.html",
+    "fr/computing.html",
+    "en/computing/transition-de-phase-3-sat.html",
+    "fr/informatique/3-sat-phase-transition.html",
+    "fr/physique/transition-de-phase-3-sat.html",
     "index.html",
   ])("%s n’existe pas", (path) => {
     expect(existsSync(file(path))).toBe(false);
@@ -112,21 +121,82 @@ describe("code des simulations, chargé seulement sur sa page", () => {
   // Chaînes propres à projectile/physics.ts et à newtons-cradle/newtons-cradle-demo.tsx.
   const projectile = "earth:9.8,moon:1.6,mars:3.7";
   const cradle = "aide-restitution";
+  // Propre à three-sat-demo.tsx, et constante de SplitMix64 (three-sat/random.ts), gardée par la minification.
+  const threeSat = "erreur-graine";
+  const solver = /0x9e3779b97f4a7c15/i;
 
-  it.each(["fr.html", "en.html", "fr/physique.html", "en/physics.html", "fr/confidentialite.html"])("%s : aucun", (path) => {
+  it.each([
+    "fr.html",
+    "en.html",
+    "fr/physique.html",
+    "en/physics.html",
+    "fr/informatique.html",
+    "en/computing.html",
+    "fr/confidentialite.html",
+  ])("%s : aucun", (path) => {
     expect(scripts(path).length).toBeGreaterThan(1000);
     expect(scripts(path)).not.toContain(projectile);
     expect(scripts(path)).not.toContain(cradle);
+    expect(scripts(path)).not.toContain(threeSat);
+    expect(scripts(path)).not.toMatch(solver);
   });
 
   it.each(experiments)("%s : le sien seulement", (path) => {
     expect(scripts(path).includes(projectile)).toBe(path.includes("projectile"));
-    expect(scripts(path).includes(cradle)).toBe(!path.includes("projectile"));
+    expect(scripts(path).includes(cradle)).toBe(/pendule|cradle/.test(path));
+    expect(scripts(path).includes(threeSat)).toBe(path.includes("3-sat"));
+    expect(solver.test(scripts(path))).toBe(path.includes("3-sat"));
   });
 
   it.each(experiments)("%s : réglages et résultats déjà dans le HTML, sans JavaScript", (path) => {
-    expect(read(path)).toMatch(/<input[^>]*type="range"/);
+    expect(read(path)).toMatch(path.includes("3-sat") ? /<select/ : /<input[^>]*type="range"/);
     expect(read(path)).toMatch(/<svg[^>]*role="img"/);
+  });
+});
+
+describe("expérience 3-SAT", () => {
+  it.each([
+    ["fr/informatique/transition-de-phase-3-sat.html", fr, "Cette expérience n’apporte pas de réponse à la question P = NP."],
+    ["en/computing/3-sat-phase-transition.html", en, "This experiment does not answer the P = NP question."],
+  ] as const)("%s : le gabarit, dans l’ordre, et la phrase sur P = NP", (path, messages, sentence) => {
+    const html = read(path);
+    const t = messages.demos["three-sat"];
+    const order = [
+      t.subtitle,
+      t.intro,
+      t.controls.title,
+      t.buttons.run,
+      t.status.empty,
+      t.charts.share,
+      t.charts.choices,
+      t.steps.title,
+      t.problem.title,
+      t.threshold.title,
+      t.complexity.title,
+      t.assumptions.title,
+      t.tryThis.title,
+      messages.experiment.sources,
+      messages.experiment.portfolio,
+    ].map((text) => html.indexOf(`>${text}</`));
+    expect(order).not.toContain(-1);
+    expect(order).toEqual([...order].sort((a, b) => a - b));
+    expect(html).toContain(sentence);
+    // Énigme n° 2 de la graine 2026, déjà dans le HTML ; aucune courbe calculée.
+    expect(html).toContain(t.steps.number.replace(/\{.*\}/, "2"));
+    expect(html).not.toContain("<polyline");
+  });
+
+  // Turbopack démarre le Worker par un fichier du site, auquel la page donne la liste de ses morceaux.
+  it("le Web Worker et son code sont des fichiers du site", () => {
+    const page = scripts("fr/informatique/transition-de-phase-3-sat.html");
+    const [, entry, list] =
+      page.match(/"(static\/chunks\/turbopack-worker-[\w.~-]+\.js)",(\[[^\]]*\])/) ?? [];
+    const chunks: string[] = JSON.parse(list ?? "[]");
+    expect(chunks.length).toBeGreaterThan(0);
+    for (const chunk of [entry, ...chunks]) expect(existsSync(file(`_next/${chunk}`)), chunk).toBe(true);
+    expect(chunks.map((chunk) => read(`_next/${chunk}`)).join("\n")).toMatch(/0x9e3779b97f4a7c15/i);
+    // Pas d'adresse blob: : la CSP (worker-src 'self') la refuserait.
+    expect(read(`_next/${entry}`)).not.toContain("blob:");
   });
 });
 
@@ -158,12 +228,12 @@ describe("images de partage", () => {
 
   it("il n’y en a pas d’autre", () => {
     const images = readdirSync(file("og/"), { recursive: true, encoding: "utf8" }).filter((name) => name.endsWith(".png"));
-    expect(images).toHaveLength(10);
+    expect(images).toHaveLength(14);
   });
 });
 
 describe("sitemap.xml et robots.txt", () => {
-  it("le sitemap liste les dix adresses, avec leurs équivalents", () => {
+  it("le sitemap liste les quatorze adresses, avec leurs équivalents", () => {
     const xml = read("sitemap.xml");
     expect([...xml.matchAll(/<loc>([^<]+)<\/loc>/g)].map((m) => m[1])).toEqual([
       "https://lab.cabrelfosso.com/fr",
@@ -172,12 +242,16 @@ describe("sitemap.xml et robots.txt", () => {
       "https://lab.cabrelfosso.com/en/privacy",
       "https://lab.cabrelfosso.com/fr/physique",
       "https://lab.cabrelfosso.com/en/physics",
+      "https://lab.cabrelfosso.com/fr/informatique",
+      "https://lab.cabrelfosso.com/en/computing",
       "https://lab.cabrelfosso.com/fr/physique/projectile",
       "https://lab.cabrelfosso.com/en/physics/projectile",
       "https://lab.cabrelfosso.com/fr/physique/pendule-de-newton",
       "https://lab.cabrelfosso.com/en/physics/newtons-cradle",
+      "https://lab.cabrelfosso.com/fr/informatique/transition-de-phase-3-sat",
+      "https://lab.cabrelfosso.com/en/computing/3-sat-phase-transition",
     ]);
-    expect(xml.match(/<xhtml:link /g)).toHaveLength(30);
+    expect(xml.match(/<xhtml:link /g)).toHaveLength(42);
     expect(xml).toContain('hreflang="x-default" href="https://lab.cabrelfosso.com/fr/confidentialite"');
   });
 

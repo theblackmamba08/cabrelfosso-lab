@@ -6,7 +6,7 @@ const site = "https://lab.cabrelfosso.com";
 describe("sitemap", () => {
   const entries = sitemapEntries();
 
-  it("liste les dix adresses publiées, en URL absolues, et rien d’autre", () => {
+  it("liste les quatorze adresses publiées, en URL absolues, et rien d’autre", () => {
     expect(entries.map((entry) => entry.url)).toEqual([
       `${site}/fr`,
       `${site}/en`,
@@ -14,10 +14,14 @@ describe("sitemap", () => {
       `${site}/en/privacy`,
       `${site}/fr/physique`,
       `${site}/en/physics`,
+      `${site}/fr/informatique`,
+      `${site}/en/computing`,
       `${site}/fr/physique/projectile`,
       `${site}/en/physics/projectile`,
       `${site}/fr/physique/pendule-de-newton`,
       `${site}/en/physics/newtons-cradle`,
+      `${site}/fr/informatique/transition-de-phase-3-sat`,
+      `${site}/en/computing/3-sat-phase-transition`,
     ]);
   });
 

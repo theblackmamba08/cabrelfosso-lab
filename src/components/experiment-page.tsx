@@ -2,6 +2,9 @@ import { CradleLaws } from "@/demos/newtons-cradle/cradle-laws";
 import { NewtonsCradleDemoLazy } from "@/demos/newtons-cradle/newtons-cradle-demo-lazy";
 import { ProjectileDemoLazy } from "@/demos/projectile/projectile-demo-lazy";
 import type { PublishedDemo } from "@/demos/registry";
+import { RichText } from "@/demos/three-sat/rich-text";
+import { ThreeSatDemoLazy } from "@/demos/three-sat/three-sat-demo-lazy";
+import { ThreeSatTheory } from "@/demos/three-sat/three-sat-theory";
 import type { Locale } from "@/i18n/config";
 import type { Messages } from "@/i18n/messages/fr";
 import { localizedPath } from "@/i18n/routes";
@@ -18,6 +21,10 @@ function Simulation({ demo, locale, t }: { demo: PublishedDemo; locale: Locale; 
     const { controls, buttons, results, legend, summary, equations } = t.demos.projectile;
     return <ProjectileDemoLazy locale={locale} texts={{ controls, buttons, results, legend, summary, equations }} />;
   }
+  if (demo.id === "three-sat") {
+    const { controls, buttons, status, charts, summaries, table, steps } = t.demos["three-sat"];
+    return <ThreeSatDemoLazy locale={locale} texts={{ controls, buttons, status, charts, summaries, table, steps }} />;
+  }
   const { controls, fixed, buttons, readings, summary } = t.demos["newtons-cradle"];
   return <NewtonsCradleDemoLazy locale={locale} texts={{ controls, fixed, buttons, readings, summary }} />;
 }
@@ -28,11 +35,15 @@ function SourceText({ text }: { text: string }) {
 }
 
 /**
- * Page d'une expérience (cahier, section 3, gabarit ; textes de l'annexe C).
+ * Page d'une expérience (cahier, section 3, gabarit ; textes des annexes C et D).
  * TODO(Jospin): classe concernée. La mention « Au programme de… » reste absente tant qu'elle manque.
+ * TODO(Jospin): niveau concerné (3-SAT). La mention « Niveau » reste absente tant qu'il manque.
  */
 export function ExperimentPage({ locale, t, demo }: { locale: Locale; t: Messages; demo: PublishedDemo }) {
   const { title, intro, assumptions, tryThis, sources } = t.demos[demo.id];
+  const threeSat = demo.id === "three-sat" ? t.demos[demo.id] : undefined;
+  /** Les textes de physique gardent leur écriture ; ceux de 3-SAT ont α et des indices. */
+  const rich = (text: string) => (threeSat ? <RichText text={text} /> : text);
 
   return (
     <article>
@@ -44,12 +55,14 @@ export function ExperimentPage({ locale, t, demo }: { locale: Locale; t: Message
           { label: title, href: localizedPath(demo.category, locale, demo.slugs) },
         ]}
       />
-      <PageHero title={title} intro={intro} />
+      <PageHero title={title} subtitle={threeSat?.subtitle} intro={intro} />
 
       <Simulation demo={demo} locale={locale} t={t} />
 
       <div className="mt-20 grid gap-20">
         {demo.id === "newtons-cradle" && <CradleLaws laws={t.demos["newtons-cradle"].laws} />}
+
+        {threeSat && <ThreeSatTheory {...threeSat} />}
 
         <PageSection id="hypotheses" title={assumptions.title}>
           <Card className="max-w-3xl md:p-8">
@@ -62,11 +75,11 @@ export function ExperimentPage({ locale, t, demo }: { locale: Locale; t: Message
             <ol className="grid list-decimal gap-5 pl-5 marker:text-ink-muted">
               {Object.values(tryThis.items).map(({ question, answer }) => (
                 <li key={question}>
-                  <p>{question}</p>
+                  <p>{rich(question)}</p>
                   <details className="mt-2">
                     <summary className="cursor-pointer text-accent">{tryThis.show}</summary>
                     {/* Le cahier écrit l'explication à la suite de « Explication : ». */}
-                    <p className="mt-2 text-ink-muted first-letter:uppercase">{answer}</p>
+                    <p className="mt-2 text-ink-muted first-letter:uppercase">{rich(answer)}</p>
                   </details>
                 </li>
               ))}

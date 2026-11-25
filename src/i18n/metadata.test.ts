@@ -32,6 +32,17 @@ describe("titres et descriptions des pages publiées", () => {
     expect(pageTexts({ key: "physics", demo: demos[1] }, en).title).toBe("Newton’s cradle — The Lab");
   });
 
+  it("reprennent ceux de l’annexe D", () => {
+    expect(pageTexts({ key: "computing" }, fr).title).toBe("Informatique — Le Labo");
+    expect(pageTexts({ key: "computing" }, en).title).toBe("Computing — The Lab");
+    expect(pageTexts({ key: "computing", demo: demos[2] }, fr)).toEqual({
+      title: "Où se cachent les problèmes difficiles\u00a0? — Le Labo",
+      description: fr.demos["three-sat"].metaDescription,
+      heading: "Où se cachent les problèmes difficiles\u00a0?",
+    });
+    expect(pageTexts({ key: "computing", demo: demos[2] }, en).title).toBe("Where are the hard problems? — The Lab");
+  });
+
   it("reprennent ceux de l’annexe B", () => {
     expect(pageTexts({ key: "privacy" }, fr).title).toBe("Confidentialité — Le Labo");
     expect(pageTexts({ key: "home" }, en).title).toBe("The Lab — Cabrel FOSSO");

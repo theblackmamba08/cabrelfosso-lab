@@ -1,12 +1,12 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import type { ComponentType } from "react";
-import { PhysicsPage } from "@/components/physics-page";
+import { CategoryPage } from "@/components/category-page";
 import { PrivacyPage } from "@/components/privacy-page";
 import { isLocale, type Locale } from "@/i18n/config";
 import { getMessages, type Messages } from "@/i18n/messages";
 import { pageMetadata } from "@/i18n/metadata";
-import { findPage, sectionParams, type PublishedKey } from "@/i18n/published";
+import { findPage, sectionParams, type PublishedCategory, type PublishedKey } from "@/i18n/published";
 
 /** Seules les pages publiées existent, chacune sous le nom d'adresse de sa langue. */
 export const dynamicParams = false;
@@ -15,10 +15,18 @@ export function generateStaticParams({ params }: { params: { lang: string } }) {
   return isLocale(params.lang) ? sectionParams(params.lang) : [];
 }
 
+type PageComponent = ComponentType<{ locale: Locale; t: Messages }>;
+
+const categoryPage = (category: PublishedCategory): PageComponent =>
+  function Category(props) {
+    return <CategoryPage category={category} {...props} />;
+  };
+
 /** Contenu de chaque page publiée, hors accueil et expériences. */
-const pages: Record<Exclude<PublishedKey, "home">, ComponentType<{ locale: Locale; t: Messages }>> = {
+const pages: Record<Exclude<PublishedKey, "home">, PageComponent> = {
   privacy: PrivacyPage,
-  physics: PhysicsPage,
+  physics: categoryPage("physics"),
+  computing: categoryPage("computing"),
 };
 
 export async function generateMetadata({ params }: PageProps<"/[lang]/[section]">): Promise<Metadata> {
