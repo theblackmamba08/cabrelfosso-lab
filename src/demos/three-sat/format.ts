@@ -1,5 +1,6 @@
 import type { Locale } from "@/i18n/config";
 import type { Messages } from "@/i18n/messages/fr";
+import { fill } from "../fill";
 import { alphaCount, alphaOf } from "./puzzle";
 import { curveSummary, sharePercent, type AlphaPoint } from "./statistics";
 
@@ -22,10 +23,7 @@ export function formatPercent(value: number, locale: Locale): string {
   return locale === "fr" ? `${value} %` : `${value}%`;
 }
 
-/** Remplace les champs {nom} d'un texte. */
-export function fill(text: string, values: Record<string, string>): string {
-  return text.replace(/\{([^}]+)\}/g, (field, name: string) => values[name] ?? field);
-}
+export { fill };
 
 /** Résumé d'une courbe complète (annexe D.3). */
 export function summaryText(
