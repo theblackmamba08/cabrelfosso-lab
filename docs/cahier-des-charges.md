@@ -1,6 +1,6 @@
 # Cahier des charges — le Labo de Cabrel FOSSO
 
-Version 0.5, du 24 novembre 2026 : relecture de L2a ; ordre des chocs du pendule précisé (section 4.1) ; nom « Cabrel FOSSO » de l’en-tête sous 640 px (section 5) ; textes anglais des sources (annexe C).
+Version 0.7, du 25 novembre 2026 : étape L3, la transition de phase de 3-SAT (annexe D, qui remplace l’annexe A) ; reprend la clôture de L2 de la version 0.6, jamais commitée (sections 8 et 9).
 
 Rédigée par Claude dans le projet claude.ai « Labo », à partir de la version 0.1 (projet « Portfolio », 23 novembre 2026) et des réponses de Jospin du 24 novembre 2026. Les marqueurs TODO(Jospin) signalent une information encore manquante. Ce fichier est copié dans le dépôt `cabrelfosso-lab` sous `docs/cahier-des-charges.md` ; c’est cette copie qui fait foi.
 
@@ -35,9 +35,9 @@ Domaine : `lab.cabrelfosso.com`. Adresses en français et en anglais, sans barre
 | Accueil (toutes les expériences, par catégorie) | /fr | /en | L1 (texte d’accueil seulement, annexe B.2) |
 | Confidentialité | /fr/confidentialite | /en/privacy | L1 (annexe B.3) |
 | Physique | /fr/physique | /en/physics | L2 (annexe C.1) |
-| Informatique | /fr/informatique | /en/computing | À la première expérience d’informatique (L3) |
+| Informatique | /fr/informatique | /en/computing | L3 (annexe D.1) |
 | Une expérience de physique | /fr/physique/[nom] | /en/physics/[name] | L2 : `projectile` / `projectile` (annexe C.2) ; `pendule-de-newton` / `newtons-cradle` (annexe C.3) |
-| Une expérience d’informatique | /fr/informatique/[nom] | /en/computing/[name] | |
+| Une expérience d’informatique | /fr/informatique/[nom] | /en/computing/[name] | L3 : `transition-de-phase-3-sat` / `3-sat-phase-transition` (annexe D.3) |
 | Page 404 bilingue, sitemap.xml, robots.txt | | | L1 |
 
 Une page de catégorie n’apparaît qu’à partir de sa première expérience publiée. Une adresse non publiée répond 404.
@@ -74,7 +74,7 @@ Options écartées : page racine bilingue (un clic de plus, page pauvre indexée
 | --- | --- | --- | --- |
 | Le mouvement d’un projectile | Physique | L2 | Déménage du portfolio (textes : annexe B.6 du cahier du portfolio) |
 | Le pendule de Newton | Physique | L2 | Déménage du portfolio (textes : annexe B.6 du cahier du portfolio) |
-| Où se cachent les problèmes difficiles ? (transition de phase de 3-SAT) | Informatique | L3 | Nouvelle (annexe A, proposition) |
+| Où se cachent les problèmes difficiles ? (transition de phase de 3-SAT) | Informatique | L3 | Nouvelle (annexe D) |
 | IA explicable (ex-démo 4.3) : série temporelle jouet décomposée en niveau, tendance, calendrier ; volet « Expliquer coûte cher » sur le coût du calcul exact des valeurs de Shapley | Informatique | Après L3 | Prévue dans le cahier du portfolio (section 6) |
 | Vérifier ou trouver (exemple de prix au marché, en FCFA) | Informatique | Plus tard | Nouvelle |
 | De Chomsky à P et NP (lien avec Word Wizard) | Informatique | Plus tard | Nouvelle |
@@ -133,7 +133,7 @@ Reprises de la section 13 du cahier du portfolio (« Phase 4 — décisions » e
 ## 5. Identité visuelle
 
 - Même identité que le portfolio : couleurs, polices (Space Grotesk, Inter, JetBrains Mono, hébergées avec le site), papier millimétré, thème sombre par défaut, typographie française. Source : section 7 du cahier du portfolio et `docs/design-system.md`, recopiés dans le dépôt du Labo à l’étape L1 ; pas de paquet partagé.
-- En-tête (barre flottante du portfolio) : « Le Labo » / « The Lab », avec « Cabrel FOSSO » ; sélecteur FR/EN ; bouton de thème ; lien « Portfolio » vers `https://cabrelfosso.com/fr` ou `/en`. Menu : une entrée par catégorie publiée, à partir de L2 « Physique » / « Physics » (annexe C.1) ; elle a le style de page courante sur la page de catégorie et sur ses expériences, et `aria-current="page"` seulement sur la page de catégorie elle-même. Sous 480 px, le menu passe sur une seconde ligne de la barre, sans défilement horizontal. Sous 640 px, « Cabrel FOSSO » est masqué visuellement dans la barre (il reste dans le nom accessible du lien), pour que le menu tienne sur la première ligne dès 480 px.
+- En-tête (barre flottante du portfolio) : « Le Labo » / « The Lab », avec « Cabrel FOSSO » ; sélecteur FR/EN ; bouton de thème ; lien « Portfolio » vers `https://cabrelfosso.com/fr` ou `/en`. Menu : une entrée par catégorie publiée, à partir de L2 « Physique » / « Physics » (annexe C.1), puis à partir de L3 « Informatique » / « Computing » (annexe D.1) ; elle a le style de page courante sur la page de catégorie et sur ses expériences, et `aria-current="page"` seulement sur la page de catégorie elle-même. Sous 480 px, le menu passe sur une seconde ligne de la barre, sans défilement horizontal. Sous 640 px, « Cabrel FOSSO » est masqué visuellement dans la barre (il reste dans le nom accessible du lien), pour que le menu tienne sur la première ligne dès 480 px.
 - Fil d’Ariane visible (composant `Breadcrumb` du portfolio) sur les pages de catégorie et d’expérience : « Le Labo › Physique › {expérience} » / « The Lab › Physics › {experiment} », dernière étape sans lien avec `aria-current="page"` ; données structurées `BreadcrumbList` identiques.
 - Pied de page : lien vers mon portfolio, lien vers le code (dépôt public), Confidentialité, mention des licences (section 7).
 - Le choix du thème est enregistré par site (stockage du navigateur, propre à chaque adresse) : il peut différer entre le portfolio et le Labo.
@@ -176,53 +176,27 @@ Le même que pour le portfolio (section 13 de son cahier) :
 | Étape | Contenu |
 | --- | --- |
 | L1. Socle (terminée le 24 novembre 2026 : version `1e6be4ff`, PageSpeed Insights mobile 100 dans les quatre catégories sur `/fr` et `/en`) | Projet Next.js statique, bilinguisme, design system recopié, en-tête, pied de page, thème, accueil du Labo (texte d’accueil, annexe B.2), Confidentialité (annexe B.3), 404 bilingue, sitemap, robots, `_headers`, Worker de la racine, Web Analytics, CI, hook, licences ; mise en ligne sur `lab.cabrelfosso.com`. Le sitemap n’est **pas** envoyé à la Search Console à cette étape |
-| L2a. Déménagement, côté Labo | Projectile et pendule de Newton (code, tests, textes, sources) ; page Physique ; menu et fil d’Ariane ; accueil avec la section « Physique », sans le bloc provisoire ; mise en ligne ; sitemap envoyé à la Search Console |
-| L2b. Déménagement, côté portfolio (après la mise en ligne de L2a) | Dans le dépôt du portfolio : redirections 301 selon la table de la section 2, liens vers le Labo, lien du bandeau d’actualité, retrait du code des démos (section 15 du cahier du portfolio) |
-| L3. Transition de phase de 3-SAT | Annexe A |
+| L2a. Déménagement, côté Labo (terminée le 24 novembre 2026 : version `7ba02663` ; sitemap envoyé dans la propriété « domaine » `cabrelfosso.com` de la Search Console, 10 pages découvertes) | Projectile et pendule de Newton (code, tests, textes, sources) ; page Physique ; menu et fil d’Ariane ; accueil avec la section « Physique », sans le bloc provisoire ; mise en ligne ; sitemap envoyé à la Search Console |
+| L2b. Déménagement, côté portfolio (terminée le 24 novembre 2026 : version du portfolio `f10afe9f` ; six redirections 308 mesurées par `curl` et par les tests `smoke` du portfolio) | Dans le dépôt du portfolio : redirections permanentes (308, que Google traite comme une 301) selon la table de la section 2, liens vers le Labo, lien du bandeau d’actualité, retrait du code des démos (section 15 du cahier du portfolio) |
+| L3. Transition de phase de 3-SAT | Annexe D : page Informatique, expérience « Où se cachent les problèmes difficiles ? » (générateur, solveur DPLL, courbes, mode pas à pas, textes, sources), menu, accueil avec la section « Informatique » ; mise en ligne |
 | Ensuite | IA explicable, puis les autres expériences de la section 3 |
 
 ## 9. Checklist de recette
 
-- [ ] Lighthouse mobile ≥ 95 dans les 4 catégories, sur l’accueil et sur une expérience.
+- [x] Lighthouse mobile ≥ 95 dans les 4 catégories, sur l’accueil et sur une expérience (PageSpeed Insights, vérifié par Jospin le 25 novembre 2026 sur les deux expériences de physique).
 - [ ] Navigation complète au clavier, focus visible.
 - [ ] Aucun lien mort.
 - [ ] Aperçu correct au partage, en FR et en EN.
 - [ ] Domaine, URL canonique et sitemap sur `lab.cabrelfosso.com`.
 - [ ] `/` redirige vers `/fr` ou `/en` selon la langue du navigateur.
-- [ ] Anciennes adresses du portfolio redirigées, sans aucun 404 (après L2).
+- [x] Anciennes adresses du portfolio redirigées, sans aucun 404 (vérifié le 24 novembre 2026 : six redirections 308 ; confirmé dans le navigateur par Jospin le 25 novembre 2026).
 - [ ] Aucun TODO ni texte de remplissage visible.
 
-## Annexe A — Démo « Où se cachent les problèmes difficiles ? » (proposition, à valider avant L3)
+## Annexe A — Démo 3-SAT (proposition de la version 0.1, remplacée)
 
-### Idée
+Remplacée par l’annexe D à la version 0.7. Changements : pas de α de 0,2 au lieu de 0,25 (le nombre de clauses doit être entier) ; « nombre de choix » au lieu de « nombre d’embranchements » ; seuil cité « voisin de 4,27 », d’après la méthode de la cavité ; sources primaires vérifiées ; arXiv cond-mat/0111153 retiré (il traite d’énigmes difficiles à solution cachée, pas de la valeur du seuil).
 
-L’ordinateur fabrique au hasard des énigmes logiques (formules 3-SAT : chaque contrainte relie trois variables vraies ou fausses, par exemple « A ou non B ou C »). Le visiteur règle α, le nombre de contraintes par variable. Avec peu de contraintes, presque toutes les énigmes ont une solution et le solveur la trouve vite ; avec beaucoup, presque aucune n’en a et il le prouve vite ; autour d’un seuil critique, voisin de 4,26 d’après la littérature, le solveur fait beaucoup plus d’essais. La démo trace ces deux courbes en direct.
-
-### Paramètres proposés
-
-| Élément | Proposition |
-| --- | --- |
-| Nombre de variables n | Au choix : 20, 30, 40 ou 50 |
-| α | De 2 à 7, par pas de 0,25 |
-| Formules par valeur de α | 20 (réglable : 10 à 50) |
-| Solveur | DPLL avec propagation unitaire, écrit pour le site |
-| Mesure | Nombre d’embranchements (choix faits par le solveur), médiane par valeur de α |
-| Courbes | Part des formules satisfiables (en %) ; médiane du nombre d’embranchements |
-| Mode pas à pas | Une petite formule (environ 8 variables) résolue étape par étape, pour les élèves |
-| Graine | Fixe par défaut, modifiable ; affichée |
-
-Temps de calcul sur un téléphone moyen : probablement quelques secondes pour n = 50, à mesurer pendant L3 ; si c’est trop long, réduire n ou le nombre de formules.
-
-### Textes obligatoires
-
-- « Cette expérience n’apporte pas de réponse à la question P = NP. Elle montre où se trouvent, en pratique, les énigmes difficiles pour un solveur. »
-- Définitions courtes de P, NP et NP-complet.
-
-### Sources à vérifier avant L3
-
-- Seuil de satisfiabilité de 3-SAT aléatoire, voisin de 4,26 : plusieurs articles le rapportent (par exemple arXiv 2605.28602 et arXiv 1412.5862, consultés le 22 novembre 2026). TODO : choisir une source de référence primaire, par exemple l’article de Mitchell, Selman et Levesque (AAAI 1992), à vérifier.
-- Lien avec la physique statistique (verres de spin) : arXiv cond-mat/0111153, consulté le 22 novembre 2026.
-- Pour la démo IA explicable : Van den Broeck, Lykov, Schleich et Suciu, « On the Tractability of SHAP Explanations », AAAI 2021, DOI 10.1609/aaai.v35i7.16806.
+Source gardée pour la future démo IA explicable : Van den Broeck, Lykov, Schleich et Suciu, « On the Tractability of SHAP Explanations », AAAI 2021, DOI 10.1609/aaai.v35i7.16806.
 
 ## Annexe B — Textes du Labo (étape L1, validés le 24 novembre 2026)
 
@@ -570,6 +544,369 @@ Le lien DOI répond 403 aux outils automatiques (vérification de L2a) ; il s’
 | Vitesses après un choc en fonction de e, fraction perdue (1 − e²) / 2 | Déduites de la conservation de la quantité de mouvement et de la définition de e (calcul vérifié par les valeurs de contrôle) |
 | « Un vrai pendule de Newton est plus subtil, car ses billes se touchent » | Hutzler et al. (2004) : la ligne de billes se sépare dès le premier choc, puis toutes les billes finissent par bouger ensemble |
 
+## Annexe D — Expérience d’informatique : la transition de phase de 3-SAT (étape L3)
+
+Paramètres choisis le 25 novembre 2026 (n par Jospin, les autres choix délégués à Claude), sources vérifiées le 25 novembre 2026, textes rédigés par Claude et acceptés par Jospin le 25 novembre 2026 pour lancer L3. Remplace l’annexe A. Les textes sont repris mot pour mot ; seule la typographie des espaces est appliquée dans le code.
+
+### D.1 Menu, page Informatique et accueil
+
+| Clé | Français | English |
+| --- | --- | --- |
+| Entrée du menu | Informatique | Computing |
+| Fil d’Ariane, page de catégorie | Le Labo › Informatique | The Lab › Computing |
+| Fil d’Ariane, expérience | Le Labo › Informatique › Où se cachent les problèmes difficiles ? | The Lab › Computing › Where are the hard problems? |
+
+**Page Informatique — /fr/informatique · /en/computing**
+
+- Titre de l’onglet : Informatique — Le Labo / Computing — The Lab
+- Description : Des expériences d’informatique à lancer vous-même, en commençant par les énigmes logiques 3-SAT : où se trouvent les problèmes vraiment difficiles ? / Computing experiments you can run yourself, starting with 3-SAT logic puzzles: where are the truly hard problems?
+- Titre : Informatique / Computing
+- Introduction : identique à la description.
+- Une carte par expérience publiée, avec les textes des cartes de l’accueil, chacune avec sa petite figure décorative.
+
+**Accueil : section « Informatique »** (juste après la section « Physique », même présentation)
+
+- Titre : Informatique / Computing
+- Carte de l’expérience : titre « Où se cachent les problèmes difficiles ? » ; texte « Des énigmes logiques tirées au hasard : réglez leur nombre de contraintes et voyez où le solveur peine. » ; lien « Ouvrir l’expérience »
+- EN card: title “Where are the hard problems?”; text “Randomly generated logic puzzles: change how constrained they are and see where the solver struggles.”; link “Open the experiment”
+- Lien sous la carte : Toutes les expériences d’informatique → `/fr/informatique` / All computing experiments → `/en/computing`
+
+### D.2 Modèle et conventions
+
+Tout ce qui suit est une convention du site, choisie pour que le calcul soit reproductible et testable. Les sources (D.3) appuient le modèle de tirage et l’algorithme ; les nombres de choix sont propres à ce solveur.
+
+**Réglages et plages**
+
+| Élément | Convention |
+| --- | --- |
+| Nombre de variables n | 20, 30, 40 ou 50 ; 40 par défaut |
+| α (clauses par variable) | 26 valeurs : α = (10 + k) / 5 pour k = 0 à 25, soit 2,0 ; 2,2 ; … ; 7,0. Nombre de clauses m = n (10 + k) / 5, calculé en nombres entiers (toujours entier pour les n autorisés) |
+| Énigmes par valeur de α (F) | 10, 20, 50 ou 100 ; 20 par défaut |
+| Graine | Entier de 1 à 999 999 ; 2026 par défaut ; affichée et modifiable. Valeur invalide : message d’erreur, calcul non lancé |
+
+**Hasard reproductible**
+
+- Générateur : xoshiro128++ 1.0 de D. Blackman et S. Vigna (sorties de 32 bits), initialisé par SplitMix64, comme le recommandent les auteurs (`https://prng.di.unimi.it/`, consulté le 25 novembre 2026). Code de référence en C, domaine public, recopié tel quel dans sa logique.
+- Clé de 64 bits d’un flux : clé = graine × 2³² + tag × 2²⁴ + n × 2¹⁶ + k × 2⁸ + j, avec tag = 0 pour les courbes, 1 pour le mode pas à pas ; k = indice de α ; j = indice de l’énigme (0 à F − 1 ; pour le mode pas à pas, k = 0 et j = numéro de l’énigme moins 1, de 0 à 255).
+- Initialisation : l’état de SplitMix64 vaut la clé ; z₁ et z₂ sont ses deux premières sorties ; l’état de xoshiro128++ est (s₀, s₁, s₂, s₃) = (32 bits bas de z₁, 32 bits hauts de z₁, 32 bits bas de z₂, 32 bits hauts de z₂).
+- Chaque énigme a son propre flux : passer de 20 à 50 énigmes par valeur de α garde les 20 premières identiques.
+- Variable au hasard : à partir d’une sortie r (entier de 0 à 2³² − 1), la variable vaut 1 + ⌊r × n / 2³²⌋. Le biais de cette méthode est inférieur à n / 2³², négligeable ici.
+
+**Tirage d’une énigme** (modèle de Mitchell, Selman et Levesque, 1992)
+
+- Les m clauses sont tirées l’une après l’autre, indépendamment : deux clauses identiques sont permises.
+- Pour une clause : on tire des variables jusqu’à en avoir trois différentes (une variable déjà tirée pour cette clause est rejetée), dans l’ordre du tirage ; puis, pour chacune des trois dans cet ordre, une sortie r : la variable est niée si le bit de poids fort de r vaut 1.
+- Les clauses sont numérotées de 1 à m dans l’ordre du tirage ; les littéraux gardent l’ordre du tirage.
+
+**Solveur (DPLL, version simple)**
+
+1. Propagation, répétée tant qu’elle change quelque chose : on parcourt les clauses dans l’ordre de leurs numéros ; la première clause fausse (tous ses littéraux faux) provoque un conflit ; sinon, la première clause unitaire (aucun littéral vrai, un seul littéral libre) impose la valeur qui rend ce littéral vrai.
+2. Si toutes les clauses sont vraies : solution, arrêt.
+3. Sinon, choix : la variable libre de plus petit numéro qui figure dans une clause pas encore vraie ; on essaie d’abord « vrai », puis « faux ».
+4. Conflit : retour en arrière au dernier choix dont la seconde valeur n’a pas été essayée.
+5. Si les deux valeurs du premier choix ont échoué : l’énigme est insatisfiable.
+
+Pas de règle du littéral pur, pas d’apprentissage de clauses : le solveur s’arrête à la première solution.
+
+**Mesure**
+
+- Nombre de choix d’une énigme : nombre d’affectations faites à l’étape 3 (les deux essais d’une même variable comptent ; les affectations par propagation ne comptent pas). Il vaut toujours au moins 1 pour les énigmes des courbes, car aucune clause n’est unitaire au départ.
+- Pour chaque n et chaque α : part des énigmes satisfiables (en %, arrondie à l’entier) et médiane du nombre de choix. Médiane d’un nombre pair de valeurs : moyenne des deux valeurs centrales (elle peut finir par ,5).
+- Résumé d’une courbe : a et b = les valeurs de α qui encadrent le premier α où la part satisfiable passe **sous** 50 % (exactement 50 % n’est pas « sous ») ; c = le α de la plus grande médiane (le plus petit α en cas d’égalité) et d = cette médiane. α toujours affiché avec une décimale.
+
+**Affichage**
+
+- Deux graphiques SVG superposés, même axe horizontal (α de 2 à 7) : part satisfiable (0 à 100 %, échelle linéaire) ; médiane du nombre de choix (échelle logarithmique, graduations aux puissances de 10, de 1 à la première puissance de 10 au-dessus du maximum affiché).
+- Ligne verticale pointillée à α = 4,27, avec sa légende.
+- Une courbe par n calculé (au plus quatre), chacune avec un style de trait et un marqueur différents (cercle, carré, triangle, losange pour n = 20, 30, 40, 50) ; jamais la couleur seule. Relancer un n remplace sa courbe ; « Effacer les courbes » les retire toutes.
+- Résumé textuel de chaque courbe et tableau repliable des valeurs (textes en D.3).
+
+**Exécution**
+
+- Rien n’est calculé au chargement de la page pour les courbes : le calcul démarre au bouton « Lancer », dans un Web Worker.
+- Le calcul avance valeur de α par valeur de α ; la courbe se dessine au fur et à mesure. « Pause » prend effet à la fin de la valeur de α en cours ; « Arrêter » interrompt tout de suite (la courbe partielle est retirée). Changer un réglage pendant un calcul est impossible (réglages désactivés).
+- Annonce aux lecteurs d’écran (`aria-live="polite"`) seulement à la fin ou à l’arrêt du calcul.
+- Objectifs, mesurés sur le téléphone de Jospin : calcul par défaut (n = 40, 20 énigmes) en 3 s au plus ; n = 50 avec 100 énigmes en 30 s au plus.
+
+**Mode pas à pas**
+
+- Énigme de 6 variables et 24 clauses (tag = 1, k = 0), tirée de la graine courante.
+- Énigme de départ : la première, de numéro 1 à 256 (j = 0 à 255), dont la résolution contient au moins un conflit ; s’il n’y en a aucune, la numéro 1. « Autre énigme » passe au numéro suivant (après 256, retour à 1). Changer la graine recalcule l’énigme de départ.
+- Une étape = un événement de la trace du solveur : choix, propagation, conflit, retour en arrière, puis solution ou « aucune solution ». Aucune lecture automatique.
+- Chaque clause affiche son numéro, ses littéraux et son état (texte et icône, pas la couleur seule) : satisfaite, fausse, unitaire, en attente.
+- Les indices (x₁…x₆) sont des indices HTML ; chaque clause a un nom accessible en mots (« x₁ ou non x₃ ou x₅ »).
+
+### D.3 Où se cachent les problèmes difficiles ? — /fr/informatique/transition-de-phase-3-sat · /en/computing/3-sat-phase-transition
+
+#### 3-SAT — français
+
+- **Titre de l’onglet** : Où se cachent les problèmes difficiles ? — Le Labo
+- **Description** : Expérience interactive sur la transition de phase de 3-SAT : part des énigmes logiques qui ont une solution et effort d’un solveur DPLL, calculés dans votre navigateur.
+- **Titre de la page** : Où se cachent les problèmes difficiles ?
+- **Sous-titre** : La transition de phase de 3-SAT
+- **Introduction** : L’ordinateur fabrique au hasard des énigmes logiques. Avec peu de contraintes, presque toutes ont une solution ; avec beaucoup, presque aucune. Entre les deux se trouve une zone étroite où le solveur peine le plus. Réglez, lancez, et voyez où elle se trouve.
+- **Mention** : Niveau : TODO(Jospin): niveau concerné. (masquée tant que le niveau manque)
+
+**L’expérience**
+
+| Réglage | Étiquette | Valeurs | Valeur de départ |
+| --- | --- | --- | --- |
+| n | Nombre de variables (n) | 20 · 30 · 40 · 50 | 40 |
+| F | Énigmes par valeur de α | 10 · 20 · 50 · 100 | 20 |
+| Graine | Graine du hasard | Entier de 1 à 999 999 | 2026 |
+
+- Aide sous la graine : Même graine, mêmes énigmes : vous pouvez refaire exactement le même calcul.
+- Erreur de graine : Entrez un nombre entier de 1 à 999 999.
+- Boutons : Lancer · Pause · Reprendre · Arrêter · Effacer les courbes
+- Progression : Calcul pour n = {n} : α = {α} ({i} / 26)
+- Fin du calcul : Calcul terminé pour n = {n} : {total} énigmes résolues.
+- Arrêt : Calcul arrêté.
+- Graphique 1 : Énigmes qui ont une solution (%)
+- Graphique 2 : Nombre de choix du solveur (médiane, échelle logarithmique)
+- Axe horizontal : α = clauses / variables
+- Légende : n = {n} ; ligne pointillée : 4,27 : prédiction pour n très grand
+- Avant tout calcul : Choisissez n, puis lancez le calcul.
+- Résumé d’une courbe : n = {n} : la part des énigmes qui ont une solution passe sous 50 % entre α = {a} et α = {b} ; le solveur fait le plus de choix à α = {c} (médiane {d}).
+- Variante : n = {n} : la part des énigmes qui ont une solution reste d’au moins 50 % sur toute la plage ; le solveur fait le plus de choix à α = {c} (médiane {d}).
+- Variante : n = {n} : la part des énigmes qui ont une solution est sous 50 % dès α = {a} ; le solveur fait le plus de choix à α = {c} (médiane {d}).
+- Tableau repliable : Voir les valeurs ; colonnes : α · n = {n} : ont une solution (%) · n = {n} : choix (médiane)
+
+**Pas à pas : le solveur sur une petite énigme**
+
+- Introduction : Une énigme de 6 variables (x₁ à x₆) et 24 clauses, tirée de la même graine. La première énigme proposée est celle où le solveur doit revenir en arrière au moins une fois. Suivez chaque décision du solveur.
+- Numéro : Énigme n° {numéro}
+- Boutons : Étape suivante · Recommencer · Autre énigme
+- Compteur : Choix : {k}
+- États d’une clause : satisfaite · fausse · unitaire (un seul littéral encore possible) · en attente
+- Clause lue à voix haute : « x₁ ou non x₃ ou x₅ » (affichée x₁ ∨ ¬x₃ ∨ x₅)
+- Messages :
+  - Choix : x{i} = vrai.
+  - Choix : x{i} = faux (on essaie l’autre valeur).
+  - Propagation : la clause {c} n’a plus qu’un littéral possible, donc x{i} = {valeur}.
+  - Conflit : la clause {c} est fausse.
+  - Retour en arrière : on annule le choix de x{i} et tout ce qui l’a suivi.
+  - Solution trouvée après {k} choix : {affectation}.
+  - Aucune solution : toutes les possibilités ont été éliminées, après {k} choix.
+- Valeurs : vrai · faux · libre (n’importe quelle valeur convient)
+
+**Le problème et l’algorithme**
+
+- **Le problème 3-SAT** : Une variable booléenne vaut vrai ou faux. Un littéral est une variable (x) ou sa négation (non x, notée ¬x). Une clause relie trois littéraux par « ou » : elle est vraie si au moins un des trois est vrai. Elle n’interdit donc qu’une seule des 8 combinaisons de ses trois variables. Une énigme (formule 3-SAT) demande de rendre vraies toutes ses clauses à la fois. Elle est satisfiable s’il existe une telle affectation, insatisfiable sinon.
+- **Exemple** : (x₁ ∨ ¬x₂ ∨ x₃) ∧ (¬x₁ ∨ x₂ ∨ x₃). Avec x₃ = vrai, les deux clauses sont vraies : l’énigme est satisfiable.
+- **Le réglage α** est le nombre de clauses par variable : avec n = 40 et α = 4,2, l’énigme compte 168 clauses.
+- **Comment les énigmes sont tirées** : chaque clause prend trois variables différentes au hasard, et chacune est niée avec une chance sur deux. Les clauses sont tirées indépendamment les unes des autres, comme dans l’expérience de Mitchell, Selman et Levesque (1992).
+- **Le solveur (algorithme DPLL)**, du nom de Davis, Putnam, Logemann et Loveland, dans une version simple :
+  1. Propagation : si une clause n’a plus qu’un littéral possible, ce littéral doit être vrai.
+  2. Si une clause est fausse : conflit ; on revient au dernier choix et on essaie l’autre valeur.
+  3. Si toutes les clauses sont vraies : solution trouvée.
+  4. Sinon, choix : on prend la plus petite variable libre d’une clause pas encore vraie, et on essaie d’abord « vrai », puis « faux ».
+- S’il a essayé les deux valeurs de chaque choix sans succès, le solveur a prouvé que l’énigme n’a pas de solution.
+- **Ce que l’on mesure** : le nombre de choix (étape 4), pour chaque énigme. La médiane est la valeur du milieu : la moitié des énigmes demandent moins de choix, l’autre moitié plus. Sur le second graphique, chaque graduation multiplie le nombre de choix par 10 (échelle logarithmique).
+
+**Que sait-on du seuil ?**
+
+- En 1992, Mitchell, Selman et Levesque observent que les énigmes les plus difficiles pour ce type de solveur se trouvent là où la moitié a une solution : vers α = 4,3 pour 50 variables, et vers 4,55 pour 20 variables.
+- Des physiciens ont calculé une valeur voisine de 4,27 pour n très grand, en 2002, par une méthode issue de l’étude des verres de spin (la méthode de la cavité). C’est un calcul, pas une démonstration.
+- Les mathématiciens ont démontré qu’en dessous de 3,52, presque toutes les énigmes ont une solution, et qu’au-dessus de 4,49, presque aucune, quand n devient très grand. Pour 3-SAT, on n’a pas démontré qu’il existe une valeur précise du seuil. On l’a démontré en 2022 pour des clauses beaucoup plus longues.
+
+**P, NP et cette expérience**
+
+- **P** : les problèmes qu’un algorithme résout en un nombre d’étapes borné par un polynôme de la taille de l’énoncé (par exemple n² ou n³) ; on dit « en temps polynomial ».
+- **NP** : les problèmes dont une solution proposée se vérifie en temps polynomial. Pour 3-SAT, vérifier une affectation est facile : on relit chaque clause.
+- **NP-complet** : un problème de NP auquel tous les problèmes de NP se ramènent en temps polynomial. Stephen Cook a démontré en 1971 que SAT est NP-complet ; 3-SAT l’est aussi.
+- La question « P = NP ? » demande si tout problème dont la solution se vérifie vite peut aussi se résoudre vite. Elle n’est pas résolue.
+- La NP-complétude parle du pire cas. Une énigme tirée au hasard n’est pas forcément difficile : cette expérience regarde les cas typiques.
+- Cette expérience n’apporte pas de réponse à la question P = NP. Elle montre où se trouvent, en pratique, les énigmes difficiles pour un solveur.
+
+**Hypothèses** : Les énigmes sont aléatoires : les résultats ne disent rien directement des énigmes tirées de problèmes réels. Les tailles sont petites (50 variables au plus) : le passage à 50 % se fait au-dessus de 4,27, et il se rapproche de cette valeur quand n augmente. Le nombre de choix dépend du solveur : un autre algorithme donnerait d’autres nombres, et des travaux ont montré que la difficulté dépend aussi du solveur choisi.
+
+**À essayer** (chaque question a son explication repliable, intitulée « Voir l’explication »)
+
+1. Lancez le calcul pour n = 20, puis pour n = 50, sans effacer. Que devient la courbe des énigmes qui ont une solution ? — Explication : pour n = 50, elle descend plus brutalement, et elle passe sous 50 % plus près de 4,27. Plus l’énigme est grande, plus la transition est nette : c’est l’effet de taille finie.
+2. Où se trouve le pic du nombre de choix par rapport au passage à 50 % ? — Explication : presque au même endroit. À gauche, les solutions sont nombreuses et les premiers choix réussissent. À droite, les contraintes sont si nombreuses que les conflits arrivent vite, et le solveur prouve rapidement qu’il n’y a pas de solution. Au milieu, il doit explorer beaucoup de pistes avant de conclure.
+3. Pour n = 20, recommencez avec une autre graine. Pourquoi la courbe change-t-elle ? — Explication : 20 énigmes par valeur de α forment un petit échantillon ; le hasard des tirages se voit. Avec 100 énigmes, la courbe devient plus régulière.
+
+#### 3-SAT — English
+
+- **Tab title**: Where are the hard problems? — The Lab
+- **Description**: Interactive experiment on the 3-SAT phase transition: the share of random logic puzzles that have a solution, and how hard a DPLL solver works, computed in your browser.
+- **Page heading**: Where are the hard problems?
+- **Subtitle**: The 3-SAT phase transition
+- **Intro**: The computer generates random logic puzzles. With few constraints, almost all of them have a solution; with many, almost none do. In between lies a narrow zone where the solver struggles most. Set it up, run it, and see where that zone is.
+- **Note**: Level: TODO(Jospin): level. (hidden while missing)
+
+**The experiment**
+
+- Controls: Number of variables (n) · Puzzles per value of α · Random seed. Same values, ranges and defaults as the French version.
+- Help under the seed: Same seed, same puzzles: you can rerun exactly the same calculation.
+- Seed error: Enter a whole number from 1 to 999,999.
+- Buttons: Run · Pause · Resume · Stop · Clear curves
+- Progress: Computing n = {n}: α = {α} ({i} / 26)
+- End of run: Done for n = {n}: {total} puzzles solved.
+- Stopped: Calculation stopped.
+- Chart 1: Puzzles that have a solution (%)
+- Chart 2: Solver decisions (median, log scale)
+- x-axis: α = clauses / variables
+- Legend: n = {n}; dashed line: 4.27: prediction for very large n
+- Before any run: Choose n, then run the calculation.
+- Curve summary: n = {n}: the share of puzzles with a solution drops below 50% between α = {a} and α = {b}; the solver makes the most decisions at α = {c} (median {d}).
+- Variant: n = {n}: the share of puzzles with a solution stays at 50% or more across the whole range; the solver makes the most decisions at α = {c} (median {d}).
+- Variant: n = {n}: the share of puzzles with a solution is below 50% from α = {a}; the solver makes the most decisions at α = {c} (median {d}).
+- Collapsible table: Show the values; columns: α · n = {n}: have a solution (%) · n = {n}: decisions (median)
+
+**Step by step: the solver on a small puzzle**
+
+- Intro: A puzzle with 6 variables (x₁ to x₆) and 24 clauses, drawn from the same seed. The first puzzle shown is one where the solver has to backtrack at least once. Follow each decision the solver makes.
+- Number: Puzzle no. {number}
+- Buttons: Next step · Start over · Another puzzle
+- Counter: Decisions: {k}
+- Clause states: satisfied · false · unit (only one literal left) · pending
+- Clause read aloud: “x₁ or not x₃ or x₅”
+- Messages:
+  - Decision: x{i} = true.
+  - Decision: x{i} = false (trying the other value).
+  - Propagation: clause {c} has only one literal left, so x{i} = {value}.
+  - Conflict: clause {c} is false.
+  - Backtrack: undo the decision on x{i} and everything after it.
+  - Solution found after {k} decisions: {assignment}.
+  - No solution: every possibility has been ruled out, after {k} decisions.
+- Values: true · false · free (any value works)
+
+**The problem and the algorithm**
+
+- **The 3-SAT problem**: A Boolean variable is either true or false. A literal is a variable (x) or its negation (not x, written ¬x). A clause joins three literals with “or”: it is true if at least one of them is true, so it rules out only one of the 8 combinations of its three variables. A puzzle (a 3-SAT formula) asks for all its clauses to be true at once. It is satisfiable if such an assignment exists, and unsatisfiable otherwise.
+- **Example**: (x₁ ∨ ¬x₂ ∨ x₃) ∧ (¬x₁ ∨ x₂ ∨ x₃). With x₃ = true, both clauses are true, so the puzzle is satisfiable.
+- **The α setting** is the number of clauses per variable: with n = 40 and α = 4.2, the puzzle has 168 clauses.
+- **How the puzzles are drawn**: each clause picks three different variables at random and negates each one with probability one half. Clauses are drawn independently of each other, as in the experiment by Mitchell, Selman and Levesque (1992).
+- **The solver (the DPLL algorithm)**, after Davis, Putnam, Logemann and Loveland, in a simple version:
+  1. Propagation: if a clause has only one literal left, that literal must be true.
+  2. If a clause is false: conflict; go back to the last decision and try the other value.
+  3. If every clause is true: solution found.
+  4. Otherwise, decide: take the lowest-numbered free variable in a clause that isn’t true yet, and try “true” first, then “false”.
+- If both values of every decision have failed, the solver has proved that the puzzle has no solution.
+- **What we measure**: the number of decisions (step 4) for each puzzle. The median is the middle value: half the puzzles need fewer decisions, half need more. On the second chart, each gridline multiplies the number of decisions by 10 (log scale).
+
+**What do we know about the threshold?**
+
+- In 1992, Mitchell, Selman and Levesque observed that the hardest puzzles for this kind of solver lie where half of them have a solution: around α = 4.3 for 50 variables, and around 4.55 for 20 variables.
+- In 2002, physicists computed a value close to 4.27 for very large n, using a method from the study of spin glasses (the cavity method). It is a calculation, not a proof.
+- Mathematicians have proved that below 3.52 almost all puzzles have a solution, and above 4.49 almost none do, as n becomes very large. For 3-SAT, nobody has proved that the threshold has one precise value. That was proved in 2022 for much longer clauses.
+
+**P, NP and this experiment**
+
+- **P**: problems an algorithm can solve in a number of steps bounded by a polynomial in the size of the input (such as n² or n³), known as “polynomial time”.
+- **NP**: problems where a proposed solution can be checked in polynomial time. For 3-SAT, checking an assignment is easy: read through every clause.
+- **NP-complete**: a problem in NP to which every problem in NP can be reduced in polynomial time. In 1971, Stephen Cook proved that SAT is NP-complete; 3-SAT is too.
+- The question “P = NP?” asks whether every problem whose solution can be checked quickly can also be solved quickly. It remains open.
+- NP-completeness is about the worst case. A randomly drawn puzzle isn’t necessarily hard: this experiment looks at typical cases.
+- This experiment does not answer the P = NP question. It shows where, in practice, the puzzles that are hard for a solver are found.
+
+**Assumptions**: The puzzles are random, so the results say nothing directly about puzzles that come from real-world problems. The sizes are small (50 variables at most): the 50% crossing happens above 4.27 and moves closer to it as n grows. The number of decisions depends on the solver: another algorithm would give other numbers, and research has shown that hardness also depends on the solver used.
+
+**Try this** (collapsible “Show the explanation”)
+
+1. Run n = 20, then n = 50, without clearing. What happens to the curve of puzzles that have a solution? — Explanation: for n = 50 it drops more steeply and falls below 50% closer to 4.27. The bigger the puzzles, the sharper the transition: this is a finite-size effect.
+2. Where is the peak in decisions compared with the 50% crossing? — Explanation: almost in the same place. On the left, there are many solutions and the first decisions succeed. On the right, there are so many constraints that conflicts come quickly and the solver soon proves there is no solution. In the middle, it has to explore many paths before it can conclude.
+3. With n = 20, run it again with another seed. Why does the curve change? — Explanation: 20 puzzles per value of α is a small sample, so the randomness of the draw shows. With 100 puzzles, the curve becomes smoother.
+
+#### Valeurs de contrôle de 3-SAT (calculées le 25 novembre 2026)
+
+Calculées par Claude avec une implantation de référence indépendante : le hasard en C (code des auteurs, compilé avec gcc), le tirage en C et en JavaScript (identiques sur 6 clés), deux solveurs JavaScript (l’un suit D.2 à la lettre, l’autre utilise des compteurs) qui donnent le même résultat et le même nombre de choix sur 2 080 énigmes (graine 2026, n = 20 à 50, 20 énigmes par α). Les traces H2 et H3 ont été refaites à la main. Le code du site doit retrouver ces valeurs, sans qu’on ajuste une valeur attendue.
+
+**Hasard**
+
+- SplitMix64, état initial 0, trois premières sorties : 0xe220a8397b1dcdaf ; 0x6e789e6aa1b965f4 ; 0x06c45d188009454f.
+- Clé (graine 2026, tag 0, n = 20, k = 0, j = 0) = 0x000007ea00140000 : état initial de xoshiro128++ 83533ed4 3607ec65 3bf32353 a89a7ffe (hexadécimal) ; six premières sorties : 2050140137 ; 1402195668 ; 789525893 ; 2849562376 ; 2645018862 ; 428651170.
+- Clé (graine 1, tag 1, n = 6, k = 0, j = 0) = 0x0000000101060000 : état e990fa20 f15177e1 3348dad9 22ea1f7c ; sorties 656263206 ; 4067180487 ; 605260372 ; 1371088429 ; 27368953 ; 1481644471.
+
+**Tirage**
+
+- Graine 2026, n = 20, k = 0, j = 0 : cinq premières clauses (−x = non x) : (−10, −7, 4) ; (7, −10, 4) ; (−11, 3, 18) ; (20, −8, −1) ; (−6, −13, 18).
+- Mode pas à pas, graine 2026, énigme n° 2 (j = 1), 24 clauses : c1 (4, −5, −1) ; c2 (6, −5, −4) ; c3 (−2, −1, −4) ; c4 (6, 3, 5) ; c5 (−1, −2, 4) ; c6 (5, −1, −3) ; c7 (−5, 4, 1) ; c8 (−2, 6, −1) ; c9 (−4, −6, 1) ; c10 (3, 4, 1) ; c11 (3, 6, 2) ; c12 (4, −6, 3) ; c13 (−4, 3, −1) ; c14 (3, −5, 2) ; c15 (−2, 4, 3) ; c16 (−4, −3, 6) ; c17 (4, −2, −3) ; c18 (−3, 4, 2) ; c19 (−6, 4, 1) ; c20 (3, −2, 5) ; c21 (6, 4, −2) ; c22 (4, −2, −1) ; c23 (4, 3, 2) ; c24 (5, 3, 2).
+
+**Solveur : petites énigmes écrites à la main**
+
+| Énigme | n | Clauses | Résultat | Choix | Trace |
+| --- | --- | --- | --- | --- | --- |
+| H1 | 3 | (1, 2, 3) | satisfiable : x₁ = vrai, x₂ et x₃ libres | 1 | choix x₁ = vrai ; solution |
+| H2 | 3 | les 8 clauses sur x₁, x₂, x₃, dans l’ordre (1, 2, 3) ; (1, 2, −3) ; (1, −2, 3) ; (1, −2, −3) ; (−1, 2, 3) ; (−1, 2, −3) ; (−1, −2, 3) ; (−1, −2, −3) | insatisfiable | 6 | choix x₁ = vrai ; choix x₂ = vrai ; propagation c7 : x₃ = vrai ; conflit c8 ; retour x₂ ; choix x₂ = faux ; propagation c5 : x₃ = vrai ; conflit c6 ; retour x₂ ; retour x₁ ; choix x₁ = faux ; choix x₂ = vrai ; propagation c3 : x₃ = vrai ; conflit c4 ; retour x₂ ; choix x₂ = faux ; propagation c1 : x₃ = vrai ; conflit c2 ; retour x₂ ; retour x₁ ; aucune solution |
+| H3 | 3 | (−1, 2, 3) ; (−1, −2, 3) ; (−1, 2, −3) ; (−1, −2, −3) | satisfiable : x₁ = faux, x₂ et x₃ libres | 4 | choix x₁ = vrai ; choix x₂ = vrai ; propagation c2 : x₃ = vrai ; conflit c4 ; retour x₂ ; choix x₂ = faux ; propagation c1 : x₃ = vrai ; conflit c3 ; retour x₂ ; retour x₁ ; choix x₁ = faux ; solution |
+| H4 | 4 | (1, 2, 3) ; (−1, 2, 4) ; (−2, −3, 4) ; (−4, 1, −3) ; (−4, −1, 3) | satisfiable : tout vrai | 3 | choix x₁ = vrai ; choix x₂ = vrai ; choix x₃ = vrai ; propagation c3 : x₄ = vrai ; solution |
+| Pas à pas, graine 2026, n° 2 | 6 | ci-dessus | satisfiable : x₁ = vrai, x₂ = faux, x₃ à x₆ = vrai | 4 | choix x₁ = vrai ; choix x₂ = vrai ; propagation c3 : x₄ = faux ; conflit c5 ; retour x₂ ; choix x₂ = faux ; choix x₃ = vrai ; propagation c6 : x₅ = vrai ; propagation c1 : x₄ = vrai ; propagation c2 : x₆ = vrai ; solution |
+
+Mode pas à pas, graine 2026 : l’énigme n° 1 (j = 0) se résout sans conflit (3 choix) ; l’énigme de départ est donc la n° 2. Les énigmes n° 3 et n° 4 demandent 5 et 2 choix.
+
+**Courbes de référence, graine 2026, 20 énigmes par α** (énigmes satisfiables sur 20 ; médiane du nombre de choix)
+
+| α | n = 20 : satisfiables | n = 20 : médiane | n = 40 : satisfiables | n = 40 : médiane |
+| --- | --- | --- | --- | --- |
+| 2,0 | 20 | 9 | 20 | 18,5 |
+| 2,2 | 20 | 10 | 20 | 17,5 |
+| 2,4 | 20 | 10 | 20 | 15 |
+| 2,6 | 20 | 10 | 20 | 16 |
+| 2,8 | 20 | 8,5 | 20 | 21 |
+| 3,0 | 20 | 9 | 20 | 15 |
+| 3,2 | 20 | 9 | 20 | 17 |
+| 3,4 | 20 | 13 | 20 | 38 |
+| 3,6 | 20 | 11 | 18 | 52,5 |
+| 3,8 | 20 | 14 | 19 | 84 |
+| 4,0 | 18 | 13,5 | 20 | 77,5 |
+| 4,2 | 14 | 21,5 | 13 | 173,5 |
+| 4,4 | 11 | 22 | 11 | 242,5 |
+| 4,6 | 12 | 24,5 | 4 | 207 |
+| 4,8 | 6 | 25 | 4 | 160 |
+| 5,0 | 4 | 36,5 | 0 | 166 |
+| 5,2 | 5 | 28 | 3 | 130 |
+| 5,4 | 3 | 28 | 2 | 129 |
+| 5,6 | 2 | 28 | 0 | 139 |
+| 5,8 | 3 | 26 | 0 | 122 |
+| 6,0 | 0 | 21 | 1 | 118 |
+| 6,2 | 1 | 26 | 0 | 86 |
+| 6,4 | 0 | 26 | 0 | 79 |
+| 6,6 | 0 | 21 | 0 | 73 |
+| 6,8 | 0 | 18 | 0 | 84 |
+| 7,0 | 0 | 20 | 0 | 74 |
+
+Résumés attendus : « n = 20 : la part des énigmes qui ont une solution passe sous 50 % entre α = 4,6 et α = 4,8 ; le solveur fait le plus de choix à α = 5,0 (médiane 36,5). » et « n = 40 : la part des énigmes qui ont une solution passe sous 50 % entre α = 4,4 et α = 4,6 ; le solveur fait le plus de choix à α = 4,4 (médiane 242,5). »
+
+#### Pour aller plus loin — 3-SAT
+
+- D. Mitchell, B. Selman et H. Levesque, « Hard and Easy Distributions of SAT Problems », *AAAI-92*, p. 459-465, 1992 (en anglais) → `https://cdn.aaai.org/AAAI/1992/AAAI92-071.pdf`
+- M. Mézard, G. Parisi et R. Zecchina, « Analytic and Algorithmic Solution of Random Satisfiability Problems », *Science*, vol. 297, p. 812-815, 2002 (en anglais) → `https://doi.org/10.1126/science.1073287`
+- M. Mézard et R. Zecchina, « The random K-satisfiability problem: from an analytic solution to an efficient algorithm », *Physical Review E*, vol. 66, 056126, 2002 (en anglais) → `https://arxiv.org/abs/cond-mat/0207194`
+- J. Ding, A. Sly et N. Sun, « Proof of the satisfiability conjecture for large k », *Annals of Mathematics*, vol. 196, p. 1-388, 2022 (en anglais) → `https://doi.org/10.4007/annals.2022.196.1.1`
+- M. Davis, G. Logemann et D. Loveland, « A machine program for theorem-proving », *Communications of the ACM*, vol. 5, p. 394-397, 1962 (en anglais) → `https://doi.org/10.1145/368273.368557`
+- S. Cook, « The P versus NP Problem », Clay Mathematics Institute (en anglais) → `https://www.claymath.org/wp-content/uploads/2022/06/pvsnp.pdf`
+
+English (same links):
+
+- D. Mitchell, B. Selman and H. Levesque, “Hard and Easy Distributions of SAT Problems”, *AAAI-92*, pp. 459–465, 1992
+- M. Mézard, G. Parisi and R. Zecchina, “Analytic and Algorithmic Solution of Random Satisfiability Problems”, *Science*, vol. 297, pp. 812–815, 2002
+- M. Mézard and R. Zecchina, “The random K-satisfiability problem: from an analytic solution to an efficient algorithm”, *Physical Review E*, vol. 66, 056126, 2002
+- J. Ding, A. Sly and N. Sun, “Proof of the satisfiability conjecture for large k”, *Annals of Mathematics*, vol. 196, pp. 1–388, 2022
+- M. Davis, G. Logemann and D. Loveland, “A machine program for theorem-proving”, *Communications of the ACM*, vol. 5, pp. 394–397, 1962
+- S. Cook, “The P versus NP Problem”, Clay Mathematics Institute
+
+Les liens DOI peuvent répondre 403 aux outils automatiques ; ils s’ouvrent normalement dans un navigateur.
+
+**Affirmations et sources** (relecture, non affiché)
+
+| Affirmation de la page | Source |
+| --- | --- |
+| Pic de difficulté là où la moitié des énigmes a une solution ; vers 4,3 pour n = 50, 4,55 pour n = 20 ; modèle de tirage | Mitchell, Selman et Levesque (1992), PDF consulté le 25 novembre 2026 |
+| Valeur voisine de 4,27 (4,267) par la méthode de la cavité ; calcul non rigoureux | Mézard et Zecchina (2002) ; Mertens, Mézard et Zecchina, *Random Structures & Algorithms* 28, 2006, DOI 10.1002/rsa.20090 ; Mézard, Parisi et Zecchina (2002) |
+| Bornes démontrées 3,52 et 4,49 (4,4898) | Hajiaghayi et Sorkin, arXiv math/0310193 (2003) ; Díaz, Kirousis, Mitsche et Pérez-Giménez, arXiv 0807.3600 (2008) |
+| Existence d’une valeur précise non démontrée pour 3-SAT | Díaz et al. (introduction) ; F. Vorobyev, arXiv 2610.10599 (prépublication du 6 octobre 2026, non relue par des pairs, qui annonce une borne supérieure de 4,268 et laisse la question ouverte) |
+| Seuil démontré en 2022 pour k grand | Ding, Sly et Sun (2022) |
+| Une clause à 3 littéraux interdit 1 combinaison sur 8 | Déduction logique (testée) |
+| Origine de DPLL | Davis, Logemann et Loveland (1962) ; Davis et Putnam, *Journal of the ACM*, 1960 (bibliographie de l’article de 1962) |
+| Définitions de P et NP ; P = NP non résolu | Cook, Clay Mathematics Institute |
+| SAT NP-complet (Cook, 1971) ; 3-SAT aussi | S. A. Cook, « The complexity of theorem-proving procedures », *STOC 1971*, p. 151-158, DOI 10.1145/800157.805047 : théorèmes 1 et 2 (l’ensemble D3, forme complémentaire de 3-SAT) |
+| NP-complétude = pire cas ; énigmes aléatoires = cas typiques | Mézard, Parisi et Zecchina (2002), introduction |
+| La difficulté dépend aussi du solveur | C. Coarfa et al., « Random 3-SAT: The Plot Thickens », DOI 10.1023/A:1025671026963 (résumé lu ; revue et année à confirmer) |
+| Effet de taille finie | Mitchell, Selman et Levesque (1992) ; observable dans la démo |
+| Générateur xoshiro128++ et initialisation par SplitMix64 | `https://prng.di.unimi.it/`, consulté le 25 novembre 2026 |
+
 ## Historique
 
 - Version 0.1 (23 novembre 2026) : décision du Labo ; publics ; adresses et table de correspondance ; expériences prévues ; stack statique sur Cloudflare Workers ; feuille de route L1 à L3 ; proposition pour la démo 3-SAT.
@@ -577,3 +914,5 @@ Le lien DOI répond 403 aux outils automatiques (vérification de L2a) ; il s’
 - Version 0.3 (24 novembre 2026) : étape L1.1 ; paragraphe « Mesure d’audience » de la page Confidentialité conditionné au jeton Web Analytics, et description de la page sans mention de la mesure d’audience, pour rester exacte dans les deux cas (section 6, annexe B.3) ; fichier technique `/_not-found` gardé, avec `noindex` (section 4).
 - Version 0.4 (24 novembre 2026) : étape L2a ; L1 terminée ; physique publiée (section 2) ; modèles et conventions des expériences (section 4.1) ; menu et fil d’Ariane (section 5) ; règle Cloudflare « Labo : pas de mesure automatique » (section 6) ; L2 découpée en L2a et L2b (section 8) ; accueil avec la section « Physique », bloc provisoire retiré (annexe B.2) ; annexe C : page Physique, projectile et pendule de Newton, sources vérifiées le 24 novembre 2026.
 - Version 0.5 (24 novembre 2026) : relecture de L2a ; ordre des chocs du pendule « dans le sens du mouvement », comme le code du portfolio (section 4.1) ; « Cabrel FOSSO » masqué visuellement sous 640 px (section 5) ; textes anglais des sources, validés (annexe C).
+- Version 0.6 (25 novembre 2026) : clôture de L2 ; L2a (version `7ba02663`, sitemap envoyé) et L2b (version du portfolio `f10afe9f`) terminées ; redirections permanentes en 308 et non 301 (section 8) ; recette des anciennes adresses cochée (section 9). Version préparée mais jamais commitée : son contenu est repris dans la 0.7.
+- Version 0.7 (25 novembre 2026) : étape L3 ; L2 confirmée par Jospin (PageSpeed Insights, 308 dans le navigateur, essai sur téléphone) ; Informatique publiée (sections 2 et 5) ; annexe D : modèle, textes, valeurs de contrôle et sources de l’expérience 3-SAT, vérifiées le 25 novembre 2026 ; annexe A remplacée.
