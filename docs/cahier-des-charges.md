@@ -1,6 +1,6 @@
 # Cahier des charges — le Labo de Cabrel FOSSO
 
-Version 0.9, du 25 novembre 2026 : étape L4, série « découverte » (annexe E) : la réfraction de la lumière et le nombre mystère ; l’IA explicable passe après (sections 3 et 8).
+Version 1.0, du 28 novembre 2026 : clôture de L4, la série « découverte » (sections 8 et 9) ; écarts acceptés lors de la réalisation (annexe E.1).
 
 Rédigée par Claude dans le projet claude.ai « Labo », à partir de la version 0.1 (projet « Portfolio », 23 novembre 2026) et des réponses de Jospin du 24 novembre 2026. Les marqueurs TODO(Jospin) signalent une information encore manquante. Ce fichier est copié dans le dépôt `cabrelfosso-lab` sous `docs/cahier-des-charges.md` ; c’est cette copie qui fait foi.
 
@@ -181,12 +181,12 @@ Le même que pour le portfolio (section 13 de son cahier) :
 | L2a. Déménagement, côté Labo (terminée le 24 novembre 2026 : version `7ba02663` ; sitemap envoyé dans la propriété « domaine » `cabrelfosso.com` de la Search Console, 10 pages découvertes) | Projectile et pendule de Newton (code, tests, textes, sources) ; page Physique ; menu et fil d’Ariane ; accueil avec la section « Physique », sans le bloc provisoire ; mise en ligne ; sitemap envoyé à la Search Console |
 | L2b. Déménagement, côté portfolio (terminée le 24 novembre 2026 : version du portfolio `f10afe9f` ; six redirections 308 mesurées par `curl` et par les tests `smoke` du portfolio) | Dans le dépôt du portfolio : redirections permanentes (308, que Google traite comme une 301) selon la table de la section 2, liens vers le Labo, lien du bandeau d’actualité, retrait du code des démos (section 15 du cahier du portfolio) |
 | L3. Transition de phase de 3-SAT (terminée le 25 novembre 2026 : version `42c36b41` ; contrôles de Jospin conformes : PageSpeed Insights mobile, durées de calcul sur téléphone, affichage de ∨ et ∧, sitemap de 14 adresses renvoyé à la Search Console) | Annexe D : page Informatique, expérience « Où se cachent les problèmes difficiles ? » (générateur, solveur DPLL, courbes, mode pas à pas, textes, sources), menu, accueil avec la section « Informatique » ; mise en ligne |
-| L4. Série « découverte » | Annexe E : la réfraction de la lumière (physique) et « Pensez à un nombre » (informatique), pages courtes et visuelles ; mise en ligne |
+| L4. Série « découverte » (terminée : mise en ligne le 25 novembre 2026, contrôlée en ligne par Claude ; contrôles de Jospin conformes le 28 novembre 2026 : PageSpeed Insights mobile, essai sur téléphone, sitemap de 18 adresses renvoyé à la Search Console) | Annexe E : la réfraction de la lumière (physique) et « Pensez à un nombre » (informatique), pages courtes et visuelles ; mise en ligne |
 | Ensuite | IA explicable, puis les autres expériences de la section 3 |
 
 ## 9. Checklist de recette
 
-- [x] Lighthouse mobile ≥ 95 dans les 4 catégories, sur l’accueil et sur une expérience (PageSpeed Insights, vérifié par Jospin le 25 novembre 2026 sur les deux expériences de physique, puis sur la page 3-SAT et la page Informatique).
+- [x] Lighthouse mobile ≥ 95 dans les 4 catégories, sur l’accueil et sur une expérience (PageSpeed Insights, vérifié par Jospin le 25 novembre 2026 sur les deux expériences de physique, puis sur la page 3-SAT et la page Informatique, puis le 28 novembre 2026 sur les pages de la série « découverte »).
 - [ ] Navigation complète au clavier, focus visible.
 - [ ] Aucun lien mort.
 - [ ] Aperçu correct au partage, en FR et en EN.
@@ -933,6 +933,11 @@ Décidée par Jospin le 25 novembre 2026 : des expériences simples et visuelles
   - EN card: title “Think of a number”; text “Pick a number between 1 and 1,000: the computer finds it in 10 questions or fewer.”; link “Open the experiment”
 - Fil d’Ariane : Le Labo › Physique › La réfraction de la lumière / The Lab › Physics › Refraction of light ; Le Labo › Informatique › Pensez à un nombre / The Lab › Computing › Think of a number.
 
+**Écarts acceptés lors de la réalisation (L4, 25 novembre 2026)**
+
+- Deux fonctions communes ont été déplacées, sans changement de comportement, pour être partagées par les expériences : `plainMath` (vers `src/demos/projectile/math.ts`) et `fill` (vers `src/demos/fill.ts`). Tous les tests des expériences existantes passent.
+- Le calcul exhaustif pour N = 1 000 000 tourne dans les tests unitaires (`npm test`).
+
 ### E.2 La réfraction de la lumière — /fr/physique/refraction · /en/physics/refraction
 
 #### Réfraction : modèle et conventions
@@ -1206,3 +1211,4 @@ English:
 - Version 0.7 (25 novembre 2026) : étape L3 ; L2 confirmée par Jospin (PageSpeed Insights, 308 dans le navigateur, essai sur téléphone) ; Informatique publiée (sections 2 et 5) ; annexe D : modèle, textes, valeurs de contrôle et sources de l’expérience 3-SAT, vérifiées le 25 novembre 2026 ; annexe A remplacée.
 - Version 0.8 (25 novembre 2026) : clôture de L3 (version `42c36b41`, contrôles de Jospin conformes) ; écarts acceptés lors de la réalisation (annexe D.2) ; objectifs de durée atteints.
 - Version 0.9 (25 novembre 2026) : étape L4, série « découverte » décidée par Jospin : la réfraction de la lumière et « Pensez à un nombre » (annexe E, sources vérifiées le 25 novembre 2026) ; description de la page Physique élargie (annexe C.1) ; l’IA explicable passe après L4 (sections 3 et 8).
+- Version 1.0 (28 novembre 2026) : clôture de L4 (mise en ligne le 25 novembre 2026, contrôles de Jospin conformes le 28 novembre 2026) ; écarts acceptés lors de la réalisation (annexe E.1).
