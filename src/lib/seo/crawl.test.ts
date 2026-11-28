@@ -6,7 +6,7 @@ const site = "https://lab.cabrelfosso.com";
 describe("sitemap", () => {
   const entries = sitemapEntries();
 
-  it("liste les dix-huit adresses publiées, en URL absolues, et rien d’autre", () => {
+  it("liste les vingt-deux adresses publiées, en URL absolues, et rien d’autre", () => {
     expect(entries.map((entry) => entry.url)).toEqual([
       `${site}/fr`,
       `${site}/en`,
@@ -22,10 +22,14 @@ describe("sitemap", () => {
       `${site}/en/physics/newtons-cradle`,
       `${site}/fr/physique/refraction`,
       `${site}/en/physics/refraction`,
+      `${site}/fr/physique/lentille-convergente`,
+      `${site}/en/physics/converging-lens`,
       `${site}/fr/informatique/transition-de-phase-3-sat`,
       `${site}/en/computing/3-sat-phase-transition`,
       `${site}/fr/informatique/pensez-a-un-nombre`,
       `${site}/en/computing/think-of-a-number`,
+      `${site}/fr/informatique/calculer-pi`,
+      `${site}/en/computing/estimating-pi`,
     ]);
   });
 

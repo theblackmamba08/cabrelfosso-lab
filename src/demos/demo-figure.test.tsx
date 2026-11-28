@@ -26,7 +26,15 @@ describe("DemoFigure (cartes des expériences)", () => {
     const [refraction, number] = (["refraction", "think-of-a-number"] as const).map((id) =>
       renderToStaticMarkup(<DemoFigure id={id} />),
     );
-    expect(new Set([projectile, cradle, threeSat, refraction, number]).size).toBe(5);
+    const [lens, pi] = (["converging-lens", "estimating-pi"] as const).map((id) =>
+      renderToStaticMarkup(<DemoFigure id={id} />),
+    );
+    expect(new Set([projectile, cradle, threeSat, refraction, number, lens, pi]).size).toBe(7);
+    // La lentille : un objet et son image renversée, des rayons.
+    expect(lens.match(/<line /g)!.length).toBeGreaterThanOrEqual(5);
+    // π : un carré, un quart de disque, des points dedans et dehors.
+    expect(pi).toMatch(/<rect /);
+    expect(pi.match(/<circle /g)!.length).toBeGreaterThanOrEqual(4);
     // La réfraction : deux milieux, une normale en pointillés, trois rayons.
     expect(refraction).toMatch(/<rect /);
     expect(refraction).toContain("stroke-dasharray");

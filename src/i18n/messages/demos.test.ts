@@ -45,6 +45,13 @@ const numberFr = between("#### Nombre mystère — français", "#### Nombre myst
 const numberEn = between("#### Nombre mystère — English", "#### Valeurs de contrôle du nombre mystère");
 const numberSources = between("#### Pour aller plus loin — nombre mystère", "**Affirmations et sources** (relecture");
 
+const lensFr = between("#### Lentille — français", "#### Lentille — English");
+const lensEn = between("#### Lentille — English", "#### Valeurs de contrôle de la lentille");
+const lensSources = between("#### Pour aller plus loin — lentille", "**Affirmations et sources** (relecture");
+const piFr = between("#### π — français", "#### π — English");
+const piEn = between("#### π — English", "#### Valeurs de contrôle de π");
+const piSources = between("#### Pour aller plus loin — π", "**Affirmations et sources** (relecture");
+
 /** Texte simple : un dollar entoure une formule, écrite dans la notation de MathText. */
 const simple = (value: string) => plain(plainMath(value.replaceAll("$", "")));
 
@@ -128,6 +135,34 @@ describe.each([
   });
 });
 
+/** Champs anglais de la lentille : {do}, {di}, {hi} dans le code, {d_o}, {d_i}, {h_i} dans le cahier. */
+const lensFields = (value: string) => value.replace("{do}", "{d_o}").replace("{di}", "{d_i}").replace("{hi}", "{h_i}");
+
+describe.each([
+  ["lentille, français", fr.demos["converging-lens"], lensFr, "**Hypothèses** : ", " — Explication : "],
+  ["lentille, anglais", en.demos["converging-lens"], lensEn, "**Assumptions**: ", " — Explanation: "],
+  ["π, français", fr.demos["estimating-pi"], piFr, "**Hypothèses** : ", " — Explication : "],
+  ["π, anglais", en.demos["estimating-pi"], piEn, "**Assumptions**: ", " — Explanation: "],
+] as const)("%s : mot pour mot de l'annexe F", (_name, demo, annexe, assumptions, explanation) => {
+  it.each(own(demo))("%s", (_path, value) => {
+    expect(annexe).toContain(lensFields(simple(value)));
+  });
+
+  // Lignes entières : un texte tronqué dans le code ne passe pas.
+  it("les lois ou l'explication, les hypothèses et les questions sont entières", () => {
+    const lines = annexe.split("\n").map((line) => line.trim().replace(/^(- |\d\. )/, ""));
+    const items = "laws" in demo ? demo.laws.items : demo.how.items;
+    expect(items).toHaveLength("laws" in demo && demo === fr.demos["converging-lens"] ? 6 : 5);
+    for (const item of items) expect(lines).toContain(lensFields(simple(item)));
+    expect(lines).toContain(assumptions + simple(demo.assumptions.text));
+    const questions = Object.values(demo.tryThis.items);
+    expect(questions).toHaveLength(3);
+    for (const { question, answer } of questions) {
+      expect(lines).toContain(`${simple(question)}${explanation}${simple(answer)}`);
+    }
+  });
+});
+
 describe("pendule : rien ne manque", () => {
   it.each([
     ["français", fr, "Ec"],
@@ -159,17 +194,21 @@ describe("sources « Pour aller plus loin »", () => {
     ...fr.demos["three-sat"].sources.map((source) => [source.text, source, threeSatSources] as const),
     ...fr.demos.refraction.sources.map((source) => [source.text, source, refractionSources] as const),
     ...fr.demos["think-of-a-number"].sources.map((source) => [source.text, source, numberSources] as const),
+    ...fr.demos["converging-lens"].sources.map((source) => [source.text, source, lensSources] as const),
+    ...fr.demos["estimating-pi"].sources.map((source) => [source.text, source, piSources] as const),
   ])("français, mot pour mot : %s", (_text, source, annexe) => {
     const mention = source.english ? ` ${inEnglish}` : "";
     expect(annexe).toContain(`${plain(source.text)}${mention} → \`${source.href}\``);
   });
 
-  it("il y en a une pour le projectile, cinq pour le pendule, trois pour la réfraction et une pour le nombre mystère, dans les deux langues", () => {
+  it("il y en a une pour le projectile, cinq pour le pendule, trois pour la réfraction, une pour le nombre mystère, deux pour la lentille et une pour π, dans les deux langues", () => {
     for (const messages of [fr, en]) {
       expect(messages.demos.projectile.sources).toHaveLength(1);
       expect(messages.demos["newtons-cradle"].sources).toHaveLength(5);
       expect(messages.demos.refraction.sources).toHaveLength(3);
       expect(messages.demos["think-of-a-number"].sources).toHaveLength(1);
+      expect(messages.demos["converging-lens"].sources).toHaveLength(2);
+      expect(messages.demos["estimating-pi"].sources).toHaveLength(1);
     }
   });
 
@@ -178,9 +217,11 @@ describe("sources « Pour aller plus loin »", () => {
     const english: Record<string, string> = {
       "https://fr.wikipedia.org/wiki/Coefficient_de_restitution": "https://en.wikipedia.org/wiki/Coefficient_of_restitution",
       "https://fr.wikipedia.org/wiki/Recherche_dichotomique": "https://en.wikipedia.org/wiki/Binary_search",
+      "https://fr.wikipedia.org/wiki/M%C3%A9thode_de_Monte-Carlo": "https://en.wikipedia.org/wiki/Monte_Carlo_method",
     };
     expect(links(en)).toEqual(links(fr).map((href) => english[href] ?? href));
     expect(refractionSources).toContain("English (same links):");
+    expect(lensSources).toContain("English (same links):");
     expect(cradleSources).toContain("https://en.wikipedia.org/wiki/Coefficient_of_restitution");
     expect(threeSatSources).toContain("English (same links):");
     expect(JSON.stringify(en.demos)).not.toContain("en anglais");
@@ -208,6 +249,12 @@ describe("sources « Pour aller plus loin »", () => {
     ),
     ...en.demos["think-of-a-number"].sources.map(
       ({ text, href }) => [text, numberSources, `- ${plain(text)} → \`${href}\``] as const,
+    ),
+    ...en.demos["converging-lens"].sources.map(
+      ({ text }) => [text, lensSources.slice(lensSources.indexOf("English (same links):")), `- ${plain(text)}`] as const,
+    ),
+    ...en.demos["estimating-pi"].sources.map(
+      ({ text, href }) => [text, piSources, `- ${plain(text)} → \`${href}\``] as const,
     ),
   ])("anglais, mot pour mot : %s", (_text, annexe, line) => {
     expect(annexe.split("\n")).toContain(line);

@@ -18,7 +18,7 @@ export function parseMath(source: string): MathToken[] {
   });
 }
 
-const subscripts: Record<string, string> = { "0": "₀", "1": "₁", "2": "₂", v: "_v", lim: "_lim" };
+const subscripts: Record<string, string> = { "0": "₀", "1": "₁", "2": "₂", v: "_v", lim: "_lim", o: "_o", i: "_i" };
 const superscripts: Record<string, string> = { "2": "²", "20": "²⁰" };
 
 /** Forme en texte simple, celle de l'annexe C.2. */

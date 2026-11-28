@@ -2,9 +2,9 @@ import { describe, expect, it } from "vitest";
 import { demos } from "../demos/registry";
 import { experimentParams, findPage, publishedPages, publishedPaths, sectionParams } from "./published";
 
-const [projectile, cradle, threeSat, refraction, number] = demos;
+const [projectile, cradle, threeSat, refraction, number, lens, pi] = demos;
 
-describe("pages publiées à l’étape L4", () => {
+describe("pages publiées à l’étape L5", () => {
   it("sont l’accueil, la Confidentialité, les catégories et leurs expériences", () => {
     expect(publishedPages).toEqual([
       { key: "home" },
@@ -14,12 +14,14 @@ describe("pages publiées à l’étape L4", () => {
       { key: "physics", demo: projectile },
       { key: "physics", demo: cradle },
       { key: "physics", demo: refraction },
+      { key: "physics", demo: lens },
       { key: "computing", demo: threeSat },
       { key: "computing", demo: number },
+      { key: "computing", demo: pi },
     ]);
   });
 
-  it("ont dix-huit adresses", () => {
+  it("ont vingt-deux adresses", () => {
     expect(publishedPaths()).toEqual([
       "/fr",
       "/en",
@@ -35,10 +37,14 @@ describe("pages publiées à l’étape L4", () => {
       "/en/physics/newtons-cradle",
       "/fr/physique/refraction",
       "/en/physics/refraction",
+      "/fr/physique/lentille-convergente",
+      "/en/physics/converging-lens",
       "/fr/informatique/transition-de-phase-3-sat",
       "/en/computing/3-sat-phase-transition",
       "/fr/informatique/pensez-a-un-nombre",
       "/en/computing/think-of-a-number",
+      "/fr/informatique/calculer-pi",
+      "/en/computing/estimating-pi",
     ]);
   });
 });
@@ -58,15 +64,19 @@ describe("paramètres statiques", () => {
       { section: "physique", experiment: "projectile" },
       { section: "physique", experiment: "pendule-de-newton" },
       { section: "physique", experiment: "refraction" },
+      { section: "physique", experiment: "lentille-convergente" },
       { section: "informatique", experiment: "transition-de-phase-3-sat" },
       { section: "informatique", experiment: "pensez-a-un-nombre" },
+      { section: "informatique", experiment: "calculer-pi" },
     ]);
     expect(experimentParams("en")).toEqual([
       { section: "physics", experiment: "projectile" },
       { section: "physics", experiment: "newtons-cradle" },
       { section: "physics", experiment: "refraction" },
+      { section: "physics", experiment: "converging-lens" },
       { section: "computing", experiment: "3-sat-phase-transition" },
       { section: "computing", experiment: "think-of-a-number" },
+      { section: "computing", experiment: "estimating-pi" },
     ]);
   });
 });

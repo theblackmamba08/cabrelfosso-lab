@@ -1,6 +1,8 @@
 import { CradleLaws, LawText } from "@/demos/newtons-cradle/cradle-laws";
 import { NewtonsCradleDemoLazy } from "@/demos/newtons-cradle/newtons-cradle-demo-lazy";
 import { ProjectileDemoLazy } from "@/demos/projectile/projectile-demo-lazy";
+import { ConvergingLensDemoLazy } from "@/demos/converging-lens/converging-lens-demo-lazy";
+import { EstimatingPiDemoLazy } from "@/demos/estimating-pi/estimating-pi-demo-lazy";
 import { RefractionDemoLazy } from "@/demos/refraction/refraction-demo-lazy";
 import type { PublishedDemo } from "@/demos/registry";
 import { HowItWorks } from "@/demos/think-of-a-number/how-it-works";
@@ -32,6 +34,21 @@ function Simulation({ demo, locale, t }: { demo: PublishedDemo; locale: Locale; 
     const { controls, results, legend, summary, laws } = t.demos.refraction;
     return <RefractionDemoLazy locale={locale} texts={{ controls, results, legend, summary, laws }} />;
   }
+  if (demo.id === "converging-lens") {
+    const { controls, fixed, results, natures, outside, legend, summary, laws } = t.demos["converging-lens"];
+    return (
+      <ConvergingLensDemoLazy
+        locale={locale}
+        texts={{ controls, fixed, results, natures, outside, legend, summary, laws }}
+      />
+    );
+  }
+  if (demo.id === "estimating-pi") {
+    const { buttons, seed, results, empty, maximum, note, legend, summary } = t.demos["estimating-pi"];
+    return (
+      <EstimatingPiDemoLazy locale={locale} texts={{ buttons, seed, results, empty, maximum, note, legend, summary }} />
+    );
+  }
   if (demo.id === "think-of-a-number") {
     const { controls, instruction, buttons, question, counter, possibilities, history, end, contradiction, bar } =
       t.demos["think-of-a-number"];
@@ -52,9 +69,9 @@ function SourceText({ text }: { text: string }) {
 }
 
 /**
- * Page d'une expérience (cahier, section 3, gabarit ; textes des annexes C, D et E).
- * TODO(Jospin): classe concernée (projectile, pendule, réfraction). La mention « Au programme de… » reste absente tant qu'elle manque.
- * TODO(Jospin): niveau concerné (3-SAT, nombre mystère). La mention « Niveau » reste absente tant qu'il manque.
+ * Page d'une expérience (cahier, section 3, gabarit ; textes des annexes C à F).
+ * TODO(Jospin): classe concernée (projectile, pendule, réfraction, lentille). La mention « Au programme de… » reste absente tant qu'elle manque.
+ * TODO(Jospin): niveau concerné (3-SAT, nombre mystère, π). La mention « Niveau » reste absente tant qu'il manque.
  */
 export function ExperimentPage({ locale, t, demo }: { locale: Locale; t: Messages; demo: PublishedDemo }) {
   const texts = t.demos[demo.id];
@@ -82,7 +99,7 @@ export function ExperimentPage({ locale, t, demo }: { locale: Locale; t: Message
 
         {threeSat && <ThreeSatTheory {...threeSat} />}
 
-        {demo.id === "think-of-a-number" && <HowItWorks how={t.demos["think-of-a-number"].how} />}
+        {"how" in texts && <HowItWorks how={texts.how} />}
 
         <PageSection id="hypotheses" title={assumptions.title}>
           <Card className="max-w-3xl md:p-8">

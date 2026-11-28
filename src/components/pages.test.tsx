@@ -22,12 +22,22 @@ const experimentLinks = (locale: "fr" | "en", category: "physics" | "computing" 
   const open = messages[locale].home.physics.open;
   const paths = {
     physics: {
-      fr: ["/fr/physique/projectile", "/fr/physique/pendule-de-newton", "/fr/physique/refraction"],
-      en: ["/en/physics/projectile", "/en/physics/newtons-cradle", "/en/physics/refraction"],
+      fr: [
+        "/fr/physique/projectile",
+        "/fr/physique/pendule-de-newton",
+        "/fr/physique/refraction",
+        "/fr/physique/lentille-convergente",
+      ],
+      en: [
+        "/en/physics/projectile",
+        "/en/physics/newtons-cradle",
+        "/en/physics/refraction",
+        "/en/physics/converging-lens",
+      ],
     },
     computing: {
-      fr: ["/fr/informatique/transition-de-phase-3-sat", "/fr/informatique/pensez-a-un-nombre"],
-      en: ["/en/computing/3-sat-phase-transition", "/en/computing/think-of-a-number"],
+      fr: ["/fr/informatique/transition-de-phase-3-sat", "/fr/informatique/pensez-a-un-nombre", "/fr/informatique/calculer-pi"],
+      en: ["/en/computing/3-sat-phase-transition", "/en/computing/think-of-a-number", "/en/computing/estimating-pi"],
     },
   };
   return paths[category][locale].map((path) => [path, open]);
@@ -197,6 +207,17 @@ describe.each(["fr", "en"] as const)("page de la réfraction (%s)", (locale) => 
   });
 });
 
+describe.each(["fr", "en"] as const)("page de π (%s)", (locale) => {
+  const texts = messages[locale].demos["estimating-pi"];
+  const html = renderToStaticMarkup(<ExperimentPage locale={locale} t={messages[locale]} demo={demos[6]} />);
+
+  it("a son sous-titre sous le titre, et met la formule en forme", () => {
+    expect(html.indexOf(`>${texts.subtitle}</p>`)).toBeGreaterThan(html.indexOf(`>${texts.title}</h1>`));
+    expect(html).toContain("<i>x</i><sup>2</sup>");
+    expect(text(html)).not.toMatch(/[$*]/);
+  });
+});
+
 describe.each(["fr", "en"] as const)("accueil (%s)", (locale) => {
   const t = messages[locale].home;
   const html = renderToStaticMarkup(<HomePage locale={locale} t={messages[locale]} />);
@@ -216,9 +237,11 @@ describe.each(["fr", "en"] as const)("accueil (%s)", (locale) => {
       `h3 ${messages[locale].demos.projectile.card.title}`,
       `h3 ${messages[locale].demos["newtons-cradle"].card.title}`,
       `h3 ${messages[locale].demos.refraction.card.title}`,
+      `h3 ${messages[locale].demos["converging-lens"].card.title}`,
       `h2 ${t.computing.title}`,
       `h3 ${messages[locale].demos["three-sat"].card.title}`,
       `h3 ${messages[locale].demos["think-of-a-number"].card.title}`,
+      `h3 ${messages[locale].demos["estimating-pi"].card.title}`,
       `h2 ${t.how.title}`,
       `h3 ${t.how.steps.adjust.title}`,
       `h3 ${t.how.steps.observe.title}`,

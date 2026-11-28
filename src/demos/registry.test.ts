@@ -3,13 +3,15 @@ import { locales } from "@/i18n/config";
 import { demos, demosOf, findPublishedDemo, publishedDemos } from "./registry";
 
 describe("registre des démos", () => {
-  it("publie les cinq expériences, dans l’ordre", () => {
+  it("publie les sept expériences, dans l’ordre", () => {
     expect(publishedDemos.map((demo) => demo.id)).toEqual([
       "projectile",
       "newtons-cradle",
       "three-sat",
       "refraction",
       "think-of-a-number",
+      "converging-lens",
+      "estimating-pi",
     ]);
   });
 
@@ -20,6 +22,8 @@ describe("registre des démos", () => {
       { fr: "transition-de-phase-3-sat", en: "3-sat-phase-transition" },
       { fr: "refraction", en: "refraction" },
       { fr: "pensez-a-un-nombre", en: "think-of-a-number" },
+      { fr: "lentille-convergente", en: "converging-lens" },
+      { fr: "calculer-pi", en: "estimating-pi" },
     ]);
   });
 
@@ -32,12 +36,12 @@ describe("registre des démos", () => {
 });
 
 describe("demosOf (expériences publiées d'une catégorie)", () => {
-  it("donne les trois expériences de physique", () => {
-    expect(demosOf("physics").map((demo) => demo.id)).toEqual(["projectile", "newtons-cradle", "refraction"]);
+  it("donne les quatre expériences de physique", () => {
+    expect(demosOf("physics").map((demo) => demo.id)).toEqual(["projectile", "newtons-cradle", "refraction", "converging-lens"]);
   });
 
-  it("donne les deux expériences d'informatique", () => {
-    expect(demosOf("computing").map((demo) => demo.id)).toEqual(["three-sat", "think-of-a-number"]);
+  it("donne les trois expériences d'informatique", () => {
+    expect(demosOf("computing").map((demo) => demo.id)).toEqual(["three-sat", "think-of-a-number", "estimating-pi"]);
   });
 
   it("ignore une expérience non publiée ou d'une autre catégorie", () => {
@@ -57,12 +61,15 @@ describe("findPublishedDemo", () => {
     expect(findPublishedDemo("en", "3-sat-phase-transition")?.id).toBe("three-sat");
     expect(findPublishedDemo("fr", "pensez-a-un-nombre")?.id).toBe("think-of-a-number");
     expect(findPublishedDemo("en", "think-of-a-number")?.id).toBe("think-of-a-number");
+    expect(findPublishedDemo("fr", "lentille-convergente")?.id).toBe("converging-lens");
+    expect(findPublishedDemo("en", "estimating-pi")?.id).toBe("estimating-pi");
   });
 
   it("ignore le nom d'une démo dans l'autre langue", () => {
     expect(findPublishedDemo("fr", "newtons-cradle")).toBeUndefined();
     expect(findPublishedDemo("en", "pendule-de-newton")).toBeUndefined();
     expect(findPublishedDemo("en", "pensez-a-un-nombre")).toBeUndefined();
+    expect(findPublishedDemo("fr", "estimating-pi")).toBeUndefined();
   });
 
   it("ignore un nom inconnu", () => {
