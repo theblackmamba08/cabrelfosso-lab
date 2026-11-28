@@ -28,6 +28,8 @@ const figures: Record<PublishedDemo["id"], () => React.ReactNode> = {
   "three-sat": ThreeSat,
   refraction: Refraction,
   "think-of-a-number": ThinkOfANumber,
+  "converging-lens": ConvergingLens,
+  "estimating-pi": EstimatingPi,
 };
 
 /**
@@ -137,6 +139,52 @@ function ThinkOfANumber() {
             strokeWidth="2"
           />
         </g>
+      ))}
+    </>
+  );
+}
+
+/** Lentille convergente : objet au-delà de 2f′, image renversée plus petite, deux rayons. */
+function ConvergingLens() {
+  return (
+    <>
+      <line x1="12" y1="68" x2="228" y2="68" stroke="var(--ink-muted)" strokeWidth="1.5" />
+      <line x1="128" y1="14" x2="128" y2="112" stroke="var(--ink)" strokeWidth="2" />
+      <path d="M121 22L128 12L135 22M121 104L128 114L135 104" stroke="var(--ink)" strokeWidth="2" />
+      <line x1="40" y1="68" x2="40" y2="32" stroke="var(--accent)" strokeWidth="3" />
+      <path d="M33 40L40 30L47 40" stroke="var(--accent)" strokeWidth="3" />
+      <line x1="40" y1="32" x2="128" y2="32" stroke="var(--line)" strokeWidth="2" />
+      <line x1="128" y1="32" x2="200" y2="95" stroke="var(--line)" strokeWidth="2" />
+      <line x1="40" y1="32" x2="200" y2="95" stroke="var(--line)" strokeWidth="2" strokeDasharray="3 5" />
+      <line x1="184" y1="68" x2="184" y2="88.6" stroke="var(--accent)" strokeWidth="3" />
+      <path d="M178.5 82L184 90L189.5 82" stroke="var(--accent)" strokeWidth="3" />
+    </>
+  );
+}
+
+/** π : un carré, un quart de disque, quelques points dedans (pleins) et dehors (croix). */
+function EstimatingPi() {
+  const inside = [
+    [86, 40],
+    [100, 82],
+    [130, 64],
+    [112, 96],
+    [146, 90],
+    [94, 58],
+  ];
+  const outside = [
+    [158, 22],
+    [168, 44],
+  ];
+  return (
+    <>
+      <rect x="74" y="12" width="96" height="96" stroke="var(--ink-muted)" strokeWidth="1.5" />
+      <path d="M74 108L74 12A96 96 0 0 1 170 108Z" fill="var(--accent-soft)" stroke="var(--accent)" strokeWidth="2" />
+      {inside.map(([x, y]) => (
+        <circle key={`${x}-${y}`} cx={x} cy={y} r="3.5" fill="var(--accent)" />
+      ))}
+      {outside.map(([x, y]) => (
+        <path key={`${x}-${y}`} d={`M${x - 4} ${y - 4}L${x + 4} ${y + 4}M${x + 4} ${y - 4}L${x - 4} ${y + 4}`} stroke="var(--ink)" strokeWidth="2" />
       ))}
     </>
   );

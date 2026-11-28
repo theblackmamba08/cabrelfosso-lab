@@ -736,6 +736,180 @@ const en: Messages = {
         },
       ],
     },
+    "converging-lens": {
+      card: {
+        title: "The converging lens",
+        text: "Move an object in front of a lens: watch its image grow, flip over, then switch sides.",
+      },
+      metaTitle: "The converging lens — The Lab",
+      metaDescription: "Interactive converging lens simulation: ray diagram, image position and size, updated live.",
+      title: "The converging lens",
+      intro:
+        "A magnifying glass, and even your own eye: both use a converging lens. Move the object and see where its image forms, and how it changes.",
+      controls: {
+        title: "Controls",
+        focal: "Focal length (cm)",
+        distance: "Distance from the object to the lens (cm)",
+      },
+      fixed: "Object height: 2 cm",
+      // Notation d'OpenStax : les champs {do}, {di} et {hi} s'écrivent d_o, d_i et h_i dans le cahier.
+      results: {
+        title: "Results",
+        position: "Image distance ($*d*_{i}$)",
+        magnification: "Magnification ($*m*$)",
+        height: "Image height ($*h*_{i}$)",
+        nature: "Type of image",
+        none: "none",
+        noMagnification: "none",
+      },
+      natures: {
+        smaller: "Real, inverted, smaller than the object.",
+        same: "Real, inverted, the same size as the object.",
+        larger: "Real, inverted, larger than the object.",
+        virtual: "Virtual, upright, larger than the object: this is how a magnifying glass works.",
+        none: "No image: the rays leave the lens parallel, so the image is at infinity.",
+      },
+      outside: "The image forms outside the frame of the figure.",
+      legend: {
+        object: "Object",
+        image: "Image",
+        rays: "Rays",
+        extensions: "Ray extensions",
+        foci: "Focal points F and F′",
+      },
+      summary: {
+        image: "Object {d} from the lens; {type} image, at $*d*_{i}$ = {di}, height {hi}.",
+        none: "Object at the focal point F: no image.",
+      },
+      laws: {
+        title: "The laws",
+        items: [
+          "Thin-lens equation: $1/*d*_{o} + 1/*d*_{i} = 1/*f*$",
+          "Magnification: $*m* = *h*_{i} / *h*_{o} = −*d*_{i} / *d*_{o}$",
+          "With the current settings: $*d*_{o}$ = {do}; $*f*$ = {f}; $*d*_{i}$ = {di}; $*m*$ = {m}",
+          "A positive $*d*_{i}$ means a real image on the other side of the lens, which can be caught on a screen. A negative $*d*_{i}$ means a virtual image, on the same side as the object, seen only by looking through the lens.",
+          "A negative magnification means an inverted image, with a negative height $*h*_{i}$; a magnification larger than 1 in absolute value means an image larger than the object.",
+        ],
+      },
+      assumptions: {
+        title: "Assumptions",
+        text: "The lens is thin: its thickness is neglected. The rays are drawn using the three ray-tracing rules for a converging lens. The object stands perpendicular to the optical axis, with its base A on the axis.",
+      },
+      tryThis: {
+        title: "Try this",
+        show: "Show the explanation",
+        items: {
+          twice: {
+            question: "With f = 5 cm, put the object 10 cm from the lens. What do you notice?",
+            answer:
+              "the image is inverted, the same size as the object, 10 cm away on the other side. With the object at twice the focal length, m = −1.",
+          },
+          focus: {
+            question: "Move the object to 5 cm, then to 5.5 cm. What happens to the image?",
+            answer:
+              "at 5 cm the object is at the focal point: the rays leave parallel and there is no image. At 5.5 cm the image is very far away (55 cm) and very large (m = −10).",
+          },
+          magnifier: {
+            question: "Put the object at 2.5 cm, closer than the focal point. Where is the image?",
+            answer:
+              "on the same side as the object, upright and twice as large (m = 2). It is virtual: you see it through the lens. This is how a magnifying glass works.",
+          },
+        },
+      },
+      sources: [
+        {
+          text: "OpenStax, *University Physics Volume 3*, section 2.4 “Thin Lenses”",
+          href: "https://openstax.org/books/university-physics-volume-3/pages/2-4-thin-lenses",
+          english: true,
+        },
+        {
+          text: "OpenStax, *University Physics Volume 3*, section 2.7 “The Simple Magnifier”",
+          href: "https://openstax.org/books/university-physics-volume-3/pages/2-7-the-simple-magnifier",
+          english: true,
+        },
+      ],
+    },
+    "estimating-pi": {
+      card: {
+        title: "Estimating π by chance",
+        text: "Throw random points into a square, and π slowly appears.",
+      },
+      metaTitle: "Estimating π by chance — The Lab",
+      metaDescription:
+        "Interactive experiment: estimate π by throwing random points into a square, using the Monte Carlo method.",
+      title: "Estimating π by chance",
+      subtitle: "The Monte Carlo method",
+      intro:
+        "Throw random points into a square and count the ones that land in the quarter disc. That simple count gives an approximate value of π, which gets closer as the points pile up.",
+      buttons: {
+        add100: "Add 100 points",
+        add1000: "Add 1,000 points",
+        add10000: "Add 10,000 points",
+        restart: "Start over",
+      },
+      seed: {
+        label: "Random seed",
+        help: "Same seed, same points: you can rerun exactly the same experiment.",
+        error: "Enter a whole number from 1 to 999,999.",
+      },
+      results: {
+        title: "Results",
+        total: "Points thrown",
+        inside: "Points in the quarter disc",
+        estimate: "Estimate of π (4 × points in the quarter disc ÷ points thrown)",
+        difference: "Difference from π (π = 3.14159…)",
+      },
+      empty: "Add some points to get started.",
+      maximum: "Maximum reached: 100,000 points. Start over for a new run.",
+      note: "The figure shows the first 2,000 points; the calculations use all of them.",
+      legend: {
+        inside: "Point in the quarter disc",
+        outside: "Point outside",
+      },
+      summary: "{N} points thrown, {n} of them in the quarter disc: π ≈ {estimate}.",
+      how: {
+        title: "How does it work?",
+        items: [
+          "The square has sides of length 1, so its area is 1. The quarter disc has radius 1, so its area is π / 4.",
+          "So a point thrown at random into the square has a probability of π / 4, about 0.785, of landing in the quarter disc.",
+          "Over many points, the share of points in the quarter disc gets closer to π / 4. Multiplying it by 4 gives an approximate value of π.",
+          "A point is in the quarter disc if $*x*^{2} + *y*^{2} ≤ 1$, where $*x*$ and $*y*$ are its coordinates.",
+          "Using chance to calculate a value like this is called the Monte Carlo method. It is slow: with 100 times more points, the error is on average about 10 times smaller.",
+        ],
+      },
+      assumptions: {
+        title: "Assumptions",
+        text: "The points are spread evenly across the square. The computer doesn’t use true randomness: it uses a pseudorandom generator, which always gives the same sequence for the same seed.",
+      },
+      tryThis: {
+        title: "Try this",
+        show: "Show the explanation",
+        items: {
+          growth: {
+            question: "With seed 2026, add 100 points, then go up to 100,000. How does the estimate change?",
+            answer:
+              "3.2000 with 100 points, 3.1760 with 1,000, 3.1632 with 10,000, 3.1422 with 100,000. It gets closer to π, but not necessarily at every step: that’s chance.",
+          },
+          seed: {
+            question: "Change the seed and do 100 points again. Why does the estimate change?",
+            answer:
+              "different points are drawn. With seed 1, you get 3.0000 with 100 points. With few points, the estimate varies a lot from one seed to another; with many points, much less.",
+          },
+          decimal: {
+            question: "How many points would you need to gain one more correct decimal place?",
+            answer:
+              "about 100 times more, because the error only shrinks by a factor of 10 on average when you multiply the number of points by 100. That is why π isn’t calculated this way in practice.",
+          },
+        },
+      },
+      sources: [
+        {
+          text: "Wikipedia, “Monte Carlo method”",
+          href: "https://en.wikipedia.org/wiki/Monte_Carlo_method",
+          english: true,
+        },
+      ],
+    },
   },
 };
 

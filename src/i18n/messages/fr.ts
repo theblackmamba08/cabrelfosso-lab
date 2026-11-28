@@ -1,7 +1,7 @@
 /**
  * Textes français : source de vérité de la structure des messages.
  * Le fichier anglais doit avoir exactement les mêmes clés (vérifié par TypeScript).
- * Textes des annexes B à E du cahier, mot pour mot (vérifié par texts.test.ts et demos.test.ts). Une phrase coupée par
+ * Textes des annexes B à F du cahier, mot pour mot (vérifié par texts.test.ts et demos.test.ts). Une phrase coupée par
  * une mise en forme ou un lien est découpée en morceaux, dans l'ordre (before, link…).
  */
 const fr = {
@@ -151,7 +151,7 @@ const fr = {
     intro:
       "Des expériences d’informatique à lancer vous-même, en commençant par les énigmes logiques 3-SAT\u00a0: où se trouvent les problèmes vraiment difficiles\u00a0?",
   },
-  // Expériences (annexes C à E). Sources : ce qui est entre deux `*` s'écrit en italique.
+  // Expériences (annexes C à F). Sources : ce qui est entre deux `*` s'écrit en italique.
   demos: {
     projectile: {
       card: {
@@ -738,6 +738,185 @@ const fr = {
         {
           text: "Wikipédia, «\u00a0Recherche dichotomique\u00a0»",
           href: "https://fr.wikipedia.org/wiki/Recherche_dichotomique",
+          english: false,
+        },
+      ],
+    },
+    "converging-lens": {
+      card: {
+        title: "La lentille convergente",
+        text: "Déplacez un objet devant une lentille\u00a0: regardez son image grandir, se renverser, puis changer de côté.",
+      },
+      metaTitle: "La lentille convergente — Le Labo",
+      metaDescription:
+        "Simulation interactive d’une lentille convergente\u00a0: construction des rayons, position et taille de l’image, mises à jour en direct.",
+      title: "La lentille convergente",
+      intro:
+        "Une loupe, et même votre œil\u00a0: tous deux utilisent une lentille convergente. Déplacez l’objet et regardez où se forme son image, et comment elle change.",
+      controls: {
+        title: "Réglages",
+        focal: "Distance focale (cm)",
+        distance: "Distance entre l’objet et la lentille (cm)",
+      },
+      fixed: "Hauteur de l’objet\u00a0: 2\u00a0cm",
+      // Les mesures algébriques (OA, OA′, OF′, AB, A′B′) sont surmontées d'une barre à l'affichage.
+      results: {
+        title: "Résultats",
+        position: "Position de l’image (OA′)",
+        magnification: "Grandissement (γ)",
+        height: "Taille algébrique de l’image (A′B′)",
+        nature: "Nature de l’image",
+        none: "aucune",
+        // « aucun » : valeurs de contrôle de l'annexe F.1.
+        noMagnification: "aucun",
+      },
+      natures: {
+        smaller: "Réelle, renversée, plus petite que l’objet.",
+        same: "Réelle, renversée, de même taille que l’objet.",
+        larger: "Réelle, renversée, plus grande que l’objet.",
+        virtual: "Virtuelle, droite, plus grande que l’objet\u00a0: c’est le principe de la loupe.",
+        none: "Pas d’image\u00a0: les rayons ressortent parallèles, l’image est rejetée à l’infini.",
+      },
+      outside: "L’image se forme hors du cadre de la figure.",
+      legend: {
+        object: "Objet",
+        image: "Image",
+        rays: "Rayons",
+        extensions: "Prolongements des rayons",
+        foci: "Foyers F et F′",
+      },
+      summary: {
+        image: "Objet à {d} de la lentille\u00a0; image {nature}, à {OA′} de la lentille, de taille {A′B′}.",
+        none: "Objet au foyer F\u00a0: pas d’image.",
+      },
+      laws: {
+        title: "Les lois",
+        items: [
+          "Les distances sont comptées à partir du centre O de la lentille, positives dans le sens de la lumière (vers la droite)\u00a0: l’objet, à gauche, a donc une position OA négative. Les tailles sont comptées positives vers le haut\u00a0: une image renversée a une taille A′B′ négative.",
+          "Relation de conjugaison\u00a0: $1/OA′ − 1/OA = 1/OF′$",
+          "Grandissement\u00a0: $γ = A′B′ / AB = OA′ / OA$",
+          "Avec les valeurs réglées\u00a0: $OA$ = {OA}\u00a0; $OF′$ = {f′}\u00a0; $OA′$ = {OA′}\u00a0; $γ$ = {γ}",
+          "Une image réelle ($OA′ > 0$) se forme de l’autre côté de la lentille et peut être recueillie sur un écran. Une image virtuelle ($OA′ < 0$) se voit seulement en regardant à travers la lentille.",
+          "Un grandissement négatif signifie une image renversée\u00a0; un grandissement plus grand que 1 en valeur absolue, une image plus grande que l’objet.",
+        ],
+      },
+      assumptions: {
+        title: "Hypothèses",
+        text: "La lentille est mince\u00a0: son épaisseur est négligée. Les rayons sont tracés selon les trois règles de construction d’une lentille convergente. L’objet est perpendiculaire à l’axe optique, son pied A sur l’axe.",
+      },
+      tryThis: {
+        title: "À essayer",
+        show: "Voir l’explication",
+        items: {
+          twice: {
+            question: "Avec f′ = 5\u00a0cm, placez l’objet à 10\u00a0cm de la lentille. Que remarquez-vous\u00a0?",
+            answer:
+              "l’image est renversée, de même taille que l’objet, à 10\u00a0cm de l’autre côté. Quand l’objet est à 2f′, γ = −1.",
+          },
+          focus: {
+            question: "Rapprochez l’objet jusqu’à 5\u00a0cm, puis jusqu’à 5,5\u00a0cm. Que devient l’image\u00a0?",
+            answer:
+              "à 5\u00a0cm, l’objet est au foyer\u00a0: les rayons ressortent parallèles et il n’y a pas d’image. À 5,5\u00a0cm, l’image est très loin (55\u00a0cm) et très grande (γ = −10).",
+          },
+          magnifier: {
+            question: "Placez l’objet à 2,5\u00a0cm, plus près que le foyer. Où est l’image\u00a0?",
+            answer:
+              "du même côté que l’objet, droite et deux fois plus grande (γ = 2). Elle est virtuelle\u00a0: on la voit à travers la lentille. C’est ainsi que fonctionne une loupe.",
+          },
+        },
+      },
+      sources: [
+        {
+          text: "OpenStax, *University Physics Volume 3*, section 2.4 «\u00a0Thin Lenses\u00a0»",
+          href: "https://openstax.org/books/university-physics-volume-3/pages/2-4-thin-lenses",
+          english: true,
+        },
+        {
+          text: "OpenStax, *University Physics Volume 3*, section 2.7 «\u00a0The Simple Magnifier\u00a0»",
+          href: "https://openstax.org/books/university-physics-volume-3/pages/2-7-the-simple-magnifier",
+          english: true,
+        },
+      ],
+    },
+    "estimating-pi": {
+      card: {
+        title: "Calculer π avec le hasard",
+        text: "Lancez des points au hasard dans un carré\u00a0: peu à peu, π apparaît.",
+      },
+      metaTitle: "Calculer π avec le hasard — Le Labo",
+      metaDescription:
+        "Expérience interactive\u00a0: estimez π en lançant des points au hasard dans un carré, avec la méthode de Monte-Carlo.",
+      title: "Calculer π avec le hasard",
+      subtitle: "La méthode de Monte-Carlo",
+      intro:
+        "Lancez des points au hasard dans un carré et comptez ceux qui tombent dans le quart de disque. Ce simple comptage donne une valeur approchée de π, de plus en plus proche à mesure que les points s’accumulent.",
+      // L'annexe F.2 ne donne pas de titre anglais à l'expérience : elle n'en a dans aucune langue.
+      buttons: {
+        add100: "Ajouter 100 points",
+        add1000: "Ajouter 1\u00a0000 points",
+        add10000: "Ajouter 10\u00a0000 points",
+        restart: "Recommencer",
+      },
+      seed: {
+        label: "Graine du hasard",
+        help: "Même graine, mêmes points\u00a0: vous pouvez refaire exactement la même expérience.",
+        error: "Entrez un nombre entier de 1 à 999\u00a0999.",
+      },
+      results: {
+        title: "Résultats",
+        total: "Points lancés",
+        inside: "Points dans le quart de disque",
+        estimate: "Estimation de π (4 × points dans le quart de disque ÷ points lancés)",
+        difference: "Écart avec π (π = 3,14159…)",
+      },
+      empty: "Ajoutez des points pour commencer.",
+      maximum: "Maximum atteint\u00a0: 100\u00a0000 points. Recommencez pour une nouvelle série.",
+      note: "La figure montre les 2\u00a0000 premiers points\u00a0; les calculs utilisent tous les points.",
+      legend: {
+        inside: "Point dans le quart de disque",
+        outside: "Point en dehors",
+      },
+      summary: "{N} points lancés, dont {n} dans le quart de disque\u00a0: π ≈ {estimation}.",
+      how: {
+        title: "Comment ça marche\u00a0?",
+        items: [
+          "Le carré a pour côté 1, donc pour aire 1. Le quart de disque a pour rayon 1, donc pour aire π / 4.",
+          "Un point lancé au hasard dans le carré a donc une probabilité π / 4, environ 0,785, de tomber dans le quart de disque.",
+          "Sur un grand nombre de points, la part des points dans le quart de disque se rapproche de π / 4. En la multipliant par 4, on obtient une valeur approchée de π.",
+          "Un point est dans le quart de disque si $*x*^{2} + *y*^{2} ≤ 1$, où $*x*$ et $*y*$ sont ses coordonnées.",
+          "Cette méthode, qui utilise le hasard pour calculer une valeur, s’appelle la méthode de Monte-Carlo. Elle est lente\u00a0: avec 100 fois plus de points, l’erreur est en moyenne environ 10 fois plus petite.",
+        ],
+      },
+      assumptions: {
+        title: "Hypothèses",
+        text: "Les points sont répartis uniformément dans le carré. L’ordinateur ne tire pas de vrai hasard\u00a0: il utilise un générateur pseudo-aléatoire, qui donne toujours la même suite pour une même graine.",
+      },
+      tryThis: {
+        title: "À essayer",
+        show: "Voir l’explication",
+        items: {
+          growth: {
+            question:
+              "Avec la graine 2026, ajoutez 100 points, puis montez jusqu’à 100\u00a0000. Comment évolue l’estimation\u00a0?",
+            answer:
+              "3,2000 avec 100 points, 3,1760 avec 1\u00a0000, 3,1632 avec 10\u00a0000, 3,1422 avec 100\u00a0000. Elle se rapproche de π, mais pas forcément à chaque étape\u00a0: c’est le hasard.",
+          },
+          seed: {
+            question: "Changez de graine et refaites 100 points. Pourquoi l’estimation change-t-elle\u00a0?",
+            answer:
+              "d’autres points sont tirés. Avec la graine 1, on obtient 3,0000 avec 100 points. Avec peu de points, l’estimation varie beaucoup d’une graine à l’autre\u00a0; avec beaucoup de points, beaucoup moins.",
+          },
+          decimal: {
+            question: "Combien de points faudrait-il pour gagner une décimale exacte de plus\u00a0?",
+            answer:
+              "environ 100 fois plus, car l’erreur ne diminue en moyenne que d’un facteur 10 quand on multiplie le nombre de points par 100. C’est pourquoi on ne calcule pas π ainsi en pratique.",
+          },
+        },
+      },
+      sources: [
+        {
+          text: "Wikipédia, «\u00a0Méthode de Monte-Carlo\u00a0»",
+          href: "https://fr.wikipedia.org/wiki/M%C3%A9thode_de_Monte-Carlo",
           english: false,
         },
       ],

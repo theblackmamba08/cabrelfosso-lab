@@ -39,6 +39,10 @@ const pages = [
   ["/en/physics/refraction", "en", "Refraction of light"],
   ["/fr/informatique/pensez-a-un-nombre", "fr", "Pensez à un nombre"],
   ["/en/computing/think-of-a-number", "en", "Think of a number"],
+  ["/fr/physique/lentille-convergente", "fr", "La lentille convergente"],
+  ["/en/physics/converging-lens", "en", "The converging lens"],
+  ["/fr/informatique/calculer-pi", "fr", "Calculer π avec le hasard"],
+  ["/en/computing/estimating-pi", "en", "Estimating π by chance"],
 ] as const;
 
 describe("racine", () => {
@@ -156,6 +160,8 @@ describe("adresses inconnues ou non publiées", () => {
     "/en/computing/pensez-a-un-nombre",
     "/fr/informatique/think-of-a-number",
     "/fr/informatique/refraction",
+    "/en/computing/calculer-pi",
+    "/fr/physique/converging-lens",
     "/en/physics/pendule-de-newton",
     "/fr/physique/newtons-cradle",
     "/fr/physique/inconnu",

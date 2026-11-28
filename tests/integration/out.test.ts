@@ -22,6 +22,10 @@ const experiments = [
   "en/physics/refraction.html",
   "fr/informatique/pensez-a-un-nombre.html",
   "en/computing/think-of-a-number.html",
+  "fr/physique/lentille-convergente.html",
+  "en/physics/converging-lens.html",
+  "fr/informatique/calculer-pi.html",
+  "en/computing/estimating-pi.html",
 ];
 
 describe("pages exportées", () => {
@@ -54,6 +58,10 @@ describe("pages exportées", () => {
     "fr/physique/transition-de-phase-3-sat.html",
     "en/computing/pensez-a-un-nombre.html",
     "fr/informatique/think-of-a-number.html",
+    "en/physics/lentille-convergente.html",
+    "fr/physique/converging-lens.html",
+    "en/computing/calculer-pi.html",
+    "fr/informatique/estimating-pi.html",
     "index.html",
   ])("%s n’existe pas", (path) => {
     expect(existsSync(file(path))).toBe(false);
@@ -133,6 +141,9 @@ describe("code des simulations, chargé seulement sur sa page", () => {
   // Constantes de refraction/optics.ts ; attribut propre à think-of-a-number-demo.tsx.
   const refraction = /water:1\.33,glass:1\.52,diamond:2\.42/;
   const number = "data-number-answers";
+  // Attributs propres à converging-lens/lens-figure.tsx et à estimating-pi/pi-figure.tsx.
+  const lens = "data-lens-rays";
+  const pi = "data-pi-points";
 
   it.each([
     "fr.html",
@@ -150,19 +161,25 @@ describe("code des simulations, chargé seulement sur sa page", () => {
     expect(scripts(path)).not.toMatch(solver);
     expect(scripts(path)).not.toMatch(refraction);
     expect(scripts(path)).not.toContain(number);
+    expect(scripts(path)).not.toContain(lens);
+    expect(scripts(path)).not.toContain(pi);
   });
 
   it.each(experiments)("%s : le sien seulement", (path) => {
     expect(scripts(path).includes(projectile)).toBe(path.includes("projectile"));
     expect(scripts(path).includes(cradle)).toBe(/pendule|cradle/.test(path));
     expect(scripts(path).includes(threeSat)).toBe(path.includes("3-sat"));
-    expect(solver.test(scripts(path))).toBe(path.includes("3-sat"));
+    expect(scripts(path).includes(threeSat)).toBe(path.includes("3-sat"));
+    // π reprend le générateur de 3-SAT (SplitMix64), pas son solveur.
+    expect(solver.test(scripts(path))).toBe(/3-sat|-pi/.test(path));
     expect(refraction.test(scripts(path))).toBe(path.includes("refraction"));
     expect(scripts(path).includes(number)).toBe(/nombre|number/.test(path));
+    expect(scripts(path).includes(lens)).toBe(/lentille|lens/.test(path));
+    expect(scripts(path).includes(pi)).toBe(/-pi/.test(path));
   });
 
   it.each(experiments)("%s : réglages et résultats déjà dans le HTML, sans JavaScript", (path) => {
-    expect(read(path)).toMatch(/3-sat|nombre|number/.test(path) ? /<select/ : /<input[^>]*type="range"/);
+    expect(read(path)).toMatch(/-pi/.test(path) ? /<input[^>]*inputMode="numeric"/ : /3-sat|nombre|number/.test(path) ? /<select/ : /<input[^>]*type="range"/);
     expect(read(path)).toMatch(/<svg[^>]*role="img"/);
   });
 });
@@ -260,8 +277,59 @@ describe("série « découverte » : le gabarit, dans l’ordre, sans JavaScript
   });
 });
 
+describe("suite de la série : le gabarit, dans l’ordre, sans JavaScript", () => {
+  const inOrder = (html: string, texts: string[]) => {
+    const order = texts.map((text) => html.indexOf(`>${text}</`));
+    expect(order).not.toContain(-1);
+    expect(order).toEqual([...order].sort((a, b) => a - b));
+  };
+
+  it.each([
+    ["fr/physique/lentille-convergente.html", fr, "7,50\u00a0cm"],
+    ["en/physics/converging-lens.html", en, "7.50\u00a0cm"],
+  ] as const)("%s", (path, messages, position) => {
+    const t = messages.demos["converging-lens"];
+    inOrder(read(path), [
+      t.title,
+      t.intro,
+      t.controls.title,
+      t.legend.object,
+      t.results.title,
+      position,
+      t.laws.title,
+      t.assumptions.title,
+      t.tryThis.title,
+      messages.experiment.sources,
+      messages.experiment.portfolio,
+    ]);
+  });
+
+  it.each([
+    ["fr/informatique/calculer-pi.html", fr],
+    ["en/computing/estimating-pi.html", en],
+  ] as const)("%s", (path, messages) => {
+    const t = messages.demos["estimating-pi"];
+    inOrder(read(path), [
+      t.title,
+      t.subtitle,
+      t.intro,
+      t.seed.label,
+      t.buttons.add100,
+      t.legend.inside,
+      t.results.title,
+      t.empty,
+      t.how.title,
+      t.assumptions.title,
+      t.tryThis.title,
+      messages.experiment.sources,
+      messages.experiment.portfolio,
+    ]);
+  });
+});
+
 describe("sous-ensemble grec de JetBrains Mono", () => {
-  const greek = /[α-ωΑ-Ω]/;
+  // π, dans les titres et le texte courant, ne vient pas de JetBrains Mono : il n'appelle pas ce sous-ensemble.
+  const greek = /[α-ορ-ωΑ-Ω]/;
   const body = (path: string) => read(path).replace(/<script[\s\S]*?<\/script>/g, "");
 
   it("est publié, jamais préchargé", () => {
@@ -272,7 +340,7 @@ describe("sous-ensemble grec de JetBrains Mono", () => {
 
   // Le navigateur ne télécharge une police que pour un caractère qu'elle seule contient.
   it("ne sert que sur les pages des expériences qui ont des lettres grecques", () => {
-    for (const path of pages) expect(greek.test(body(path)), path).toBe(/projectile|pendule|cradle|3-sat/.test(path));
+    for (const path of pages) expect(greek.test(body(path)), path).toBe(/projectile|pendule|cradle|3-sat|fr\/physique\/lentille/.test(path));
   });
 });
 
@@ -288,12 +356,12 @@ describe("images de partage", () => {
 
   it("il n’y en a pas d’autre", () => {
     const images = readdirSync(file("og/"), { recursive: true, encoding: "utf8" }).filter((name) => name.endsWith(".png"));
-    expect(images).toHaveLength(18);
+    expect(images).toHaveLength(22);
   });
 });
 
 describe("sitemap.xml et robots.txt", () => {
-  it("le sitemap liste les dix-huit adresses, avec leurs équivalents", () => {
+  it("le sitemap liste les vingt-deux adresses, avec leurs équivalents", () => {
     const xml = read("sitemap.xml");
     expect([...xml.matchAll(/<loc>([^<]+)<\/loc>/g)].map((m) => m[1])).toEqual([
       "https://lab.cabrelfosso.com/fr",
@@ -310,12 +378,16 @@ describe("sitemap.xml et robots.txt", () => {
       "https://lab.cabrelfosso.com/en/physics/newtons-cradle",
       "https://lab.cabrelfosso.com/fr/physique/refraction",
       "https://lab.cabrelfosso.com/en/physics/refraction",
+      "https://lab.cabrelfosso.com/fr/physique/lentille-convergente",
+      "https://lab.cabrelfosso.com/en/physics/converging-lens",
       "https://lab.cabrelfosso.com/fr/informatique/transition-de-phase-3-sat",
       "https://lab.cabrelfosso.com/en/computing/3-sat-phase-transition",
       "https://lab.cabrelfosso.com/fr/informatique/pensez-a-un-nombre",
       "https://lab.cabrelfosso.com/en/computing/think-of-a-number",
+      "https://lab.cabrelfosso.com/fr/informatique/calculer-pi",
+      "https://lab.cabrelfosso.com/en/computing/estimating-pi",
     ]);
-    expect(xml.match(/<xhtml:link /g)).toHaveLength(54);
+    expect(xml.match(/<xhtml:link /g)).toHaveLength(66);
     expect(xml).toContain('hreflang="x-default" href="https://lab.cabrelfosso.com/fr/confidentialite"');
   });
 

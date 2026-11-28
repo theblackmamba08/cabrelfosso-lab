@@ -34,6 +34,18 @@ export const demos = [
     slugs: { fr: "pensez-a-un-nombre", en: "think-of-a-number" },
     published: true,
   },
+  {
+    id: "converging-lens",
+    category: "physics",
+    slugs: { fr: "lentille-convergente", en: "converging-lens" },
+    published: true,
+  },
+  {
+    id: "estimating-pi",
+    category: "computing",
+    slugs: { fr: "calculer-pi", en: "estimating-pi" },
+    published: true,
+  },
 ] as const satisfies readonly DemoEntry[];
 
 export type Demo = (typeof demos)[number];
