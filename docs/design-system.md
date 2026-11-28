@@ -155,6 +155,18 @@ Contrastes vérifiés par `src/design/contrast.test.ts`, dans les deux thèmes :
 - **Figures de carte** : un rayon réfléchi et réfracté ; quatre barres, chacune moitié de la précédente.
   Sans texte.
 
+## Série « découverte », suite (lentille, π)
+
+- **Figure de la lentille** : repère orthonormé (12 unités par cm), cadre de −42 à 42 cm et de −14 à 14 cm.
+  Axe optique `ink-muted` ; lentille, foyers F et F′ et objet en `ink` ; rayons en `accent` ; prolongements
+  en `ink-muted` pointillé ; image en `highlight`, pointillée si elle est virtuelle. Mesures algébriques de la
+  page française surmontées d'une barre (`overline`, sans caractère ajouté). Aucune animation.
+- **Figure de π** : carré `ink-muted`, quart de disque `accent-soft` bordé d'`accent` ; point dedans : disque
+  plein `accent` ; point dehors : petite croix `ink` (jamais la couleur seule). 2 000 points au plus, en deux
+  chemins SVG.
+- **Figures de carte** : une lentille, un objet et son image renversée ; un carré, un quart de disque, des
+  points et des croix. Sans texte.
+
 ## Mouvement
 
 - Survols et apparitions : transitions courtes (0,6 s au plus). Dans une grille, les cartes
