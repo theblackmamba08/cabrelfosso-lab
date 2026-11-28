@@ -1,6 +1,6 @@
 # Cahier des charges — le Labo de Cabrel FOSSO
 
-Version 1.0, du 28 novembre 2026 : clôture de L4, la série « découverte » (sections 8 et 9) ; écarts acceptés lors de la réalisation (annexe E.1).
+Version 1.1, du 28 novembre 2026 : étape L5, suite de la série « découverte » (annexe F) : la lentille convergente et π par le hasard ; L6 prévue (sections 3 et 8).
 
 Rédigée par Claude dans le projet claude.ai « Labo », à partir de la version 0.1 (projet « Portfolio », 23 novembre 2026) et des réponses de Jospin du 24 novembre 2026. Les marqueurs TODO(Jospin) signalent une information encore manquante. Ce fichier est copié dans le dépôt `cabrelfosso-lab` sous `docs/cahier-des-charges.md` ; c’est cette copie qui fait foi.
 
@@ -36,8 +36,8 @@ Domaine : `lab.cabrelfosso.com`. Adresses en français et en anglais, sans barre
 | Confidentialité | /fr/confidentialite | /en/privacy | L1 (annexe B.3) |
 | Physique | /fr/physique | /en/physics | L2 (annexe C.1) |
 | Informatique | /fr/informatique | /en/computing | L3 (annexe D.1) |
-| Une expérience de physique | /fr/physique/[nom] | /en/physics/[name] | L2 : `projectile` / `projectile` (annexe C.2) ; `pendule-de-newton` / `newtons-cradle` (annexe C.3) ; L4 : `refraction` / `refraction` (annexe E.2) |
-| Une expérience d’informatique | /fr/informatique/[nom] | /en/computing/[name] | L3 : `transition-de-phase-3-sat` / `3-sat-phase-transition` (annexe D.3) ; L4 : `pensez-a-un-nombre` / `think-of-a-number` (annexe E.3) |
+| Une expérience de physique | /fr/physique/[nom] | /en/physics/[name] | L2 : `projectile` / `projectile` (annexe C.2) ; `pendule-de-newton` / `newtons-cradle` (annexe C.3) ; L4 : `refraction` / `refraction` (annexe E.2) ; L5 : `lentille-convergente` / `converging-lens` (annexe F.1) |
+| Une expérience d’informatique | /fr/informatique/[nom] | /en/computing/[name] | L3 : `transition-de-phase-3-sat` / `3-sat-phase-transition` (annexe D.3) ; L4 : `pensez-a-un-nombre` / `think-of-a-number` (annexe E.3) ; L5 : `calculer-pi` / `estimating-pi` (annexe F.2) |
 | Page 404 bilingue, sitemap.xml, robots.txt | | | L1 |
 
 Une page de catégorie n’apparaît qu’à partir de sa première expérience publiée. Une adresse non publiée répond 404.
@@ -77,7 +77,11 @@ Options écartées : page racine bilingue (un clic de plus, page pauvre indexée
 | Où se cachent les problèmes difficiles ? (transition de phase de 3-SAT) | Informatique | L3 | Nouvelle (annexe D) |
 | La réfraction de la lumière | Physique | L4 | Nouvelle, série « découverte » (annexe E.2) |
 | Pensez à un nombre (recherche dichotomique) | Informatique | L4 | Nouvelle, série « découverte » (annexe E.3) |
-| IA explicable (ex-démo 4.3) : série temporelle jouet décomposée en niveau, tendance, calendrier ; volet « Expliquer coûte cher » sur le coût du calcul exact des valeurs de Shapley | Informatique | Après L4 | Prévue dans le cahier du portfolio (section 6) |
+| La lentille convergente | Physique | L5 | Nouvelle, série « découverte » (annexe F.1) |
+| Calculer π avec le hasard (méthode de Monte-Carlo) | Informatique | L5 | Nouvelle, série « découverte » (annexe F.2) |
+| La loi d’Ohm | Physique | L6 | Nouvelle, série « découverte » (à rédiger) |
+| Le jeu de la vie | Informatique | L6 | Nouvelle, série « découverte » (à rédiger ; bouton Pause) |
+| IA explicable (ex-démo 4.3) : série temporelle jouet décomposée en niveau, tendance, calendrier ; volet « Expliquer coûte cher » sur le coût du calcul exact des valeurs de Shapley | Informatique | Après la série « découverte » (L6) | Prévue dans le cahier du portfolio (section 6) |
 | Vérifier ou trouver (exemple de prix au marché, en FCFA) | Informatique | Plus tard | Nouvelle |
 | De Chomsky à P et NP (lien avec Word Wizard) | Informatique | Plus tard | Nouvelle |
 | Autres expériences de physique, du lycée puis du supérieur | Physique | Plus tard | |
@@ -182,6 +186,8 @@ Le même que pour le portfolio (section 13 de son cahier) :
 | L2b. Déménagement, côté portfolio (terminée le 24 novembre 2026 : version du portfolio `f10afe9f` ; six redirections 308 mesurées par `curl` et par les tests `smoke` du portfolio) | Dans le dépôt du portfolio : redirections permanentes (308, que Google traite comme une 301) selon la table de la section 2, liens vers le Labo, lien du bandeau d’actualité, retrait du code des démos (section 15 du cahier du portfolio) |
 | L3. Transition de phase de 3-SAT (terminée le 25 novembre 2026 : version `42c36b41` ; contrôles de Jospin conformes : PageSpeed Insights mobile, durées de calcul sur téléphone, affichage de ∨ et ∧, sitemap de 14 adresses renvoyé à la Search Console) | Annexe D : page Informatique, expérience « Où se cachent les problèmes difficiles ? » (générateur, solveur DPLL, courbes, mode pas à pas, textes, sources), menu, accueil avec la section « Informatique » ; mise en ligne |
 | L4. Série « découverte » (terminée : mise en ligne le 25 novembre 2026, contrôlée en ligne par Claude ; contrôles de Jospin conformes le 28 novembre 2026 : PageSpeed Insights mobile, essai sur téléphone, sitemap de 18 adresses renvoyé à la Search Console) | Annexe E : la réfraction de la lumière (physique) et « Pensez à un nombre » (informatique), pages courtes et visuelles ; mise en ligne |
+| L5. Série « découverte », suite | Annexe F : la lentille convergente (physique) et « Calculer π avec le hasard » (informatique) ; mise en ligne |
+| L6. Série « découverte », fin | La loi d’Ohm et le jeu de la vie (annexe à rédiger) |
 | Ensuite | IA explicable, puis les autres expériences de la section 3 |
 
 ## 9. Checklist de recette
@@ -1200,6 +1206,265 @@ English:
 | Au plus ⌊log₂ N⌋ + 1 questions ; 10 pour 1 000, 20 pour un million | Déduction, vérifiée par calcul exhaustif (valeurs de contrôle) |
 | Recherche un par un : jusqu’à N questions | Déduction immédiate |
 
+## Annexe F — Série « découverte », suite : la lentille convergente et π par le hasard (étape L5)
+
+Décidée par Jospin le 28 novembre 2026 (suite de la série « découverte ») ; paramètres et textes rédigés par Claude (choix délégués par Jospin), sources vérifiées le 28 novembre 2026. Même gabarit court que l’annexe E. Les textes sont repris mot pour mot ; seule la typographie des espaces est appliquée dans le code.
+
+### F.0 Cartes et fil d’Ariane
+
+- Carte de la lentille (accueil, section « Physique », et page Physique, après la réfraction) : titre « La lentille convergente » ; texte « Déplacez un objet devant une lentille : regardez son image grandir, se renverser, puis changer de côté. » ; lien « Ouvrir l’expérience »
+  - EN card: title “The converging lens”; text “Move an object in front of a lens: watch its image grow, flip over, then switch sides.”; link “Open the experiment”
+- Carte de π (accueil, section « Informatique », et page Informatique, après « Pensez à un nombre ») : titre « Calculer π avec le hasard » ; texte « Lancez des points au hasard dans un carré : peu à peu, π apparaît. » ; lien « Ouvrir l’expérience »
+  - EN card: title “Estimating π by chance”; text “Throw random points into a square, and π slowly appears.”; link “Open the experiment”
+- Fil d’Ariane : Le Labo › Physique › La lentille convergente / The Lab › Physics › The converging lens ; Le Labo › Informatique › Calculer π avec le hasard / The Lab › Computing › Estimating π by chance.
+- Les descriptions des pages Physique et Informatique ne changent pas.
+
+### F.1 La lentille convergente — /fr/physique/lentille-convergente · /en/physics/converging-lens
+
+#### Lentille : modèle et conventions
+
+- **Réglages** : distance focale f′ de 2 à 10 cm, pas de 0,5 cm, départ 5 cm ; distance objet-lentille d de 1 à 40 cm, pas de 0,5 cm, départ 15 cm. Objet AB de hauteur fixe 2 cm, debout sur l’axe optique, à gauche de la lentille ; la lumière va de gauche à droite.
+- **Mesures algébriques** (page française) : distances comptées à partir du centre O de la lentille, positives vers la droite. OA = −d ; OF′ = f′. Elles s’affichent surmontées d’une barre.
+- **Calculs exacts** : si d ≠ f′, OA′ = f′ d / (d − f′) et γ = OA′ / OA = −f′ / (d − f′) ; A′B′ = γ × AB. Si d = f′ : pas d’image (image à l’infini).
+- **Nature de l’image**, décidée en comparant d à f′ et à 2f′ (valeurs réglées, exactes) et non à partir de γ calculé : d > 2f′ : réelle, renversée, plus petite ; d = 2f′ : réelle, renversée, même taille ; f′ < d < 2f′ : réelle, renversée, plus grande ; d = f′ : pas d’image ; d < f′ : virtuelle, droite, plus grande.
+- **Page anglaise** : mêmes nombres, écrits avec l’équation des lentilles minces d’OpenStax : d_o = d, d_i = OA′, f = f′, m = γ, h_i = A′B′.
+- **Affichage des nombres** : 3 chiffres significatifs, arrondis avant l’affichage (−1 s’affiche −1,00, et non −1,000) ; unités en cm ; virgule en français.
+- **Figure** : SVG, repère orthonormé, cadre de −42 à 42 cm horizontalement et de −14 à 14 cm verticalement ; axe optique, lentille (trait vertical avec flèches), foyers F et F′, objet (flèche), trois rayons partant de B : (1) parallèle à l’axe, puis passant par F′ ; (2) passant par O, sans déviation ; (3) passant par F, puis ressortant parallèle à l’axe (non tracé si d = f′). Image (flèche) ; image virtuelle et prolongements des rayons en pointillés. Si l’image sort du cadre, elle n’est pas dessinée et un message le dit. Aucune animation.
+- **Accessibilité** : deux `<input type="range">` avec étiquette et valeur affichée ; résultats dans une liste de définitions ; résumé textuel de la figure ; pas d’annonce `aria-live` à chaque mouvement d’un curseur.
+
+#### Lentille — français
+
+- **Titre de l’onglet** : La lentille convergente — Le Labo
+- **Description** : Simulation interactive d’une lentille convergente : construction des rayons, position et taille de l’image, mises à jour en direct.
+- **Titre de la page** : La lentille convergente
+- **Introduction** : Une loupe, et même votre œil : tous deux utilisent une lentille convergente. Déplacez l’objet et regardez où se forme son image, et comment elle change.
+- **Mention** : Au programme de TODO(Jospin): classe concernée. (masquée tant que la classe manque)
+
+**Réglages**
+
+| Réglage | Étiquette | Plage | Pas | Valeur de départ |
+| --- | --- | --- | --- | --- |
+| f′ | Distance focale (cm) | 2 à 10 | 0,5 | 5 |
+| d | Distance entre l’objet et la lentille (cm) | 1 à 40 | 0,5 | 15 |
+
+- **Donnée fixe, affichée** : Hauteur de l’objet : 2 cm
+- **Résultats** (titre « Résultats ») : Position de l’image (OA′) · Grandissement (γ) · Taille algébrique de l’image (A′B′) · Nature de l’image
+- **Natures** : Réelle, renversée, plus petite que l’objet. · Réelle, renversée, de même taille que l’objet. · Réelle, renversée, plus grande que l’objet. · Virtuelle, droite, plus grande que l’objet : c’est le principe de la loupe. · Pas d’image : les rayons ressortent parallèles, l’image est rejetée à l’infini.
+- **Position et taille, sans image** : aucune
+- **Image hors du cadre** : L’image se forme hors du cadre de la figure.
+- **Légende de la figure** : Objet · Image · Rayons · Prolongements des rayons · Foyers F et F′
+- **Résumé textuel de la figure** : « Objet à {d} de la lentille ; image {nature}, à {OA′} de la lentille, de taille {A′B′}. » ou « Objet au foyer F : pas d’image. »
+
+**Les lois**
+
+- Les distances sont comptées à partir du centre O de la lentille, positives dans le sens de la lumière (vers la droite) : l’objet, à gauche, a donc une position OA négative. Les tailles sont comptées positives vers le haut : une image renversée a une taille A′B′ négative.
+- Relation de conjugaison : 1/OA′ − 1/OA = 1/OF′
+- Grandissement : γ = A′B′ / AB = OA′ / OA
+- Avec les valeurs réglées : OA = {OA} ; OF′ = {f′} ; OA′ = {OA′} ; γ = {γ}
+- Une image réelle (OA′ > 0) se forme de l’autre côté de la lentille et peut être recueillie sur un écran. Une image virtuelle (OA′ < 0) se voit seulement en regardant à travers la lentille.
+- Un grandissement négatif signifie une image renversée ; un grandissement plus grand que 1 en valeur absolue, une image plus grande que l’objet.
+
+**Hypothèses** : La lentille est mince : son épaisseur est négligée. Les rayons sont tracés selon les trois règles de construction d’une lentille convergente. L’objet est perpendiculaire à l’axe optique, son pied A sur l’axe.
+
+**À essayer** (chaque question a son explication repliable, intitulée « Voir l’explication »)
+
+1. Avec f′ = 5 cm, placez l’objet à 10 cm de la lentille. Que remarquez-vous ? — Explication : l’image est renversée, de même taille que l’objet, à 10 cm de l’autre côté. Quand l’objet est à 2f′, γ = −1.
+2. Rapprochez l’objet jusqu’à 5 cm, puis jusqu’à 5,5 cm. Que devient l’image ? — Explication : à 5 cm, l’objet est au foyer : les rayons ressortent parallèles et il n’y a pas d’image. À 5,5 cm, l’image est très loin (55 cm) et très grande (γ = −10).
+3. Placez l’objet à 2,5 cm, plus près que le foyer. Où est l’image ? — Explication : du même côté que l’objet, droite et deux fois plus grande (γ = 2). Elle est virtuelle : on la voit à travers la lentille. C’est ainsi que fonctionne une loupe.
+
+#### Lentille — English
+
+- **Tab title**: The converging lens — The Lab
+- **Description**: Interactive converging lens simulation: ray diagram, image position and size, updated live.
+- **Page heading**: The converging lens
+- **Intro**: A magnifying glass, and even your own eye: both use a converging lens. Move the object and see where its image forms, and how it changes.
+- **Note**: Part of the TODO(Jospin): class curriculum in Cameroon. (hidden while the class is missing)
+- **Controls**: Focal length (cm) · Distance from the object to the lens (cm). Same ranges, steps and starting values as the French version.
+- **Fixed value, shown**: Object height: 2 cm
+- **Results** (heading “Results”): Image distance (d_i) · Magnification (m) · Image height (h_i) · Type of image
+- **Types**: Real, inverted, smaller than the object. · Real, inverted, the same size as the object. · Real, inverted, larger than the object. · Virtual, upright, larger than the object: this is how a magnifying glass works. · No image: the rays leave the lens parallel, so the image is at infinity.
+- **Distance and height, with no image**: none
+- **Image outside the frame**: The image forms outside the frame of the figure.
+- **Figure legend**: Object · Image · Rays · Ray extensions · Focal points F and F′
+- **Text summary of the figure**: “Object {d} from the lens; {type} image, at d_i = {d_i}, height {h_i}.” or “Object at the focal point F: no image.”
+
+**The laws**
+
+- Thin-lens equation: 1/d_o + 1/d_i = 1/f
+- Magnification: m = h_i / h_o = −d_i / d_o
+- With the current settings: d_o = {d_o}; f = {f}; d_i = {d_i}; m = {m}
+- A positive d_i means a real image on the other side of the lens, which can be caught on a screen. A negative d_i means a virtual image, on the same side as the object, seen only by looking through the lens.
+- A negative magnification means an inverted image, with a negative height h_i; a magnification larger than 1 in absolute value means an image larger than the object.
+
+**Assumptions**: The lens is thin: its thickness is neglected. The rays are drawn using the three ray-tracing rules for a converging lens. The object stands perpendicular to the optical axis, with its base A on the axis.
+
+**Try this** (collapsible “Show the explanation”)
+
+1. With f = 5 cm, put the object 10 cm from the lens. What do you notice? — Explanation: the image is inverted, the same size as the object, 10 cm away on the other side. With the object at twice the focal length, m = −1.
+2. Move the object to 5 cm, then to 5.5 cm. What happens to the image? — Explanation: at 5 cm the object is at the focal point: the rays leave parallel and there is no image. At 5.5 cm the image is very far away (55 cm) and very large (m = −10).
+3. Put the object at 2.5 cm, closer than the focal point. Where is the image? — Explanation: on the same side as the object, upright and twice as large (m = 2). It is virtual: you see it through the lens. This is how a magnifying glass works.
+
+#### Valeurs de contrôle de la lentille (calculées le 28 novembre 2026)
+
+Calculées par Claude en Python. AB = 2 cm.
+
+| f′ (cm) | d (cm) | OA′ = d_i (cm) | γ = m | A′B′ = h_i (cm) | Nature |
+| --- | --- | --- | --- | --- | --- |
+| 5 | 15 | 7,5 | −0,5 | −1 | réelle, renversée, plus petite |
+| 5 | 10 | 10 | −1 | −2 | réelle, renversée, même taille |
+| 5 | 7,5 | 15 | −2 | −4 | réelle, renversée, plus grande |
+| 5 | 5,5 | 55 | −10 | −20 | réelle, renversée, plus grande (hors du cadre) |
+| 5 | 5 | aucune | aucun | aucune | pas d’image |
+| 5 | 2,5 | −5 | 2 | 4 | virtuelle, droite, plus grande |
+| 10 | 5 | −10 | 2 | 4 | virtuelle, droite, plus grande |
+| 10 | 10,5 | 210 | −20 | −40 | réelle, renversée, plus grande (hors du cadre) |
+| 10 | 20 | 20 | −1 | −2 | réelle, renversée, même taille |
+| 8 | 12 | 24 | −2 | −4 | réelle, renversée, plus grande |
+| 5 | 30 | 6 | −0,2 | −0,4 | réelle, renversée, plus petite |
+| 2 | 1 | −2 | 2 | 4 | virtuelle, droite, plus grande |
+
+Affichages attendus (français, 3 chiffres significatifs) : 7,50 cm ; −0,500 ; −1,00 cm ; 10,0 cm ; −1,00 ; 55,0 cm ; −10,0 ; −20,0 cm ; −5,00 cm ; 2,00 ; 4,00 cm ; 210 cm ; −20,0 ; −40,0 cm ; 6,00 cm ; −0,200 ; −0,400 cm. Contrôle externe : l’exemple 2.4(b) d’OpenStax (d_o = 5,00 cm, f = 10,0 cm) donne m = +2,00, comme la ligne f′ = 10, d = 5.
+
+#### Pour aller plus loin — lentille
+
+- OpenStax, *University Physics Volume 3*, section 2.4 « Thin Lenses » (en anglais) → `https://openstax.org/books/university-physics-volume-3/pages/2-4-thin-lenses`
+- OpenStax, *University Physics Volume 3*, section 2.7 « The Simple Magnifier » (en anglais) → `https://openstax.org/books/university-physics-volume-3/pages/2-7-the-simple-magnifier`
+
+English (same links):
+
+- OpenStax, *University Physics Volume 3*, section 2.4 “Thin Lenses”
+- OpenStax, *University Physics Volume 3*, section 2.7 “The Simple Magnifier”
+
+**Affirmations et sources** (relecture, non affiché)
+
+| Affirmation de la page | Source |
+| --- | --- |
+| Signe de h_i : négatif pour une image renversée | OpenStax, section 2.4 (m négatif : image renversée ; m = h_i / h_o avec h_o > 0) |
+| Équation des lentilles minces (2.19), grandissement m = h_i / h_o = −d_i / d_o (2.22), signes de d_i, f et m | OpenStax, section 2.4 |
+| Les trois règles de construction des rayons | OpenStax, section 2.4 |
+| Objet au foyer : rayons parallèles, image à l’infini | OpenStax, section 2.4 |
+| Objet plus près que le foyer : image virtuelle, droite, plus grande ; loupe | OpenStax, sections 2.4 et 2.7 |
+| Relation de conjugaison et grandissement en mesures algébriques (page française) | Déduits de l’équation 2.19 et de l’équation 2.22 avec OA = −d_o, OA′ = d_i, OF′ = f, γ = m (vérifié par les valeurs de contrôle) |
+| Lentille mince : épaisseur négligée | OpenStax, section 2.4 (approximation des lentilles minces) |
+| Loupe et œil : des lentilles convergentes | OpenStax, section 2.7 « The Simple Magnifier » (loupe) et section 2.5 « The Eye » (la cornée est une lentille convergente ; cornée et cristallin agissent comme une lentille mince), vérifiées le 28 novembre 2026 |
+
+### F.2 Calculer π avec le hasard — /fr/informatique/calculer-pi · /en/computing/estimating-pi
+
+#### π : modèle et conventions
+
+- **Hasard** : générateur et initialisation de l’annexe D.2 (xoshiro128++ initialisé par SplitMix64), avec la clé graine × 2³² + 2 × 2²⁴ (tag = 2, n = k = j = 0). Graine : entier de 1 à 999 999, 2026 par défaut, affichée et modifiable, avec la même aide et le même message d’erreur que l’expérience 3-SAT (annexe D.3).
+- **Un point** : deux sorties successives r₁ puis r₂ ; x = r₁ / 2³², y = r₂ / 2³² (dans [0, 1[) ; le point est dans le quart de disque si x² + y² ≤ 1, calcul en nombres à virgule flottante de 64 bits.
+- **Boutons** : ajouter 100, 1 000 ou 10 000 points ; recommencer. Au plus 100 000 points : au-delà, les boutons d’ajout sont indisponibles et un message le dit.
+- **Estimation** : π ≈ 4 n / N, où N est le nombre de points et n le nombre de points dans le quart de disque. Affichée avec 4 décimales ; écart |4 n / N − π| avec 4 décimales.
+- **Figure** : SVG ; carré de côté 1, quart de cercle de rayon 1 centré au coin inférieur gauche ; seuls les 2 000 premiers points sont dessinés (les calculs utilisent tous les points) ; point dans le quart de disque : disque plein ; point dehors : petite croix (pas la couleur seule). Aucune animation.
+- **Accessibilité** : boutons natifs ; les résultats sont annoncés (`aria-live="polite"`) une fois par clic.
+
+#### π — français
+
+- **Titre de l’onglet** : Calculer π avec le hasard — Le Labo
+- **Description** : Expérience interactive : estimez π en lançant des points au hasard dans un carré, avec la méthode de Monte-Carlo.
+- **Titre de la page** : Calculer π avec le hasard
+- **Sous-titre** : La méthode de Monte-Carlo
+- **Introduction** : Lancez des points au hasard dans un carré et comptez ceux qui tombent dans le quart de disque. Ce simple comptage donne une valeur approchée de π, de plus en plus proche à mesure que les points s’accumulent.
+- **Mention** : Niveau : TODO(Jospin): niveau concerné. (masquée tant que le niveau manque)
+
+**L’expérience**
+
+- Boutons : Ajouter 100 points · Ajouter 1 000 points · Ajouter 10 000 points · Recommencer
+- Graine : étiquette « Graine du hasard » ; aide « Même graine, mêmes points : vous pouvez refaire exactement la même expérience. » ; erreur « Entrez un nombre entier de 1 à 999 999. »
+- Résultats (titre « Résultats ») : Points lancés · Points dans le quart de disque · Estimation de π (4 × points dans le quart de disque ÷ points lancés) · Écart avec π (π = 3,14159…)
+- Avant le premier point : Ajoutez des points pour commencer.
+- Maximum : Maximum atteint : 100 000 points. Recommencez pour une nouvelle série.
+- Note sous la figure : La figure montre les 2 000 premiers points ; les calculs utilisent tous les points.
+- Légende : Point dans le quart de disque · Point en dehors
+- Résumé textuel de la figure : « {N} points lancés, dont {n} dans le quart de disque : π ≈ {estimation}. »
+
+**Comment ça marche ?**
+
+- Le carré a pour côté 1, donc pour aire 1. Le quart de disque a pour rayon 1, donc pour aire π / 4.
+- Un point lancé au hasard dans le carré a donc une probabilité π / 4, environ 0,785, de tomber dans le quart de disque.
+- Sur un grand nombre de points, la part des points dans le quart de disque se rapproche de π / 4. En la multipliant par 4, on obtient une valeur approchée de π.
+- Un point est dans le quart de disque si x² + y² ≤ 1, où x et y sont ses coordonnées.
+- Cette méthode, qui utilise le hasard pour calculer une valeur, s’appelle la méthode de Monte-Carlo. Elle est lente : avec 100 fois plus de points, l’erreur est en moyenne environ 10 fois plus petite.
+
+**Hypothèses** : Les points sont répartis uniformément dans le carré. L’ordinateur ne tire pas de vrai hasard : il utilise un générateur pseudo-aléatoire, qui donne toujours la même suite pour une même graine.
+
+**À essayer** (explication repliable « Voir l’explication »)
+
+1. Avec la graine 2026, ajoutez 100 points, puis montez jusqu’à 100 000. Comment évolue l’estimation ? — Explication : 3,2000 avec 100 points, 3,1760 avec 1 000, 3,1632 avec 10 000, 3,1422 avec 100 000. Elle se rapproche de π, mais pas forcément à chaque étape : c’est le hasard.
+2. Changez de graine et refaites 100 points. Pourquoi l’estimation change-t-elle ? — Explication : d’autres points sont tirés. Avec la graine 1, on obtient 3,0000 avec 100 points. Avec peu de points, l’estimation varie beaucoup d’une graine à l’autre ; avec beaucoup de points, beaucoup moins.
+3. Combien de points faudrait-il pour gagner une décimale exacte de plus ? — Explication : environ 100 fois plus, car l’erreur ne diminue en moyenne que d’un facteur 10 quand on multiplie le nombre de points par 100. C’est pourquoi on ne calcule pas π ainsi en pratique.
+
+#### π — English
+
+- **Tab title**: Estimating π by chance — The Lab
+- **Description**: Interactive experiment: estimate π by throwing random points into a square, using the Monte Carlo method.
+- **Page heading**: Estimating π by chance
+- **Subtitle**: The Monte Carlo method
+- **Intro**: Throw random points into a square and count the ones that land in the quarter disc. That simple count gives an approximate value of π, which gets closer as the points pile up.
+- **Note**: Level: TODO(Jospin): level. (hidden while missing)
+- Buttons: Add 100 points · Add 1,000 points · Add 10,000 points · Start over
+- Seed: label “Random seed”; help “Same seed, same points: you can rerun exactly the same experiment.”; error “Enter a whole number from 1 to 999,999.”
+- Results (heading “Results”): Points thrown · Points in the quarter disc · Estimate of π (4 × points in the quarter disc ÷ points thrown) · Difference from π (π = 3.14159…)
+- Before the first point: Add some points to get started.
+- Maximum: Maximum reached: 100,000 points. Start over for a new run.
+- Note below the figure: The figure shows the first 2,000 points; the calculations use all of them.
+- Legend: Point in the quarter disc · Point outside
+- Text summary of the figure: “{N} points thrown, {n} of them in the quarter disc: π ≈ {estimate}.”
+
+**How does it work?**
+
+- The square has sides of length 1, so its area is 1. The quarter disc has radius 1, so its area is π / 4.
+- So a point thrown at random into the square has a probability of π / 4, about 0.785, of landing in the quarter disc.
+- Over many points, the share of points in the quarter disc gets closer to π / 4. Multiplying it by 4 gives an approximate value of π.
+- A point is in the quarter disc if x² + y² ≤ 1, where x and y are its coordinates.
+- Using chance to calculate a value like this is called the Monte Carlo method. It is slow: with 100 times more points, the error is on average about 10 times smaller.
+
+**Assumptions**: The points are spread evenly across the square. The computer doesn’t use true randomness: it uses a pseudorandom generator, which always gives the same sequence for the same seed.
+
+**Try this** (collapsible “Show the explanation”)
+
+1. With seed 2026, add 100 points, then go up to 100,000. How does the estimate change? — Explanation: 3.2000 with 100 points, 3.1760 with 1,000, 3.1632 with 10,000, 3.1422 with 100,000. It gets closer to π, but not necessarily at every step: that’s chance.
+2. Change the seed and do 100 points again. Why does the estimate change? — Explanation: different points are drawn. With seed 1, you get 3.0000 with 100 points. With few points, the estimate varies a lot from one seed to another; with many points, much less.
+3. How many points would you need to gain one more correct decimal place? — Explanation: about 100 times more, because the error only shrinks by a factor of 10 on average when you multiply the number of points by 100. That is why π isn’t calculated this way in practice.
+
+#### Valeurs de contrôle de π (calculées le 28 novembre 2026)
+
+Calculées par Claude deux fois, indépendamment : sorties du générateur en C (code des auteurs) puis comptage en Python ; générateur et comptage en JavaScript (implantation de référence de l’annexe D). Résultats identiques.
+
+- Clé (graine 2026) = 0x000007ea02000000 ; premier point x = 0,6832870045, y = 0,5017964535 ; deuxième point 0,4433471586 ; 0,0882721562 ; troisième point 0,9030095774 ; 0,5688651365.
+- Clé (graine 1) = 0x0000000102000000 ; premier point 0,6193879198 ; 0,5703130444.
+
+| Graine | N | n | Estimation 4 n / N | Écart avec π |
+| --- | --- | --- | --- | --- |
+| 2026 | 100 | 80 | 3,2000 | 0,0584 |
+| 2026 | 1 000 | 794 | 3,1760 | 0,0344 |
+| 2026 | 10 000 | 7 908 | 3,1632 | 0,0216 |
+| 2026 | 100 000 | 78 554 | 3,1422 | 0,0006 |
+| 1 | 100 | 75 | 3,0000 | 0,1416 |
+| 1 | 1 000 | 797 | 3,1880 | 0,0464 |
+| 1 | 10 000 | 7 866 | 3,1464 | 0,0048 |
+| 1 | 100 000 | 78 481 | 3,1392 | 0,0024 |
+
+#### Pour aller plus loin — π
+
+- Wikipédia, « Méthode de Monte-Carlo » → `https://fr.wikipedia.org/wiki/M%C3%A9thode_de_Monte-Carlo`
+
+English:
+
+- Wikipedia, “Monte Carlo method” → `https://en.wikipedia.org/wiki/Monte_Carlo_method`
+
+**Affirmations et sources** (relecture, non affiché)
+
+| Affirmation de la page | Source |
+| --- | --- |
+| Point au hasard dans le carré unité, test x² + y² ≤ 1, probabilité π / 4 | Wikipédia « Méthode de Monte-Carlo » (section sur la détermination de π) |
+| Multiplier par 4 pour estimer π ; meilleure estimation avec plus de points | Wikipedia “Monte Carlo method” |
+| 100 fois plus de points : erreur environ 10 fois plus petite | Wikipédia « Méthode de Monte-Carlo » ; cohérent avec l’écart type 4 √(p (1 − p) / N) ≈ 1,64 / √N, p = π / 4 (déduction) |
+| Aires du carré et du quart de disque | Géométrie élémentaire |
+| Générateur pseudo-aléatoire, même suite pour une même graine | Annexe D.2 (xoshiro128++, `https://prng.di.unimi.it/`) |
+| Valeurs numériques de « À essayer » | Valeurs de contrôle ci-dessus |
+
 ## Historique
 
 - Version 0.1 (23 novembre 2026) : décision du Labo ; publics ; adresses et table de correspondance ; expériences prévues ; stack statique sur Cloudflare Workers ; feuille de route L1 à L3 ; proposition pour la démo 3-SAT.
@@ -1212,3 +1477,4 @@ English:
 - Version 0.8 (25 novembre 2026) : clôture de L3 (version `42c36b41`, contrôles de Jospin conformes) ; écarts acceptés lors de la réalisation (annexe D.2) ; objectifs de durée atteints.
 - Version 0.9 (25 novembre 2026) : étape L4, série « découverte » décidée par Jospin : la réfraction de la lumière et « Pensez à un nombre » (annexe E, sources vérifiées le 25 novembre 2026) ; description de la page Physique élargie (annexe C.1) ; l’IA explicable passe après L4 (sections 3 et 8).
 - Version 1.0 (28 novembre 2026) : clôture de L4 (mise en ligne le 25 novembre 2026, contrôles de Jospin conformes le 28 novembre 2026) ; écarts acceptés lors de la réalisation (annexe E.1).
+- Version 1.1 (28 novembre 2026) : étape L5, suite de la série « découverte » : la lentille convergente et « Calculer π avec le hasard » (annexe F, sources vérifiées le 28 novembre 2026) ; L6 prévue (loi d’Ohm, jeu de la vie) ; l’IA explicable passe après L6 (sections 3 et 8).
